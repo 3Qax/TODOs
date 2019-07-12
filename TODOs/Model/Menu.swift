@@ -15,8 +15,11 @@ class Menu {
     private var realm: Realm
     
     init() {
+        
+        let config = Realm.Configuration(fileURL: Bundle.main.url(forResource: "default", withExtension: "realm"),
+                                         readOnly: true)
         do {
-            try realm = Realm()
+            try realm = Realm(configuration: config)
         } catch let error {
             fatalError(error.localizedDescription)
         }
