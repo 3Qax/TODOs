@@ -21,10 +21,6 @@ class ListViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        print(list)
-    }
-
 }
 
 extension ListViewController: UITableViewDelegate {
@@ -34,7 +30,6 @@ extension ListViewController: UITableViewDelegate {
 extension ListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print(list.todos.count)
         return list.todos.count
     }
     

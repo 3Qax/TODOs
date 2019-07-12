@@ -38,7 +38,7 @@ class MenuTableViewController: UITableViewController {
         case 0:
             return isListsSectionCollapsed ? 0 : menu.lists.count
         case 1:
-            return isTagsSectionCollapsed ? 0 : 3
+            return isTagsSectionCollapsed ? 0 : menu.tags.count
         default:
             fatalError()
         }
@@ -47,8 +47,13 @@ class MenuTableViewController: UITableViewController {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "menuTableViewCell") as? MenuTableViewCell else {
             fatalError()
         }
-        if indexPath.section == 0 {
+        switch indexPath.section {
+        case 0:
             cell.titleLabel.text = menu.lists[indexPath.item].name
+        case 1:
+            cell.titleLabel.text = menu.tags[indexPath.item].name
+        default:
+            fatalError()
         }
         return cell
     }
