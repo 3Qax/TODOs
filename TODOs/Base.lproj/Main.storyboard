@@ -18,9 +18,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="2T4-sI-uay">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="singleLineEtched" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="2T4-sI-uay">
                                 <rect key="frame" x="0.0" y="88" width="414" height="774"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="todoWithTag" id="bHk-kJ-Fei" customClass="TodoTableViewCell" customModule="TODOs" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="414" height="44"/>
@@ -29,12 +30,18 @@
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="V2j-yw-Yqf">
-                                                    <rect key="frame" x="1072" y="12" width="20" height="20"/>
-                                                    <color key="backgroundColor" red="1" green="0.57637232540000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Posprzątać pokój" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P94-vz-TtX">
+                                                    <rect key="frame" x="45" y="11.5" width="132" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NKX-lM-L4l">
+                                                    <rect key="frame" x="15" y="12" width="20" height="20"/>
+                                                    <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="20" id="fWc-wx-Ezt"/>
-                                                        <constraint firstAttribute="width" constant="20" id="hkF-zc-fnU"/>
+                                                        <constraint firstAttribute="height" constant="20" id="YBD-WI-NM3"/>
+                                                        <constraint firstAttribute="width" constant="20" id="yPe-I8-O93"/>
                                                     </constraints>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
@@ -42,23 +49,31 @@
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                 </view>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Posprzątać pokój" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P94-vz-TtX">
-                                                    <rect key="frame" x="40" y="11.5" width="132" height="21"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JZc-rz-39B">
+                                                    <rect key="frame" x="17.5" y="14.5" width="15" height="15"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="15" id="Hh9-he-sOI"/>
+                                                        <constraint firstAttribute="height" constant="15" id="gze-MQ-g9l"/>
+                                                    </constraints>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                            <real key="value" value="7.5"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
+                                                </view>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="P94-vz-TtX" firstAttribute="leading" secondItem="jdh-SE-Teb" secondAttribute="leadingMargin" constant="20" id="5Nu-9Q-stn"/>
-                                                <constraint firstAttribute="trailing" secondItem="V2j-yw-Yqf" secondAttribute="trailing" constant="20" id="L4u-ka-ePZ"/>
-                                                <constraint firstItem="V2j-yw-Yqf" firstAttribute="centerY" secondItem="jdh-SE-Teb" secondAttribute="centerY" id="oza-Y9-vtc"/>
+                                                <constraint firstItem="NKX-lM-L4l" firstAttribute="centerY" secondItem="jdh-SE-Teb" secondAttribute="centerY" id="2el-16-qZf"/>
+                                                <constraint firstItem="P94-vz-TtX" firstAttribute="leading" secondItem="NKX-lM-L4l" secondAttribute="trailing" constant="10" id="FOA-3f-7tA"/>
+                                                <constraint firstItem="JZc-rz-39B" firstAttribute="centerX" secondItem="NKX-lM-L4l" secondAttribute="centerX" id="Ttz-cv-Dui"/>
+                                                <constraint firstItem="NKX-lM-L4l" firstAttribute="leading" secondItem="jdh-SE-Teb" secondAttribute="leading" constant="15" id="WND-PF-ctc"/>
                                                 <constraint firstItem="P94-vz-TtX" firstAttribute="centerY" secondItem="jdh-SE-Teb" secondAttribute="centerY" id="v7S-A6-JwB"/>
+                                                <constraint firstItem="JZc-rz-39B" firstAttribute="centerY" secondItem="NKX-lM-L4l" secondAttribute="centerY" id="y9S-2l-9xV"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="nameLabel" destination="P94-vz-TtX" id="UUk-FZ-JaX"/>
-                                            <outlet property="tagView" destination="V2j-yw-Yqf" id="1oK-wo-avk"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -139,14 +154,14 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="250" text="Moja pierwsza lista" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nta-Fu-s5H">
-                                            <rect key="frame" x="50" y="13" width="344" height="18"/>
-                                            <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
+                                            <rect key="frame" x="30" y="11.5" width="364" height="20.5"/>
+                                            <fontDescription key="fontDescription" type="system" weight="light" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="Nta-Fu-s5H" firstAttribute="leading" secondItem="WOP-gZ-TwD" secondAttribute="leadingMargin" constant="30" id="cT7-gh-QUJ"/>
+                                        <constraint firstItem="Nta-Fu-s5H" firstAttribute="leading" secondItem="WOP-gZ-TwD" secondAttribute="leadingMargin" constant="10" id="cT7-gh-QUJ"/>
                                         <constraint firstItem="Nta-Fu-s5H" firstAttribute="centerY" secondItem="WOP-gZ-TwD" secondAttribute="centerY" id="dl5-3y-8gX"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="Nta-Fu-s5H" secondAttribute="trailing" id="vFp-5P-fYB"/>
                                     </constraints>
