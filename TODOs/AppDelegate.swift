@@ -8,6 +8,19 @@
 
 import UIKit
 
+extension UIView {
+    @IBInspectable
+    var cornerRadius: CGFloat {
+        set {
+            self.layer.cornerRadius = newValue
+            self.layer.masksToBounds = newValue > 0 ? true : false
+        }
+        get {
+            return self.layer.cornerRadius
+        }
+    }
+}
+
 // swiftlint:disable line_length
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
