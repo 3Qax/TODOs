@@ -23,7 +23,7 @@ class MenuTableViewController: UITableViewController {
         menuTableView.canCancelContentTouches = false
         listsObservationToken = menu.lists.observe({ [weak self] changes in
             switch changes {
-            case .initial(_):
+            case .initial:
                 self?.menuTableView.reloadData()
             case .update(_, let deletions, let insertions, let modifications):
                 self?.menuTableView.beginUpdates()
@@ -50,7 +50,7 @@ class MenuTableViewController: UITableViewController {
         })
         tagsObservationToken = menu.tags.observe({ [weak self] changes in
             switch changes {
-            case .initial(_):
+            case .initial:
                 self?.menuTableView.reloadSections(IndexSet(integer: 1), with: .automatic)
             case .update(_, let deletions, let insertions, let modifications):
                 self?.menuTableView.beginUpdates()
@@ -110,7 +110,9 @@ class MenuTableViewController: UITableViewController {
         return true
     }
     
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView,
+                            commit editingStyle: UITableViewCell.EditingStyle,
+                            forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             menu.remove(menu.lists[indexPath.item])
         }

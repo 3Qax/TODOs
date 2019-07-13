@@ -32,8 +32,10 @@ class TodoTableViewCell: UITableViewCell {
         checkImageView.isHidden = false
         checkImageView.tintColor = .lightGray
         nameLabel.textColor = .lightGray
-        nameLabel.attributedText = NSAttributedString(string: nameLabel.text!, attributes: [NSAttributedString.Key.strikethroughStyle: NSUnderlineStyle.single.rawValue,
-                                                                                            NSAttributedString.Key.strikethroughColor: UIColor.darkGray])
+        var textAttributes = [NSAttributedString.Key: Any]()
+        textAttributes[NSAttributedString.Key.strikethroughStyle] = NSUnderlineStyle.single.rawValue
+        textAttributes[NSAttributedString.Key.strikethroughColor] = UIColor.darkGray
+        nameLabel.attributedText = NSAttributedString(string: nameLabel.text!, attributes: textAttributes)
     }
 
 }

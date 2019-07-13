@@ -2,3 +2,6 @@ excluded:
   - Pods
 disabled_rules:
   - trailing_whitespace
+
+# rules configuration
+line_length: 128

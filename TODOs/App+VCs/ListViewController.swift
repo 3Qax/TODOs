@@ -12,14 +12,12 @@ import RealmSwift
 @IBDesignable
 class ListViewController: UIViewController {
     
-
-    
     var list = List() {
         didSet {
             listObservationToken?.invalidate()
             listObservationToken = list.todos.observe({ [weak self] changes in
                 switch changes {
-                case .initial(_):
+                case .initial:
                     self?.taskTableView.reloadData()
                 case .update(_, let deletions, let insertions, let modifications):
                     self?.taskTableView.beginUpdates()
