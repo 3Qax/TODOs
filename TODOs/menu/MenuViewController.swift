@@ -7,17 +7,64 @@
 //
 
 import UIKit
+import RealmSwift
 
 class MenuTableViewController: UITableViewController {
 
     @IBOutlet var menuTableView: UITableView!
     private var isListsSectionCollapsed: Bool = false
     private var isTagsSectionCollapsed: Bool = false
-    var menu = Menu()
+    var menu: Menu = Menu.common
+    var listsObservationToken: NotificationToken?
+    var tagsObservationToken: NotificationToken?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         menuTableView.canCancelContentTouches = false
+        listsObservationToken = menu.lists.observe({ [weak self] changes in
+            switch changes {
+            case .initial(_):
+                self?.menuTableView.reloadData()
+            case .update(_, let deletions, let insertions, let modifications):
+                self?.menuTableView.beginUpdates()
+                // When adding new cell
+                self?.menuTableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0) }),
+                                     with: .automatic)
+                
+                self?.menuTableView.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}),
+                                     with: .automatic)
+                
+                self?.menuTableView.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0) }),
+                                     with: .automatic)
+                self?.menuTableView.endUpdates()
+                
+                if let item = insertions.last,
+                let insertedCell = self?.menuTableView.cellForRow(at: IndexPath(item: item, section: 0)) as? MenuTableViewCell {
+                    insertedCell.titleTextView.isEditable = true
+                    insertedCell.titleTextView.becomeFirstResponder()
+                }
+                
+            case .error(let err):
+                fatalError(err.localizedDescription)
+            }
+        })
+        tagsObservationToken = menu.tags.observe({ [weak self] changes in
+            switch changes {
+            case .initial(_):
+                self?.menuTableView.reloadSections(IndexSet(integer: 1), with: .automatic)
+            case .update(_, let deletions, let insertions, let modifications):
+                self?.menuTableView.beginUpdates()
+                self?.menuTableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: 1) }),
+                                               with: .automatic)
+                self?.menuTableView.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 1)}),
+                                               with: .automatic)
+                self?.menuTableView.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 1) }),
+                                               with: .automatic)
+                self?.menuTableView.endUpdates()
+            case .error(let err):
+                fatalError(err.localizedDescription)
+            }
+        })
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -47,17 +94,35 @@ class MenuTableViewController: UITableViewController {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "menuTableViewCell") as? MenuTableViewCell else {
             fatalError()
         }
+        cell.delegate = self
         switch indexPath.section {
         case 0:
-            cell.titleLabel.text = menu.lists[indexPath.item].name
+            cell.titleTextView.text = menu.lists[indexPath.item].name
         case 1:
-            cell.titleLabel.text = menu.tags[indexPath.item].name
+            cell.titleTextView.text = menu.tags[indexPath.item].name
         default:
             fatalError()
         }
         return cell
     }
     
+    @IBAction func didTapAdd(_ sender: Any) {
+        let newList = List()
+        menu.add(newList)
+    }
+    
+    deinit {
+        listsObservationToken?.invalidate()
+    }
+}
+
+// MARK: Handle adding new cells
+extension MenuTableViewController: MenuTableViewCellDelegate {
+    func didEndEditingListName(sender: MenuTableViewCell) {
+        if let index = menuTableView.indexPath(for: sender)?.item {
+            menu.set(name: sender.titleTextView.text, for: index)
+        }
+    }
 }
 
 // MARK: Headers handling

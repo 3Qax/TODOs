@@ -153,22 +153,27 @@
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="250" text="Moja pierwsza lista" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nta-Fu-s5H">
-                                            <rect key="frame" x="30" y="11.5" width="364" height="20.5"/>
+                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="crY-bQ-0Os">
+                                            <rect key="frame" x="25" y="5" width="369" height="33.5"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                             <fontDescription key="fontDescription" type="system" weight="light" pointSize="17"/>
-                                            <nil key="textColor"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
+                                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="done"/>
+                                            <connections>
+                                                <outlet property="delegate" destination="0P5-rf-mAt" id="JFG-ap-3gt"/>
+                                            </connections>
+                                        </textView>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="Nta-Fu-s5H" firstAttribute="leading" secondItem="WOP-gZ-TwD" secondAttribute="leadingMargin" constant="10" id="cT7-gh-QUJ"/>
-                                        <constraint firstItem="Nta-Fu-s5H" firstAttribute="centerY" secondItem="WOP-gZ-TwD" secondAttribute="centerY" id="dl5-3y-8gX"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="Nta-Fu-s5H" secondAttribute="trailing" id="vFp-5P-fYB"/>
+                                        <constraint firstItem="crY-bQ-0Os" firstAttribute="top" secondItem="WOP-gZ-TwD" secondAttribute="top" constant="5" id="8Le-gI-pCz"/>
+                                        <constraint firstAttribute="trailing" secondItem="crY-bQ-0Os" secondAttribute="trailing" constant="20" id="GqK-Lw-vWM"/>
+                                        <constraint firstItem="crY-bQ-0Os" firstAttribute="leading" secondItem="WOP-gZ-TwD" secondAttribute="leading" constant="25" id="Zos-9O-iCr"/>
+                                        <constraint firstAttribute="bottom" secondItem="crY-bQ-0Os" secondAttribute="bottom" constant="5" id="zBa-2P-AOH"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <connections>
-                                    <outlet property="titleLabel" destination="Nta-Fu-s5H" id="M2e-kf-C3z"/>
+                                    <outlet property="titleTextView" destination="crY-bQ-0Os" id="AIo-Mr-Ugi"/>
                                     <segue destination="gj9-6x-zaQ" kind="showDetail" identifier="showList" id="qOH-Un-HWR"/>
                                 </connections>
                             </tableViewCell>
@@ -180,7 +185,11 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="TODOs by JT" id="E7p-Wr-1aY">
                         <barButtonItem key="backBarButtonItem" title="menu" id="2k7-l9-pF6"/>
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="txJ-ou-5i2"/>
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="txJ-ou-5i2">
+                            <connections>
+                                <action selector="didTapAdd:" destination="lKR-a0-QNJ" id="6J0-0t-4zd"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="menuTableView" destination="fTb-zS-egn" id="Lm0-14-p9R"/>

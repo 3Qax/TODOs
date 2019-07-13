@@ -10,6 +10,6 @@ import Foundation
 import RealmSwift
 
 class List: Object {
-    @objc dynamic private(set) var name: String = ""
+    @objc dynamic var name: String = ""
     let todos = RealmSwift.List<Todo>()
 }

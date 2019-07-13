@@ -12,12 +12,13 @@ import RealmSwift
 class Menu {
     private(set) var lists: Results<List>
     private(set) var tags: Results<Tag>
-    private var realm: Realm
+    public var realm: Realm
+    public static let common = Menu()
     
-    init() {
+    private init() {
         
         let config = Realm.Configuration(fileURL: Bundle.main.url(forResource: "default", withExtension: "realm"),
-                                         readOnly: true)
+                                         readOnly: false)
         
         do { try realm = Realm(configuration: config) }
         catch let error { fatalError(error.localizedDescription) }
@@ -25,5 +26,15 @@ class Menu {
         print(realm.configuration.fileURL)
         lists = realm.objects(List.self)
         tags = realm.objects(Tag.self)
+    }
+    
+    func add(_ newList: List) {
+        do { try realm.write { realm.add(newList) } }
+        catch let err { fatalError(err.localizedDescription) }
+    }
+    
+    func set(name: String, for index: Int) {
+        do { try realm.write { lists[index].name = name } }
+        catch let err { fatalError(err.localizedDescription)}
     }
 }
