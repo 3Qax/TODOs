@@ -21,6 +21,10 @@ class ListViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     
+    @IBAction func unwindToList(_ unwindSegue: UIStoryboardSegue) {
+        let sourceViewController = unwindSegue.source
+        // Use data from the view controller which initiated the unwind segue
+    }
 }
 
 extension ListViewController: UITableViewDelegate {

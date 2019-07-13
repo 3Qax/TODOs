@@ -93,13 +93,77 @@
                         <viewLayoutGuide key="safeArea" id="RLH-bn-R1Q"/>
                     </view>
                     <navigationItem key="navigationItem" title="lists" id="3j0-Yk-w3I">
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="oM3-VN-0uc"/>
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="oM3-VN-0uc">
+                            <connections>
+                                <segue destination="d1w-76-WiE" kind="show" id="QcW-Rl-QvI"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VVc-q6-UAP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-572.48201438848923" y="92.805755395683462"/>
+        </scene>
+        <!--add new todo-->
+        <scene sceneID="5j9-kw-jiB">
+            <objects>
+                <viewController title="add new todo" id="d1w-76-WiE" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="zAQ-wB-Dua">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="q0l-RM-gqW">
+                                <rect key="frame" x="20" y="138" width="374" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="XVr-hJ-Vde"/>
+                                </constraints>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="VbV-Um-Yuf">
+                                <rect key="frame" x="20" y="208" width="374" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="ICX-fM-D01"/>
+                                </constraints>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="LWu-Jz-xYE">
+                                <rect key="frame" x="20" y="278" width="374" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="ROg-xq-88e"/>
+                                </constraints>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="LWu-Jz-xYE" firstAttribute="leading" secondItem="uEp-14-5m2" secondAttribute="leading" constant="20" id="P3g-Q2-I47"/>
+                            <constraint firstItem="uEp-14-5m2" firstAttribute="trailing" secondItem="LWu-Jz-xYE" secondAttribute="trailing" constant="20" id="Z9D-nj-wLe"/>
+                            <constraint firstItem="q0l-RM-gqW" firstAttribute="top" secondItem="uEp-14-5m2" secondAttribute="top" constant="50" id="bjk-7h-Qwd"/>
+                            <constraint firstItem="uEp-14-5m2" firstAttribute="trailing" secondItem="q0l-RM-gqW" secondAttribute="trailing" constant="20" id="fQv-QH-3GS"/>
+                            <constraint firstItem="VbV-Um-Yuf" firstAttribute="top" secondItem="q0l-RM-gqW" secondAttribute="bottom" constant="20" id="fjo-T8-zS7"/>
+                            <constraint firstItem="uEp-14-5m2" firstAttribute="trailing" secondItem="VbV-Um-Yuf" secondAttribute="trailing" constant="20" id="gxH-uX-lsH"/>
+                            <constraint firstItem="VbV-Um-Yuf" firstAttribute="leading" secondItem="uEp-14-5m2" secondAttribute="leading" constant="20" id="ha9-3p-s0s"/>
+                            <constraint firstItem="q0l-RM-gqW" firstAttribute="leading" secondItem="uEp-14-5m2" secondAttribute="leading" constant="20" id="qf0-zh-5gO"/>
+                            <constraint firstItem="LWu-Jz-xYE" firstAttribute="top" secondItem="VbV-Um-Yuf" secondAttribute="bottom" constant="20" id="voY-mZ-mPF"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="uEp-14-5m2"/>
+                    </view>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" title="add todo" id="yqs-cg-gYO">
+                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="C32-S4-In1"/>
+                    </navigationItem>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8iQ-Pf-g3A" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="320" y="92"/>
         </scene>
         <!--menu-->
         <scene sceneID="3P9-xg-6Bt">
