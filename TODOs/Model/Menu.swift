@@ -31,6 +31,9 @@ class Menu {
         print(realm.configuration.fileURL!)
         lists = realm.objects(List.self)
         tags = realm.objects(Tag.self)
+        do { try realm.write { lists.forEach({ $0.todos.sort(by: { _, rhs in return rhs.isDone})}) }
+        } catch let err {fatalError(err.localizedDescription)}
+        
     }
     
     func add(_ newList: List) {

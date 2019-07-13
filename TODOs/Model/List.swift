@@ -11,5 +11,5 @@ import RealmSwift
 
 class List: Object {
     @objc dynamic var name: String = ""
-    let todos = RealmSwift.List<Todo>()
+    var todos = RealmSwift.List<Todo>()
 }

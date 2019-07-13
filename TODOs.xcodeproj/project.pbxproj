@@ -24,6 +24,7 @@
 		1993A13D22D8986B00C88D74 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1993A13C22D8986B00C88D74 /* Assets.xcassets */; };
 		1993A14022D8986B00C88D74 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1993A13E22D8986B00C88D74 /* LaunchScreen.storyboard */; };
 		1993A14B22D8986B00C88D74 /* TODOsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1993A14A22D8986B00C88D74 /* TODOsTests.swift */; };
+		19B9CBCB22DA37BA00012E61 /* TaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19B9CBCA22DA37BA00012E61 /* TaskViewController.swift */; };
 		9D8C6CF29A1F8FD8CACE3474 /* Pods_TODOsTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E3B089A9C610F17089A2C59 /* Pods_TODOsTests.framework */; };
 		A469F9605B22AE040B848FE2 /* Pods_TODOs.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4DB29A22409A319067D4D68 /* Pods_TODOs.framework */; };
 /* End PBXBuildFile section */
@@ -60,6 +61,7 @@
 		1993A14622D8986B00C88D74 /* TODOsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TODOsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1993A14A22D8986B00C88D74 /* TODOsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TODOsTests.swift; sourceTree = "<group>"; };
 		1993A14C22D8986B00C88D74 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		19B9CBCA22DA37BA00012E61 /* TaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewController.swift; sourceTree = "<group>"; };
 		2212E680BB196BD1392CAC82 /* Pods-TODOsTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TODOsTests.debug.xcconfig"; path = "Target Support Files/Pods-TODOsTests/Pods-TODOsTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5E3B089A9C610F17089A2C59 /* Pods_TODOsTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TODOsTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		82E34E0A5BFA1E88BD306C2B /* Pods-TODOsTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TODOsTests.release.xcconfig"; path = "Target Support Files/Pods-TODOsTests/Pods-TODOsTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -142,6 +144,7 @@
 				1904D23222D8A88F00866F19 /* TodoTableViewCell.swift */,
 				1904D23E22D8C17900866F19 /* menu */,
 				198A613422D915B600BCC1D0 /* Model */,
+				19B9CBCA22DA37BA00012E61 /* TaskViewController.swift */,
 			);
 			path = TODOs;
 			sourceTree = "<group>";
@@ -386,6 +389,7 @@
 				1993A13822D8986A00C88D74 /* ViewController.swift in Sources */,
 				198A613322D915B000BCC1D0 /* Tag.swift in Sources */,
 				1904D23522D8B59400866F19 /* MenuViewController.swift in Sources */,
+				19B9CBCB22DA37BA00012E61 /* TaskViewController.swift in Sources */,
 				1904D23922D8B89700866F19 /* MenuTableViewCell.swift in Sources */,
 				1993A13622D8986A00C88D74 /* AppDelegate.swift in Sources */,
 				1904D24022D8C38E00866F19 /* MenuHeaderView.swift in Sources */,
