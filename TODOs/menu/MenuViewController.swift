@@ -106,6 +106,16 @@ class MenuTableViewController: UITableViewController {
         return cell
     }
     
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            menu.remove(menu.lists[indexPath.item])
+        }
+    }
+    
     @IBAction func didTapAdd(_ sender: Any) {
         let newList = List()
         menu.add(newList)
@@ -120,6 +130,10 @@ class MenuTableViewController: UITableViewController {
 extension MenuTableViewController: MenuTableViewCellDelegate {
     func didEndEditingListName(sender: MenuTableViewCell) {
         if let index = menuTableView.indexPath(for: sender)?.item {
+            if sender.titleTextView.text.allSatisfy({ $0.isWhitespace }) {
+                menu.remove(menu.lists[index])
+                return
+            }
             menu.set(name: sender.titleTextView.text, for: index)
         }
     }

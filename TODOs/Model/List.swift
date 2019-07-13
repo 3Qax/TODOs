@@ -12,4 +12,15 @@ import RealmSwift
 class List: Object {
     @objc dynamic var name: String = ""
     var todos = RealmSwift.List<Todo>()
+    
+    func add(_ newTodo: Todo) {
+        do { try Menu.common.realm.write { todos.append(newTodo) }
+        } catch let err { fatalError(err.localizedDescription) }
+    }
+    
+    func remove(_ todo: Todo) {
+        do { try Menu.common.realm.write { Menu.common.realm.delete(todo) }
+        } catch let err { fatalError(err.localizedDescription) }
+    }
+    
 }

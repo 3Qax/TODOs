@@ -45,4 +45,9 @@ class Menu {
         do { try realm.write { lists[index].name = name }
         } catch let err { fatalError(err.localizedDescription)}
     }
+    
+    func remove(_ list: List) {
+        do { try realm.write { realm.delete(list) }
+        } catch let err { fatalError(err.localizedDescription) }
+    }
 }

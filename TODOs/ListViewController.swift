@@ -50,6 +50,9 @@ class ListViewController: UIViewController {
         if segue.identifier == "addTask" {
             if let taskVC = segue.destination as? TaskViewController {
                 _ = taskVC.view
+                let newTodo = Todo()
+                list.add(newTodo)
+                taskVC.task = newTodo
                 taskVC.state = .editing
                 taskVC.title = "add todo"
             }
@@ -67,13 +70,19 @@ class ListViewController: UIViewController {
     }
     
     @IBAction func unwindToList(_ unwindSegue: UIStoryboardSegue) {
-        let sourceViewController = unwindSegue.source
-        // Use data from the view controller which initiated the unwind segue
     }
 }
 
 extension ListViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
     
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            list.remove(list.todos[indexPath.item])
+        }
+    }
 }
 
 extension ListViewController: UITableViewDataSource {

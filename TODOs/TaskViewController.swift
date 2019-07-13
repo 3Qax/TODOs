@@ -22,24 +22,16 @@ class TaskViewController: UIViewController {
         }
     }
     @IBOutlet weak var titleTextLabel: UITextField!
-    @IBOutlet weak var tagsTextLabel: UITextField!
+    @IBOutlet weak var stateLabel: UILabel!
     @IBOutlet weak var isDoneSwitch: UISwitch!
+    @IBOutlet weak var tagsTextLabel: UITextField!
     
-    @IBOutlet weak var markedAsDoneLabel: UILabel!
-    @IBOutlet weak var markAsDoneLabel: UILabel!
-    
-    var taskObservationToken: NotificationToken?
     var task = Todo() {
         didSet {
             updateForChangedTask()
         }
     }
-
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-    }
+    var taskObservationToken: NotificationToken?
     
     func updateForChangedTask() {
         taskObservationToken?.invalidate()
@@ -50,13 +42,13 @@ class TaskViewController: UIViewController {
             case .change(let properties):
                 for property in properties {
                     // swiftlint:disable force_cast
-                    if property.name == "title" { self.titleTextLabel.text = property.newValue as! String }
-                    if property.name == "isDone" { self.isDoneSwitch.isOn = property.newValue as! Bool }
+                    if property.name == "title" { self.titleTextLabel.text = (property.newValue as! String) }
+                    if property.name == "isDone" { self.isDoneSwitch.isOn = (property.newValue as! Bool) }
                     // swiftlint:enable force_cast
                     
                 }
             case .deleted:
-                fatalError("Task can not be deleted")
+                fatalError("Task can not be deleted in TaskVC")
             }
         })
         titleTextLabel.text = task.title
@@ -67,26 +59,21 @@ class TaskViewController: UIViewController {
         switch state {
         case .editing:
             titleTextLabel.isUserInteractionEnabled = true
-            titleTextLabel.backgroundColor = .white
-            titleTextLabel.borderStyle = .roundedRect
+            titleTextLabel.becomeFirstResponder()
             tagsTextLabel.isUserInteractionEnabled = true
-            tagsTextLabel.backgroundColor = .white
-            tagsTextLabel.borderStyle = .roundedRect
             isDoneSwitch.isHidden = false
-            markAsDoneLabel.isHidden = false
-            markedAsDoneLabel.isHidden = true
-            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(didTapDone))
+            stateLabel.text = "mark as done"
+            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done,
+                                                                target: self,
+                                                                action: #selector(didTapDone))
         case .viewing:
             titleTextLabel.isUserInteractionEnabled = false
-            titleTextLabel.backgroundColor = .clear
-            titleTextLabel.borderStyle = .none
             tagsTextLabel.isUserInteractionEnabled = false
-            tagsTextLabel.backgroundColor = .clear
-            tagsTextLabel.borderStyle = .none
             isDoneSwitch.isHidden = true
-            markAsDoneLabel.isHidden = true
-            markedAsDoneLabel.isHidden = false
-            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(didTapEdit))
+            stateLabel.text = task.isDone ? "Marked as done" : "Pending"
+            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit,
+                                                                target: self,
+                                                                action: #selector(didTapEdit))
         }
     }
     
@@ -99,5 +86,14 @@ class TaskViewController: UIViewController {
     @objc func didTapEdit() {
         self.state = .editing
     }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        taskObservationToken?.invalidate()
+    }
 
+    deinit {
+        taskObservationToken?.invalidate()
+    }
+    
 }
