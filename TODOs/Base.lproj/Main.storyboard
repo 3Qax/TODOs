@@ -305,10 +305,10 @@
             </objects>
             <point key="canvasLocation" x="-572" y="-643"/>
         </scene>
-        <!--Split View Controller-->
+        <!--Primary Split View Controller-->
         <scene sceneID="Psj-eh-qEf">
             <objects>
-                <splitViewController id="A72-PI-b0a" sceneMemberID="viewController">
+                <splitViewController id="A72-PI-b0a" customClass="PrimarySplitViewController" customModule="TODOs" customModuleProvider="target" sceneMemberID="viewController">
                     <connections>
                         <segue destination="y9b-ix-QCf" kind="relationship" relationship="masterViewController" id="avG-TN-z5B"/>
                         <segue destination="gj9-6x-zaQ" kind="relationship" relationship="detailViewController" id="1ZP-34-quQ"/>
@@ -397,6 +397,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="QcW-Rl-QvI"/>
-        <segue reference="lTe-1O-FQY"/>
+        <segue reference="1ZP-34-quQ"/>
     </inferredMetricsTieBreakers>
 </document>
