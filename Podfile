@@ -8,6 +8,7 @@ target 'TODOs' do
   # Pods for TODOs
   pod 'RealmSwift'
   pod 'SwiftLint'
+  pod 'WSTagsField'
 
   target 'TODOsTests' do
     inherit! :search_paths

@@ -48,6 +48,8 @@ class MenuTableViewController: UITableViewController {
                 fatalError(err.localizedDescription)
             }
         })
+//         oh god...
+//         https://github.com/realm/realm-cocoa/issues/5528
         tagsObservationToken = menu.tags.observe({ [weak self] changes in
             switch changes {
             case .initial:
@@ -77,7 +79,9 @@ class MenuTableViewController: UITableViewController {
             let index = tableView.indexPathForSelectedRow?.item else {
                 fatalError()
             }
-            guard section == 0 else { fatalError("showList segue should only be performed for cells (actual lists) from section 0") }
+            guard section == 0 else {
+                fatalError("showList segue should only be performed for cells (actual lists) from section 0")
+            }
             listVC.title = menu.lists[index].name
             listVC.list = menu.lists[index]
         }
@@ -88,7 +92,9 @@ class MenuTableViewController: UITableViewController {
                 let index = tableView.indexPathForSelectedRow?.item else {
                     fatalError()
             }
-            guard section == 1 else { fatalError("showListForTag segue should only be performed for cells (tags) from section 1") }
+            guard section == 1 else {
+                fatalError("showListForTag segue should only be performed for cells (tags) from section 1")
+            }
             listForTagVC.title = menu.tags[index].name
             listForTagVC.list = menu.todosFor(tag: menu.tags[index])
         }
@@ -122,7 +128,8 @@ class MenuTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return true
+        if indexPath.section == 0 { return true }
+        return false
     }
     
     override func tableView(_ tableView: UITableView,
@@ -151,6 +158,7 @@ class MenuTableViewController: UITableViewController {
     
     deinit {
         listsObservationToken?.invalidate()
+        tagsObservationToken?.invalidate()
     }
 }
 
@@ -160,9 +168,10 @@ extension MenuTableViewController: MenuTableViewCellDelegate {
         if let index = menuTableView.indexPath(for: sender)?.item {
             if sender.titleTextView.text.allSatisfy({ $0.isWhitespace }) {
                 menu.remove(menu.lists[index])
+                UINotificationFeedbackGenerator().notificationOccurred(.error)
                 return
             }
-            menu.set(name: sender.titleTextView.text, for: index)
+            menu.lists[index].set(name: sender.titleTextView.text)
         }
     }
 }

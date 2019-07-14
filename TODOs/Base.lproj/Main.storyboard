@@ -56,7 +56,7 @@
                                         <connections>
                                             <outlet property="checkCircle" destination="QdM-Nr-JPd" id="Na3-et-UZh"/>
                                             <outlet property="nameLabel" destination="P94-vz-TtX" id="UUk-FZ-JaX"/>
-                                            <segue destination="d1w-76-WiE" kind="show" identifier="showTaskDetails" id="F5Y-bE-2EA"/>
+                                            <segue destination="d1w-76-WiE" kind="showDetail" identifier="showTaskDetails" id="F5Y-bE-2EA"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -78,7 +78,7 @@
                     <navigationItem key="navigationItem" title="lists" id="3j0-Yk-w3I">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="oM3-VN-0uc">
                             <connections>
-                                <segue destination="d1w-76-WiE" kind="show" identifier="addTask" id="QcW-Rl-QvI"/>
+                                <segue destination="d1w-76-WiE" kind="showDetail" identifier="addTask" id="QcW-Rl-QvI"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -151,15 +151,6 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Tags" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="LWu-Jz-xYE">
-                                <rect key="frame" x="20" y="281" width="384" height="40"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="I2t-44-wWU"/>
-                                </constraints>
-                                <nil key="textColor"/>
-                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="19"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -172,17 +163,14 @@
                             <constraint firstItem="lEx-so-daC" firstAttribute="top" secondItem="pNH-WM-BJo" secondAttribute="bottom" constant="10" id="KQc-rV-3Yy"/>
                             <constraint firstItem="uEp-14-5m2" firstAttribute="trailing" secondItem="Vta-Zn-h1u" secondAttribute="trailing" constant="10" id="Nuy-7C-Jx9"/>
                             <constraint firstItem="BBa-Lg-LvQ" firstAttribute="centerY" secondItem="pNH-WM-BJo" secondAttribute="centerY" id="T5H-f0-Xd0"/>
-                            <constraint firstItem="LWu-Jz-xYE" firstAttribute="top" secondItem="lEx-so-daC" secondAttribute="bottom" constant="5" id="VIK-wv-xQa"/>
                             <constraint firstItem="q0l-RM-gqW" firstAttribute="leading" secondItem="uEp-14-5m2" secondAttribute="leading" constant="20" id="Y7N-4w-pR1"/>
                             <constraint firstItem="pNH-WM-BJo" firstAttribute="top" secondItem="Vta-Zn-h1u" secondAttribute="bottom" constant="5" id="ZB6-Ic-vLX"/>
-                            <constraint firstItem="LWu-Jz-xYE" firstAttribute="leading" secondItem="uEp-14-5m2" secondAttribute="leading" constant="20" id="aVo-dH-wNC"/>
                             <constraint firstItem="lEx-so-daC" firstAttribute="leading" secondItem="uEp-14-5m2" secondAttribute="leading" constant="15" id="cDK-jx-7ce"/>
                             <constraint firstItem="uEp-14-5m2" firstAttribute="trailing" secondItem="Hqa-08-brv" secondAttribute="trailing" constant="10" id="fiB-wC-UTE"/>
                             <constraint firstItem="uEp-14-5m2" firstAttribute="trailing" secondItem="q0l-RM-gqW" secondAttribute="trailing" constant="10" id="lNz-Wf-JEL"/>
                             <constraint firstItem="uEp-14-5m2" firstAttribute="trailing" secondItem="BBa-Lg-LvQ" secondAttribute="trailing" constant="20" id="nCo-vb-X6F"/>
                             <constraint firstItem="uEp-14-5m2" firstAttribute="trailing" secondItem="lEx-so-daC" secondAttribute="trailing" constant="10" id="qjn-ox-L8z"/>
                             <constraint firstItem="Hqa-08-brv" firstAttribute="leading" secondItem="uEp-14-5m2" secondAttribute="leading" constant="15" id="wxS-ds-CEt"/>
-                            <constraint firstItem="uEp-14-5m2" firstAttribute="trailing" secondItem="LWu-Jz-xYE" secondAttribute="trailing" constant="10" id="y7F-ad-kBn"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="uEp-14-5m2"/>
                     </view>
@@ -192,7 +180,7 @@
                     <connections>
                         <outlet property="isDoneSwitch" destination="BBa-Lg-LvQ" id="gcb-B8-Sfl"/>
                         <outlet property="stateLabel" destination="pNH-WM-BJo" id="KpI-70-Uko"/>
-                        <outlet property="tagsTextLabel" destination="LWu-Jz-xYE" id="6Ag-at-q9c"/>
+                        <outlet property="tagsLabel" destination="lEx-so-daC" id="sZr-z7-4l7"/>
                         <outlet property="titleTextLabel" destination="q0l-RM-gqW" id="hXp-N9-a1o"/>
                         <segue destination="Tw8-Lr-hFU" kind="unwind" identifier="unwindToList" unwindAction="unwindToList:" id="RUL-D9-9oc"/>
                     </connections>
@@ -408,7 +396,7 @@
         <image name="down-arrow" width="320" height="512"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="F5Y-bE-2EA"/>
+        <segue reference="QcW-Rl-QvI"/>
         <segue reference="lTe-1O-FQY"/>
     </inferredMetricsTieBreakers>
 </document>

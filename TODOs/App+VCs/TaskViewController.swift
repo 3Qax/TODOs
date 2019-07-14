@@ -8,6 +8,7 @@
 
 import UIKit
 import RealmSwift
+import WSTagsField
 
 class TaskViewController: UIViewController {
     
@@ -24,7 +25,8 @@ class TaskViewController: UIViewController {
     @IBOutlet weak var titleTextLabel: UITextField!
     @IBOutlet weak var stateLabel: UILabel!
     @IBOutlet weak var isDoneSwitch: UISwitch!
-    @IBOutlet weak var tagsTextLabel: UITextField!
+    @IBOutlet weak var tagsLabel: UILabel!
+    let tagsField = WSTagsField()
     
     var task = Todo() {
         didSet {
@@ -48,11 +50,12 @@ class TaskViewController: UIViewController {
                     
                 }
             case .deleted:
-                fatalError("Task can not be deleted in TaskVC")
+                ()
             }
         })
         titleTextLabel.text = task.title
         isDoneSwitch.isOn = task.isDone
+        task.tags.forEach({ tagsField.addTag($0.name) })
     }
     
     func updateViewState() {
@@ -60,7 +63,8 @@ class TaskViewController: UIViewController {
         case .editing:
             titleTextLabel.isUserInteractionEnabled = true
             titleTextLabel.becomeFirstResponder()
-            tagsTextLabel.isUserInteractionEnabled = true
+            tagsField.isUserInteractionEnabled = true
+            if tagsField.tags.isEmpty { tagsField.placeholder = "Space separated tags" }
             isDoneSwitch.isHidden = false
             stateLabel.text = "mark as done"
             navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done,
@@ -68,7 +72,8 @@ class TaskViewController: UIViewController {
                                                                 action: #selector(didTapDone))
         case .viewing:
             titleTextLabel.isUserInteractionEnabled = false
-            tagsTextLabel.isUserInteractionEnabled = false
+            tagsField.isUserInteractionEnabled = false
+            if tagsField.tags.isEmpty { tagsField.placeholder = "No tags were specified" }
             isDoneSwitch.isHidden = true
             stateLabel.text = task.isDone ? "Marked as done" : "Pending"
             navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit,
@@ -80,11 +85,40 @@ class TaskViewController: UIViewController {
     @objc func didTapDone() {
         task.set(title: titleTextLabel.text!)
         task.set(isDone: isDoneSwitch.isOn)
+        task.set(tags: tagsField.tags.map({ $0.text }))
         self.performSegue(withIdentifier: "unwindToList", sender: self)
     }
     
     @objc func didTapEdit() {
         self.state = .editing
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.addSubview(tagsField)
+        tagsField.translatesAutoresizingMaskIntoConstraints = false
+        let topConstraint = tagsField.topAnchor.constraint(equalTo: tagsLabel!.bottomAnchor, constant: 5)
+        let leadingConstraint = tagsField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20)
+        let trailingConstraint = tagsField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 20)
+        view.addConstraints([topConstraint, leadingConstraint, trailingConstraint])
+        
+        tagsField.layoutMargins = UIEdgeInsets(top: 2, left: 6, bottom: 2, right: 6)
+        tagsField.contentInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        tagsField.spaceBetweenLines = 5.0
+        tagsField.spaceBetweenTags = 10.0
+        tagsField.font = .systemFont(ofSize: 19, weight: .light)
+        tagsField.backgroundColor = .white
+        tagsField.placeholder = "Space separated tags"
+        tagsField.tintColor = view.tintColor
+        tagsField.textColor = .white
+        tagsField.fieldTextColor = .black
+        tagsField.selectedColor = .darkGray
+        tagsField.selectedTextColor = .white
+        tagsField.isDelimiterVisible = false
+        tagsField.placeholderColor = .darkGray
+        tagsField.placeholderAlwaysVisible = false
+        tagsField.returnKeyType = .next
+        tagsField.acceptTagOption = .space
     }
     
     override func viewDidDisappear(_ animated: Bool) {

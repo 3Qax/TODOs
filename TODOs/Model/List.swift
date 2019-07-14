@@ -18,6 +18,11 @@ class List: Object {
         } catch let err { fatalError(err.localizedDescription) }
     }
     
+    func set(name: String) {
+        do { try Menu.common.realm.write { self.name = name }
+        } catch let err { fatalError(err.localizedDescription)}
+    }
+    
     func remove(_ todo: Todo) {
         do { try Menu.common.realm.write { Menu.common.realm.delete(todo) }
         } catch let err { fatalError(err.localizedDescription) }

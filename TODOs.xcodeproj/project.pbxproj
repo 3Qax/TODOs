@@ -215,8 +215,8 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1993A14F22D8986B00C88D74 /* Build configuration list for PBXNativeTarget "TODOs" */;
 			buildPhases = (
-				1904D22D22D89A7E00866F19 /* ShellScript */,
 				6240E8ED8D47F4383591CF0E /* [CP] Check Pods Manifest.lock */,
+				1904D22D22D89A7E00866F19 /* ShellScript */,
 				1993A12E22D8986A00C88D74 /* Sources */,
 				1993A12F22D8986A00C88D74 /* Frameworks */,
 				1993A13022D8986A00C88D74 /* Resources */,

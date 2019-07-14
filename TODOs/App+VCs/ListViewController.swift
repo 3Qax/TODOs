@@ -68,6 +68,14 @@ class ListViewController: UIViewController {
     }
     
     @IBAction func unwindToList(_ unwindSegue: UIStoryboardSegue) {
+        if unwindSegue.identifier == "unwindToList" {
+            if let taskVC = unwindSegue.source as? TaskViewController {
+                if taskVC.task.title.allSatisfy({ $0.isWhitespace }) {
+                    UINotificationFeedbackGenerator().notificationOccurred(.error)
+                    list.remove(taskVC.task)
+                }
+            }
+        }
     }
 }
 
