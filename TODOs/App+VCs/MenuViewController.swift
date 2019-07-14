@@ -68,25 +68,29 @@ class MenuTableViewController: UITableViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
         guard let identifier = segue.identifier else { return }
+        
         if identifier == "showList" {
             guard let listVC = segue.destination as? ListViewController,
             let section = tableView.indexPathForSelectedRow?.section,
             let index = tableView.indexPathForSelectedRow?.item else {
                 fatalError()
             }
-            switch section {
-            case 0:
-                listVC.title = menu.lists[index].name
-                listVC.list = menu.lists[index]
-            case 1:
-                listVC.title = menu.tags[index].name
-//                listVC.list = menu.tags[index]
-                
-            default:
-                fatalError("Invalid section number")
+            guard section == 0 else { fatalError("showList segue should only be performed for cells (actual lists) from section 0") }
+            listVC.title = menu.lists[index].name
+            listVC.list = menu.lists[index]
+        }
+        
+        if identifier == "showListForTag" {
+            guard let listForTagVC = segue.destination as? ListForTagViewController,
+                let section = tableView.indexPathForSelectedRow?.section,
+                let index = tableView.indexPathForSelectedRow?.item else {
+                    fatalError()
             }
-
+            guard section == 1 else { fatalError("showListForTag segue should only be performed for cells (tags) from section 1") }
+            listForTagVC.title = menu.tags[index].name
+            listForTagVC.list = menu.todosFor(tag: menu.tags[index])
         }
 
     }
@@ -132,6 +136,17 @@ class MenuTableViewController: UITableViewController {
     @IBAction func didTapAdd(_ sender: Any) {
         let newList = List()
         menu.add(newList)
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        switch indexPath.section {
+        case 0:
+            performSegue(withIdentifier: "showList", sender: self)
+        case 1:
+            performSegue(withIdentifier: "showListForTag", sender: self)
+        default:
+            fatalError("Invalid section")
+        }
     }
     
     deinit {

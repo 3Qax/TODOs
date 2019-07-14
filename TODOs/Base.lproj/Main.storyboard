@@ -89,7 +89,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VVc-q6-UAP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-573.91304347826087" y="92.410714285714278"/>
+            <point key="canvasLocation" x="-193" y="92"/>
         </scene>
         <!--add new todo-->
         <scene sceneID="5j9-kw-jiB">
@@ -200,7 +200,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8iQ-Pf-g3A" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="Tw8-Lr-hFU" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="318.84057971014494" y="91.741071428571431"/>
+            <point key="canvasLocation" x="-194" y="855"/>
         </scene>
         <!--menu-->
         <scene sceneID="3P9-xg-6Bt">
@@ -275,7 +275,6 @@
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <connections>
                                     <outlet property="titleTextView" destination="crY-bQ-0Os" id="AIo-Mr-Ugi"/>
-                                    <segue destination="gj9-6x-zaQ" kind="showDetail" identifier="showList" id="qOH-Un-HWR"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -294,6 +293,8 @@
                     </navigationItem>
                     <connections>
                         <outlet property="menuTableView" destination="fTb-zS-egn" id="Lm0-14-p9R"/>
+                        <segue destination="glH-h3-By5" kind="showDetail" identifier="showListForTag" id="PaJ-qu-lQ3"/>
+                        <segue destination="gj9-6x-zaQ" kind="showDetail" identifier="showList" id="lTe-1O-FQY"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="t52-w2-OXS" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -329,12 +330,85 @@
             </objects>
             <point key="canvasLocation" x="-1291" y="-232"/>
         </scene>
+        <!--List-->
+        <scene sceneID="QMO-wX-yBP">
+            <objects>
+                <viewController title="List" id="glH-h3-By5" customClass="ListForTagViewController" customModule="TODOs" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="MYf-u6-y9z">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="8gQ-Hv-zU8">
+                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="todoWithTag" id="nYc-57-tgg" customClass="TodoTableViewCell" customModule="TODOs" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="414" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="nYc-57-tgg" id="YlX-9A-eA4">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="t6J-NR-pbE" customClass="CheckCircle" customModule="TODOs" customModuleProvider="target">
+                                                    <rect key="frame" x="10" y="9.5" width="25" height="25"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="25" id="IiK-IV-eEM"/>
+                                                        <constraint firstAttribute="width" constant="25" id="Y5K-jd-lgO"/>
+                                                    </constraints>
+                                                </view>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Posprzątać pokójeeee" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WCb-hj-Yhy">
+                                                    <rect key="frame" x="45" y="10.5" width="359" height="23"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="light" pointSize="19"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="t6J-NR-pbE" firstAttribute="leading" secondItem="YlX-9A-eA4" secondAttribute="leading" constant="10" id="Frw-vD-LMb"/>
+                                                <constraint firstItem="t6J-NR-pbE" firstAttribute="centerY" secondItem="YlX-9A-eA4" secondAttribute="centerY" id="KzO-Pf-yDX"/>
+                                                <constraint firstItem="WCb-hj-Yhy" firstAttribute="leading" secondItem="t6J-NR-pbE" secondAttribute="trailing" constant="10" id="ZG2-Z1-qc6"/>
+                                                <constraint firstItem="WCb-hj-Yhy" firstAttribute="centerY" secondItem="YlX-9A-eA4" secondAttribute="centerY" id="aO8-Zo-cUf"/>
+                                                <constraint firstAttribute="trailing" secondItem="WCb-hj-Yhy" secondAttribute="trailing" constant="10" id="ykJ-Vv-Sta"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="checkCircle" destination="t6J-NR-pbE" id="XzY-ul-DPX"/>
+                                            <outlet property="nameLabel" destination="WCb-hj-Yhy" id="vvA-R9-erj"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="glH-h3-By5" id="AXy-I8-khv"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="JEM-Jf-480" firstAttribute="trailing" secondItem="8gQ-Hv-zU8" secondAttribute="trailing" id="7rQ-hh-gRU"/>
+                            <constraint firstItem="8gQ-Hv-zU8" firstAttribute="leading" secondItem="JEM-Jf-480" secondAttribute="leading" id="EaA-ch-dob"/>
+                            <constraint firstItem="8gQ-Hv-zU8" firstAttribute="top" secondItem="JEM-Jf-480" secondAttribute="top" id="gEi-br-o27"/>
+                            <constraint firstItem="JEM-Jf-480" firstAttribute="bottom" secondItem="8gQ-Hv-zU8" secondAttribute="bottom" id="uIB-3l-UjZ"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="JEM-Jf-480"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="lists" id="Xts-by-YrL"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <connections>
+                        <outlet property="taskTableView" destination="8gQ-Hv-zU8" id="Kji-V1-GbF"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ohp-Lq-38S" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="548" y="92"/>
+        </scene>
     </scenes>
     <resources>
         <image name="down-arrow" width="320" height="512"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="F5Y-bE-2EA"/>
-        <segue reference="qOH-Un-HWR"/>
+        <segue reference="lTe-1O-FQY"/>
     </inferredMetricsTieBreakers>
 </document>

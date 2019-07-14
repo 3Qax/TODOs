@@ -52,12 +52,8 @@ class Menu {
         } catch let err { fatalError(err.localizedDescription) }
     }
     
-//    func todosFor(tag: String) -> RealmSwift.List<Todo> {
-//        lists = realm.objects(List.self)
-//        let availableTags = realm.objects(Tag.self).distinct(by: ["name"]).map({ return "'" + $0.name + "'" })
-//        let joinedTags: String = "{" + availableTags.joined(separator: ", ") + "}"
-//        print(joinedTags)
-//        return realm.objects(Todo).filter("")
-//        //where tag in searchingTags
-//    }
+    func todosFor(tag: Tag) -> AnyRealmCollection<Todo> {
+        print(type(of: realm.objects(Todo.self).filter("ANY tags.name = '\(tag.name)'")))
+        return AnyRealmCollection(realm.objects(Todo.self).filter("ANY tags.name = '\(tag.name)'"))
+    }
 }

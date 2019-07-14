@@ -12,6 +12,7 @@
 		1904D23522D8B59400866F19 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1904D23422D8B59400866F19 /* MenuViewController.swift */; };
 		1904D23922D8B89700866F19 /* MenuTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1904D23822D8B89700866F19 /* MenuTableViewCell.swift */; };
 		1904D24022D8C38E00866F19 /* MenuHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1904D23F22D8C38E00866F19 /* MenuHeaderView.swift */; };
+		19762C0922DB82E7008FEAD9 /* ListForTagViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19762C0822DB82E7008FEAD9 /* ListForTagViewController.swift */; };
 		197AC80022DB3215004883EC /* CheckCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 197AC7FF22DB3215004883EC /* CheckCircle.swift */; };
 		198A612F22D9130600BCC1D0 /* Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 198A612E22D9130600BCC1D0 /* Menu.swift */; };
 		198A613122D915AA00BCC1D0 /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = 198A613022D915AA00BCC1D0 /* List.swift */; };
@@ -47,6 +48,7 @@
 		1904D23422D8B59400866F19 /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		1904D23822D8B89700866F19 /* MenuTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuTableViewCell.swift; sourceTree = "<group>"; };
 		1904D23F22D8C38E00866F19 /* MenuHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuHeaderView.swift; sourceTree = "<group>"; };
+		19762C0822DB82E7008FEAD9 /* ListForTagViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListForTagViewController.swift; sourceTree = "<group>"; };
 		197AC7FF22DB3215004883EC /* CheckCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckCircle.swift; sourceTree = "<group>"; };
 		198A612E22D9130600BCC1D0 /* Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Menu.swift; sourceTree = "<group>"; };
 		198A613022D915AA00BCC1D0 /* List.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = List.swift; sourceTree = "<group>"; };
@@ -173,6 +175,7 @@
 				1904D23422D8B59400866F19 /* MenuViewController.swift */,
 				1904D22E22D8A09500866F19 /* ListViewController.swift */,
 				19B9CBCA22DA37BA00012E61 /* TaskViewController.swift */,
+				19762C0822DB82E7008FEAD9 /* ListForTagViewController.swift */,
 			);
 			path = "App+VCs";
 			sourceTree = "<group>";
@@ -418,6 +421,7 @@
 				19A22EF522DA885000DFEB5A /* UIView.swift in Sources */,
 				19B9CBCB22DA37BA00012E61 /* TaskViewController.swift in Sources */,
 				1904D23922D8B89700866F19 /* MenuTableViewCell.swift in Sources */,
+				19762C0922DB82E7008FEAD9 /* ListForTagViewController.swift in Sources */,
 				1993A13622D8986A00C88D74 /* AppDelegate.swift in Sources */,
 				1904D24022D8C38E00866F19 /* MenuHeaderView.swift in Sources */,
 				197AC80022DB3215004883EC /* CheckCircle.swift in Sources */,
