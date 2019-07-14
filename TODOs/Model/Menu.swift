@@ -30,7 +30,7 @@ class Menu {
         
         print(realm.configuration.fileURL!)
         lists = realm.objects(List.self)
-        tags = realm.objects(Tag.self)
+        tags = realm.objects(Tag.self).distinct(by: ["name"])
         do { try realm.write { lists.forEach({ $0.todos.sort(by: { _, rhs in return rhs.isDone})}) }
         } catch let err {fatalError(err.localizedDescription)}
         
@@ -50,4 +50,13 @@ class Menu {
         do { try realm.write { realm.delete(list) }
         } catch let err { fatalError(err.localizedDescription) }
     }
+    
+//    func todosFor(tag: String) -> RealmSwift.List<Todo> {
+//        lists = realm.objects(List.self)
+//        let availableTags = realm.objects(Tag.self).distinct(by: ["name"]).map({ return "'" + $0.name + "'" })
+//        let joinedTags: String = "{" + availableTags.joined(separator: ", ") + "}"
+//        print(joinedTags)
+//        return realm.objects(Todo).filter("")
+//        //where tag in searchingTags
+//    }
 }

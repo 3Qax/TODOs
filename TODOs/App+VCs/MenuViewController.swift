@@ -71,11 +71,22 @@ class MenuTableViewController: UITableViewController {
         guard let identifier = segue.identifier else { return }
         if identifier == "showList" {
             guard let listVC = segue.destination as? ListViewController,
-                  let indexOfSelectedList = tableView.indexPathForSelectedRow?.item else {
+            let section = tableView.indexPathForSelectedRow?.section,
+            let index = tableView.indexPathForSelectedRow?.item else {
                 fatalError()
             }
-            listVC.title = menu.lists[indexOfSelectedList].name
-            listVC.list = menu.lists[indexOfSelectedList]
+            switch section {
+            case 0:
+                listVC.title = menu.lists[index].name
+                listVC.list = menu.lists[index]
+            case 1:
+                listVC.title = menu.tags[index].name
+//                listVC.list = menu.tags[index]
+                
+            default:
+                fatalError("Invalid section number")
+            }
+
         }
 
     }
