@@ -56,7 +56,7 @@
                                         <connections>
                                             <outlet property="checkCircle" destination="QdM-Nr-JPd" id="Na3-et-UZh"/>
                                             <outlet property="nameLabel" destination="P94-vz-TtX" id="UUk-FZ-JaX"/>
-                                            <segue destination="d1w-76-WiE" kind="showDetail" identifier="showTaskDetails" id="F5Y-bE-2EA"/>
+                                            <segue destination="d1w-76-WiE" kind="show" identifier="showTaskDetails" id="F5Y-bE-2EA"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -78,7 +78,7 @@
                     <navigationItem key="navigationItem" title="lists" id="3j0-Yk-w3I">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="oM3-VN-0uc">
                             <connections>
-                                <segue destination="d1w-76-WiE" kind="showDetail" identifier="addTask" id="QcW-Rl-QvI"/>
+                                <segue destination="d1w-76-WiE" kind="show" identifier="addTask" id="QcW-Rl-QvI"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -316,7 +316,7 @@
                 </splitViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="L6V-ed-jFZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1291" y="-232"/>
+            <point key="canvasLocation" x="-1516" y="-234"/>
         </scene>
         <!--List-->
         <scene sceneID="QMO-wX-yBP">
@@ -397,6 +397,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="QcW-Rl-QvI"/>
-        <segue reference="1ZP-34-quQ"/>
+        <segue reference="lTe-1O-FQY"/>
     </inferredMetricsTieBreakers>
 </document>
