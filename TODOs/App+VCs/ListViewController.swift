@@ -95,9 +95,22 @@ extension ListViewController: UITableViewDataSource {
         }
         
         cell.nameLabel.text = list.todos[indexPath.item].title
-        if list.todos[indexPath.item].isDone { cell.markAsDone() }
+        cell.shouldStypeAsDone = list.todos[indexPath.item].isDone
+        cell.delegate = self
 
         return cell
     }
     
+}
+
+extension ListViewController: TodoTableViewCellDelegate {
+    func didTapCircle(sender: TodoTableViewCell) {
+        if let index = taskTableView.indexPath(for: sender)?.item {
+            if list.todos[index].isDone {
+                 list.todos[index].set(isDone: false)
+            } else {
+                 list.todos[index].set(isDone: true)
+            }
+        }
+    }
 }

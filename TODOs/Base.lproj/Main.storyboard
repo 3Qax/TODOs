@@ -30,64 +30,32 @@
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Posprzątać pokój" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P94-vz-TtX">
-                                                    <rect key="frame" x="50" y="10.5" width="354" height="23"/>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QdM-Nr-JPd" customClass="CheckCircle" customModule="TODOs" customModuleProvider="target">
+                                                    <rect key="frame" x="10" y="9.5" width="25" height="25"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="25" id="C5f-hs-Hjh"/>
+                                                        <constraint firstAttribute="height" constant="25" id="Rly-yG-OMd"/>
+                                                    </constraints>
+                                                </view>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Posprzątać pokójeeee" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P94-vz-TtX">
+                                                    <rect key="frame" x="45" y="10.5" width="359" height="23"/>
                                                     <fontDescription key="fontDescription" type="system" weight="light" pointSize="19"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NKX-lM-L4l">
-                                                    <rect key="frame" x="15" y="9.5" width="25" height="25"/>
-                                                    <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="25" id="YBD-WI-NM3"/>
-                                                        <constraint firstAttribute="width" constant="25" id="yPe-I8-O93"/>
-                                                    </constraints>
-                                                    <userDefinedRuntimeAttributes>
-                                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                            <real key="value" value="12.5"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                    </userDefinedRuntimeAttributes>
-                                                </view>
-                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JZc-rz-39B">
-                                                    <rect key="frame" x="16.5" y="11" width="22" height="22"/>
-                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="22" id="Hh9-he-sOI"/>
-                                                        <constraint firstAttribute="height" constant="22" id="gze-MQ-g9l"/>
-                                                    </constraints>
-                                                    <userDefinedRuntimeAttributes>
-                                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                            <real key="value" value="11"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                    </userDefinedRuntimeAttributes>
-                                                </view>
-                                                <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="check-circle" translatesAutoresizingMaskIntoConstraints="NO" id="9Q6-vG-aeP">
-                                                    <rect key="frame" x="15" y="9.5" width="25" height="25"/>
-                                                    <color key="tintColor" red="1" green="0.15543016479999999" blue="0.1824437086" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="25" id="mrY-qt-iKJ"/>
-                                                        <constraint firstAttribute="height" constant="25" id="mun-Ri-lP0"/>
-                                                    </constraints>
-                                                </imageView>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="NKX-lM-L4l" firstAttribute="centerY" secondItem="jdh-SE-Teb" secondAttribute="centerY" id="2el-16-qZf"/>
-                                                <constraint firstItem="P94-vz-TtX" firstAttribute="leading" secondItem="NKX-lM-L4l" secondAttribute="trailing" constant="10" id="FOA-3f-7tA"/>
-                                                <constraint firstItem="9Q6-vG-aeP" firstAttribute="centerY" secondItem="jdh-SE-Teb" secondAttribute="centerY" id="PpU-d5-FuP"/>
-                                                <constraint firstItem="9Q6-vG-aeP" firstAttribute="leading" secondItem="jdh-SE-Teb" secondAttribute="leading" constant="15" id="SV9-Cc-qwN"/>
-                                                <constraint firstItem="JZc-rz-39B" firstAttribute="centerX" secondItem="NKX-lM-L4l" secondAttribute="centerX" id="Ttz-cv-Dui"/>
-                                                <constraint firstAttribute="trailing" secondItem="P94-vz-TtX" secondAttribute="trailing" constant="10" id="TwR-VP-wZw"/>
-                                                <constraint firstItem="NKX-lM-L4l" firstAttribute="leading" secondItem="jdh-SE-Teb" secondAttribute="leading" constant="15" id="WND-PF-ctc"/>
-                                                <constraint firstItem="P94-vz-TtX" firstAttribute="centerY" secondItem="jdh-SE-Teb" secondAttribute="centerY" id="v7S-A6-JwB"/>
-                                                <constraint firstItem="JZc-rz-39B" firstAttribute="centerY" secondItem="NKX-lM-L4l" secondAttribute="centerY" id="y9S-2l-9xV"/>
+                                                <constraint firstItem="QdM-Nr-JPd" firstAttribute="centerY" secondItem="jdh-SE-Teb" secondAttribute="centerY" id="5Mf-ds-Ihk"/>
+                                                <constraint firstItem="P94-vz-TtX" firstAttribute="centerY" secondItem="jdh-SE-Teb" secondAttribute="centerY" id="JMc-5r-4vS"/>
+                                                <constraint firstItem="QdM-Nr-JPd" firstAttribute="leading" secondItem="jdh-SE-Teb" secondAttribute="leading" constant="10" id="MeJ-Ca-jrm"/>
+                                                <constraint firstAttribute="trailing" secondItem="P94-vz-TtX" secondAttribute="trailing" constant="10" id="U7x-tQ-oQs"/>
+                                                <constraint firstItem="P94-vz-TtX" firstAttribute="leading" secondItem="QdM-Nr-JPd" secondAttribute="trailing" constant="10" id="vO4-EP-SYu"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="checkImageView" destination="9Q6-vG-aeP" id="JmG-JP-iA9"/>
-                                            <outlet property="innerCircle" destination="JZc-rz-39B" id="IcH-Xk-qxP"/>
+                                            <outlet property="checkCircle" destination="QdM-Nr-JPd" id="Na3-et-UZh"/>
                                             <outlet property="nameLabel" destination="P94-vz-TtX" id="UUk-FZ-JaX"/>
-                                            <outlet property="outerCircle" destination="NKX-lM-L4l" id="rgR-PQ-hay"/>
                                             <segue destination="d1w-76-WiE" kind="show" identifier="showTaskDetails" id="F5Y-bE-2EA"/>
                                         </connections>
                                     </tableViewCell>
@@ -121,7 +89,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VVc-q6-UAP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-572.48201438848923" y="92.805755395683462"/>
+            <point key="canvasLocation" x="-573.91304347826087" y="92.410714285714278"/>
         </scene>
         <!--add new todo-->
         <scene sceneID="5j9-kw-jiB">
@@ -363,7 +331,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="check-circle" width="512" height="512"/>
         <image name="down-arrow" width="320" height="512"/>
     </resources>
     <inferredMetricsTieBreakers>

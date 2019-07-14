@@ -41,6 +41,7 @@ class Menu {
         } catch let err { fatalError(err.localizedDescription) }
     }
     
+    //TODO: This should be method of list
     func set(name: String, for index: Int) {
         do { try realm.write { lists[index].name = name }
         } catch let err { fatalError(err.localizedDescription)}

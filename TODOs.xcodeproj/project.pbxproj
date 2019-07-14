@@ -12,6 +12,7 @@
 		1904D23522D8B59400866F19 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1904D23422D8B59400866F19 /* MenuViewController.swift */; };
 		1904D23922D8B89700866F19 /* MenuTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1904D23822D8B89700866F19 /* MenuTableViewCell.swift */; };
 		1904D24022D8C38E00866F19 /* MenuHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1904D23F22D8C38E00866F19 /* MenuHeaderView.swift */; };
+		197AC80022DB3215004883EC /* CheckCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 197AC7FF22DB3215004883EC /* CheckCircle.swift */; };
 		198A612F22D9130600BCC1D0 /* Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 198A612E22D9130600BCC1D0 /* Menu.swift */; };
 		198A613122D915AA00BCC1D0 /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = 198A613022D915AA00BCC1D0 /* List.swift */; };
 		198A613322D915B000BCC1D0 /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 198A613222D915B000BCC1D0 /* Tag.swift */; };
@@ -46,6 +47,7 @@
 		1904D23422D8B59400866F19 /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		1904D23822D8B89700866F19 /* MenuTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuTableViewCell.swift; sourceTree = "<group>"; };
 		1904D23F22D8C38E00866F19 /* MenuHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuHeaderView.swift; sourceTree = "<group>"; };
+		197AC7FF22DB3215004883EC /* CheckCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckCircle.swift; sourceTree = "<group>"; };
 		198A612E22D9130600BCC1D0 /* Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Menu.swift; sourceTree = "<group>"; };
 		198A613022D915AA00BCC1D0 /* List.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = List.swift; sourceTree = "<group>"; };
 		198A613222D915B000BCC1D0 /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
@@ -99,6 +101,14 @@
 			path = Cells;
 			sourceTree = "<group>";
 		};
+		19762C0722DB4451008FEAD9 /* Controls */ = {
+			isa = PBXGroup;
+			children = (
+				197AC7FF22DB3215004883EC /* CheckCircle.swift */,
+			);
+			path = Controls;
+			sourceTree = "<group>";
+		};
 		198A613422D915B600BCC1D0 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -139,6 +149,7 @@
 				1993A13C22D8986B00C88D74 /* Assets.xcassets */,
 				1993A13E22D8986B00C88D74 /* LaunchScreen.storyboard */,
 				19A22EF322DA883700DFEB5A /* Extensions */,
+				19762C0722DB4451008FEAD9 /* Controls */,
 				1904D23E22D8C17900866F19 /* Cells */,
 				198A613422D915B600BCC1D0 /* Model */,
 				19A22EF222DA871300DFEB5A /* App+VCs */,
@@ -409,6 +420,7 @@
 				1904D23922D8B89700866F19 /* MenuTableViewCell.swift in Sources */,
 				1993A13622D8986A00C88D74 /* AppDelegate.swift in Sources */,
 				1904D24022D8C38E00866F19 /* MenuHeaderView.swift in Sources */,
+				197AC80022DB3215004883EC /* CheckCircle.swift in Sources */,
 				1904D22F22D8A09500866F19 /* ListViewController.swift in Sources */,
 				1904D23322D8A88F00866F19 /* TodoTableViewCell.swift in Sources */,
 				198A613122D915AA00BCC1D0 /* List.swift in Sources */,
