@@ -42,7 +42,9 @@ class Menu {
     }
     
     func remove(_ list: List) {
-        do { try realm.write { realm.delete(list) }
+        do { try realm.write {
+            realm.delete(list)
+            }
         } catch let err { fatalError(err.localizedDescription) }
     }
     

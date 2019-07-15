@@ -27,16 +27,15 @@ class Todo: Object {
     func set(tags: [String]) {
         //adding, changing, removing tags should work when the following code is uncommented
         //but it does not, since https://github.com/realm/realm-cocoa/issues/5528
-//        do {
-//            try Menu.common.realm.write { Menu.common.realm.delete(self.tags) }
-//        } catch let err { fatalError(err.localizedDescription) }
-//
-//        do {
-//            try Menu.common.realm.write {
-//                tags.forEach({ self.tags.append(Tag(value: ["name": "\($0)"])) })
-//
-//            }
-//        } catch let err { fatalError(err.localizedDescription) }
+        do {
+            try Menu.common.realm.write { Menu.common.realm.delete(self.tags) }
+        } catch let err { fatalError(err.localizedDescription) }
+
+        do {
+            try Menu.common.realm.write {
+                tags.forEach({ self.tags.append(Tag(value: ["name": "\($0)"])) })
+            }
+        } catch let err { fatalError(err.localizedDescription) }
         
     }
 }

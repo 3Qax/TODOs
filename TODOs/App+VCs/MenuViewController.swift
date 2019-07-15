@@ -18,57 +18,6 @@ class MenuTableViewController: UITableViewController {
     var listsObservationToken: NotificationToken?
     var tagsObservationToken: NotificationToken?
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        menuTableView.canCancelContentTouches = false
-        listsObservationToken = menu.lists.observe({ [weak self] changes in
-            switch changes {
-            case .initial:
-                self?.menuTableView.reloadData()
-            case .update(_, let deletions, let insertions, let modifications):
-                self?.menuTableView.beginUpdates()
-                // When adding new cell
-                self?.menuTableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0) }),
-                                     with: .automatic)
-                
-                self?.menuTableView.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}),
-                                     with: .automatic)
-                
-                self?.menuTableView.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0) }),
-                                     with: .automatic)
-                self?.menuTableView.endUpdates()
-                
-                if let item = insertions.last,
-                let insertedCell = self?.menuTableView.cellForRow(at: IndexPath(item: item, section: 0)) as? MenuTableViewCell {
-                    insertedCell.titleTextView.isEditable = true
-                    insertedCell.titleTextView.becomeFirstResponder()
-                }
-                
-            case .error(let err):
-                fatalError(err.localizedDescription)
-            }
-        })
-//         oh god...
-//         https://github.com/realm/realm-cocoa/issues/5528
-        tagsObservationToken = menu.tags.observe({ [weak self] changes in
-            switch changes {
-            case .initial:
-                self?.menuTableView.reloadSections(IndexSet(integer: 1), with: .automatic)
-            case .update(_, let deletions, let insertions, let modifications):
-                self?.menuTableView.beginUpdates()
-                self?.menuTableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: 1) }),
-                                               with: .automatic)
-                self?.menuTableView.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 1)}),
-                                               with: .automatic)
-                self?.menuTableView.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 1) }),
-                                               with: .automatic)
-                self?.menuTableView.endUpdates()
-            case .error(let err):
-                fatalError(err.localizedDescription)
-            }
-        })
-    }
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         guard let identifier = segue.identifier else { return }
@@ -100,7 +49,52 @@ class MenuTableViewController: UITableViewController {
         }
 
     }
-
+    
+    func applyListChanges(changes: RealmCollectionChange<Results<List>>) {
+        switch changes {
+        case .initial:
+            self.menuTableView.reloadData()
+        case .update(_, let deletions, let insertions, let modifications):
+            self.menuTableView.beginUpdates()
+            self.menuTableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0) }),
+                                          with: .automatic)
+            
+            self.menuTableView.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}),
+                                          with: .automatic)
+            
+            self.menuTableView.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0) }),
+                                          with: .automatic)
+            self.menuTableView.endUpdates()
+            
+            if let item = insertions.last,
+                let insertedCell = self.menuTableView.cellForRow(at: IndexPath(item: item, section: 0)) as? MenuTableViewCell {
+                insertedCell.titleTextView.isEditable = true
+                insertedCell.titleTextView.becomeFirstResponder()
+            }
+            
+        case .error(let err):
+            fatalError(err.localizedDescription)
+        }
+    }
+    
+    func applyTagsChanges(changes: RealmCollectionChange<Results<Tag>>) {
+        switch changes {
+        case .initial:
+            self.menuTableView.reloadSections(IndexSet(integer: 1), with: .automatic)
+        case .update(_, let deletions, let insertions, let modifications):
+            self.menuTableView.beginUpdates()
+            self.menuTableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: 1) }),
+                                          with: .automatic)
+            self.menuTableView.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 1)}),
+                                          with: .automatic)
+            self.menuTableView.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 1) }),
+                                          with: .automatic)
+            self.menuTableView.endUpdates()
+        case .error(let err):
+            fatalError(err.localizedDescription)
+        }
+    }
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
@@ -159,6 +153,18 @@ class MenuTableViewController: UITableViewController {
     deinit {
         listsObservationToken?.invalidate()
         tagsObservationToken?.invalidate()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        listsObservationToken?.invalidate()
+        tagsObservationToken?.invalidate()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        listsObservationToken = menu.lists.observe(applyListChanges(changes:))
+        tagsObservationToken = menu.tags.observe(applyTagsChanges(changes:))
     }
 }
 

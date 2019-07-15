@@ -11,5 +11,4 @@ import RealmSwift
 
 class Tag: Object {
     @objc dynamic private(set) var name: String = ""
-    let todos = LinkingObjects(fromType: Todo.self, property: "tags")
 }
