@@ -26,7 +26,7 @@ class TodoTableViewCell: UITableViewCell {
                 checkCircle.isChecked = false
                 nameLabel.textColor = .black
                 let textAttributes = [NSAttributedString.Key: Any]()
-                nameLabel.attributedText = NSAttributedString(string: nameLabel.text!, attributes: textAttributes)
+                nameLabel.attributedText = NSAttributedString(string: nameLabel.text ?? "", attributes: textAttributes)
             }
         }
     }

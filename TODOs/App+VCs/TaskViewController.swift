@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import RealmSwift
+import CoreData
 import WSTagsField
 
 class TaskViewController: UIViewController {
@@ -28,34 +28,12 @@ class TaskViewController: UIViewController {
     @IBOutlet weak var tagsLabel: UILabel!
     let tagsField = WSTagsField()
     
-    var task = Todo() {
+    var task: Todo? {
         didSet {
-            updateForChangedTask()
+            titleTextLabel.text = task!.name
+            isDoneSwitch.isOn = task!.isDone
+            task!.tags?.forEach({ tagsField.addTag(($0 as? Tag)?.name ?? "dupa") })
         }
-    }
-    var taskObservationToken: NotificationToken?
-    
-    func updateForChangedTask() {
-        taskObservationToken?.invalidate()
-        taskObservationToken = task.observe({ change in
-            switch change {
-            case .error(let err):
-                fatalError(err.localizedDescription)
-            case .change(let properties):
-                for property in properties {
-                    // swiftlint:disable force_cast
-                    if property.name == "title" { self.titleTextLabel.text = (property.newValue as! String) }
-                    if property.name == "isDone" { self.isDoneSwitch.isOn = (property.newValue as! Bool) }
-                    // swiftlint:enable force_cast
-                    
-                }
-            case .deleted:
-                ()
-            }
-        })
-        titleTextLabel.text = task.title
-        isDoneSwitch.isOn = task.isDone
-        task.tags.forEach({ tagsField.addTag($0.name) })
     }
     
     func updateViewState() {
@@ -75,7 +53,7 @@ class TaskViewController: UIViewController {
             tagsField.isUserInteractionEnabled = false
             if tagsField.tags.isEmpty { tagsField.placeholder = "No tags were specified" }
             isDoneSwitch.isHidden = true
-            stateLabel.text = task.isDone ? "Marked as done" : "Pending"
+            stateLabel.text = task!.isDone ? "Marked as done" : "Pending"
             navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit,
                                                                 target: self,
                                                                 action: #selector(didTapEdit))
@@ -83,9 +61,9 @@ class TaskViewController: UIViewController {
     }
     
     @objc func didTapDone() {
-        task.set(title: titleTextLabel.text!)
-        task.set(isDone: isDoneSwitch.isOn)
-        task.set(tags: tagsField.tags.map({ $0.text }))
+        task!.set(name: titleTextLabel.text!)
+        task!.set(isDone: isDoneSwitch.isOn)
+        task!.set(tags: tagsField.tags.map({ $0.text }))
         self.performSegue(withIdentifier: "unwindToList", sender: self)
     }
     
@@ -119,15 +97,6 @@ class TaskViewController: UIViewController {
         tagsField.placeholderAlwaysVisible = false
         tagsField.returnKeyType = .next
         tagsField.acceptTagOption = .space
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        taskObservationToken?.invalidate()
-    }
-
-    deinit {
-        taskObservationToken?.invalidate()
     }
     
 }

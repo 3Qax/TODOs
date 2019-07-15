@@ -41,6 +41,7 @@ class MenuTableViewController: UITableViewController {
             guard section == 0 else {
                 fatalError("showList segue should only be performed for cells (actual lists) from section 0")
             }
+            _ = listVC.view
             listVC.title = menu.lists.fetchedObjects![index].title!
             listVC.list = menu.lists.fetchedObjects![index]
         }
@@ -54,6 +55,7 @@ class MenuTableViewController: UITableViewController {
             guard section == 1 else {
                 fatalError("showListForTag segue should only be performed for cells (tags) from section 1")
             }
+            _ = listForTagVC.view
             listForTagVC.title = menu.tags.fetchedObjects![index].name!
             listForTagVC.todos = menu.todosFor(tag: menu.tags.fetchedObjects![index])
         }
@@ -124,7 +126,8 @@ extension MenuTableViewController: MenuTableViewCellDelegate {
                 UINotificationFeedbackGenerator().notificationOccurred(.error)
                 return
             }
-            menu.lists.fetchedObjects![index].set(name: sender.titleTextView.text)
+            menu.lists.fetchedObjects![index].title = sender.titleTextView.text
+//            AppDelegate.viewContext.save()
         }
     }
 }
@@ -173,50 +176,54 @@ extension MenuTableViewController: MenuHeaderDelegate {
 extension MenuTableViewController: NSFetchedResultsControllerDelegate {
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         if anObject is List {
-            let changeIndexPath = IndexPath(item: indexPath!.item, section: 0)
             switch type {
             case .insert:
                 menuTableView.beginUpdates()
-                menuTableView.insertRows(at: [changeIndexPath], with: .automatic)
+                menuTableView.insertRows(at: [newIndexPath!], with: .automatic)
                 menuTableView.endUpdates()
-                if let insertedCell = menuTableView.cellForRow(at: changeIndexPath) as? MenuTableViewCell {
+                if let insertedCell = menuTableView.cellForRow(at: newIndexPath!) as? MenuTableViewCell {
                     insertedCell.titleTextView.isEditable = true
                     insertedCell.titleTextView.becomeFirstResponder()
                 }
-            case .update:
+            case .delete:
                 menuTableView.beginUpdates()
-                menuTableView.reloadRows(at: [changeIndexPath], with: .automatic)
+                menuTableView.deleteRows(at: [indexPath!], with: .automatic)
                 menuTableView.endUpdates()
             case .move:
                 menuTableView.beginUpdates()
-                menuTableView.moveRow(at: changeIndexPath, to: IndexPath(item: newIndexPath!.item, section: 0))
+                menuTableView.moveRow(at: indexPath!, to: newIndexPath!)
                 menuTableView.endUpdates()
-            case .delete:
+            case .update:
                 menuTableView.beginUpdates()
-                menuTableView.deleteRows(at: [changeIndexPath], with: .automatic)
+                menuTableView.reloadRows(at: [indexPath!], with: .automatic)
                 menuTableView.endUpdates()
             @unknown default:
                 fatalError()
             }
         }
         if anObject is Tag {
-            let changeIndexPath = IndexPath(item: indexPath!.item, section: 1)
+            //Fetch request controller doesn't know that these results are in 2nd section of table view
+            var correctIndexPath = indexPath
+            correctIndexPath?.section = 1
+            var correctNewIndexPath = newIndexPath
+            correctNewIndexPath?.section = 1
             switch type {
             case .insert:
                 menuTableView.beginUpdates()
-                menuTableView.insertRows(at: [changeIndexPath], with: .automatic)
+                menuTableView.insertRows(at: [correctNewIndexPath!], with: .automatic)
+                menuTableView.endUpdates()
+            case .delete:
+                menuTableView.reloadSections(IndexSet(integer: 1), with: .fade)
+//                menuTableView.beginUpdates()
+//                menuTableView.deleteRows(at: [correctIndexPath!], with: .automatic)
+//                menuTableView.endUpdates()
+            case .move:
+                menuTableView.beginUpdates()
+                menuTableView.moveRow(at: correctIndexPath!, to: correctNewIndexPath!)
                 menuTableView.endUpdates()
             case .update:
                 menuTableView.beginUpdates()
-                menuTableView.reloadRows(at: [changeIndexPath], with: .automatic)
-                menuTableView.endUpdates()
-            case .move:
-                menuTableView.beginUpdates()
-                menuTableView.moveRow(at: changeIndexPath, to: IndexPath(item: newIndexPath!.item, section: 1))
-                menuTableView.endUpdates()
-            case .delete:
-                menuTableView.beginUpdates()
-                menuTableView.deleteRows(at: [changeIndexPath], with: .automatic)
+                menuTableView.reloadRows(at: [correctIndexPath!], with: .automatic)
                 menuTableView.endUpdates()
             @unknown default:
                 fatalError()

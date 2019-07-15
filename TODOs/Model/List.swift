@@ -9,6 +9,7 @@
 import Foundation
 import CoreData
 
+@objc (List)
 class List: NSManagedObject {
     
     func set(name: String) {

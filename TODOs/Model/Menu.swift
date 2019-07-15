@@ -16,7 +16,7 @@ class Menu {
     init() {
         
         lists = {
-            let request: NSFetchRequest<List> = List.fetchRequest()
+            let request: NSFetchRequest<List> = NSFetchRequest(entityName: "List")
             request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
             return NSFetchedResultsController(fetchRequest: request,
                                               managedObjectContext: AppDelegate.viewContext,
@@ -24,11 +24,8 @@ class Menu {
                                               cacheName: nil)
         }()
         tags = {
-            let request: NSFetchRequest<Tag> = Tag.fetchRequest()
+            let request: NSFetchRequest<Tag> = NSFetchRequest(entityName: "Tag")
             request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
-            request.resultType = .dictionaryResultType
-            request.propertiesToFetch = ["name"]
-            request.returnsDistinctResults = true
             return NSFetchedResultsController(fetchRequest: request,
                                               managedObjectContext: AppDelegate.viewContext,
                                               sectionNameKeyPath: nil,
@@ -37,7 +34,7 @@ class Menu {
     }
     
     func addNewList(title: String? = nil, todos: NSSet? = nil) {
-        let newList = List(context: AppDelegate.viewContext)
+        let newList = List(entity: NSEntityDescription.entity(forEntityName: "List", in: AppDelegate.viewContext)!, insertInto: AppDelegate.viewContext)
         if let title = title { newList.title = title }
         if let todos = todos { newList.todos = todos }
         do { try AppDelegate.viewContext.save()
@@ -53,7 +50,7 @@ class Menu {
     func todosFor(tag: Tag) -> NSFetchedResultsController<Todo> {
         let request: NSFetchRequest<Todo> = Todo.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
-        request.predicate = NSPredicate(format: "ANY tags.name = @%", tag.name!)
+        request.predicate = NSPredicate(format: "ANY tags.name = %@", tag.name!)
         return NSFetchedResultsController(fetchRequest: request,
                                           managedObjectContext: AppDelegate.viewContext,
                                           sectionNameKeyPath: nil,
