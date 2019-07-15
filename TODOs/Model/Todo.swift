@@ -26,15 +26,16 @@ class Todo: NSManagedObject {
     
     func set(tags: [String]) {
         // swiftlint:disable force_cast
-        self.tags?.forEach({ tag in AppDelegate.viewContext.delete(tag as! Tag) })
+        self.removeFromTags(self.tags!)
         tags.forEach({ tagName in
             let tag = Tag(entity: NSEntityDescription.entity(forEntityName: "Tag",
                                                              in: AppDelegate.viewContext)!,
                           insertInto: AppDelegate.viewContext)
             tag.name = tagName
             tag.todo = self
+            do { try AppDelegate.viewContext.save()
+            } catch let err { fatalError(err.localizedDescription) }
         })
-        do { try AppDelegate.viewContext.save()
-        } catch let err { fatalError(err.localizedDescription) }
+
     }
 }
