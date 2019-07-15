@@ -7,25 +7,13 @@
 //
 
 import Foundation
-import RealmSwift
+import CoreData
 
-class List: Object {
-    @objc dynamic var name: String = ""
-    var todos = RealmSwift.List<Todo>()
-    
-    func add(_ newTodo: Todo) {
-        do { try Menu.common.realm.write { todos.append(newTodo) }
-        } catch let err { fatalError(err.localizedDescription) }
-    }
+class List: NSManagedObject {
     
     func set(name: String) {
-        do { try Menu.common.realm.write { self.name = name }
-        } catch let err { fatalError(err.localizedDescription)}
-    }
-    
-    func remove(_ todo: Todo) {
-        do { try Menu.common.realm.write { Menu.common.realm.delete(todo) }
-        } catch let err { fatalError(err.localizedDescription) }
+//        do { try Menu.common.realm.write { self.name = name }
+//        } catch let err { fatalError(err.localizedDescription)}
     }
     
 }

@@ -27,6 +27,8 @@
 		19A22EF522DA885000DFEB5A /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A22EF422DA885000DFEB5A /* UIView.swift */; };
 		19B35BE722DBEA1100E191B7 /* default.realm in Resources */ = {isa = PBXBuildFile; fileRef = 19B35BE622DBEA1000E191B7 /* default.realm */; };
 		19B35BE822DBEA1100E191B7 /* default.realm in Resources */ = {isa = PBXBuildFile; fileRef = 19B35BE622DBEA1000E191B7 /* default.realm */; };
+		19B35C1222DC717100E191B7 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 19B35C1022DC717100E191B7 /* Model.xcdatamodeld */; };
+		19B35C1322DC717100E191B7 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 19B35C1022DC717100E191B7 /* Model.xcdatamodeld */; };
 		19B9CBCB22DA37BA00012E61 /* TaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19B9CBCA22DA37BA00012E61 /* TaskViewController.swift */; };
 		524400BC143F00378329320C /* Pods_TODOs.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D865AFFD2EF8DD2E1771827D /* Pods_TODOs.framework */; };
 		A7809C1CA74571D1E28EF8DA /* Pods_TODOsTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C85969AC32811595D706BAC /* Pods_TODOsTests.framework */; };
@@ -66,6 +68,7 @@
 		1998F58A22DBDD97003F211F /* PrimarySplitController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimarySplitController.swift; sourceTree = "<group>"; };
 		19A22EF422DA885000DFEB5A /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
 		19B35BE622DBEA1000E191B7 /* default.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = default.realm; sourceTree = "<group>"; };
+		19B35C1122DC717100E191B7 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		19B9CBCA22DA37BA00012E61 /* TaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewController.swift; sourceTree = "<group>"; };
 		3831629F3CAED0E121DFA797 /* Pods-TODOsTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TODOsTests.debug.xcconfig"; path = "Target Support Files/Pods-TODOsTests/Pods-TODOsTests.debug.xcconfig"; sourceTree = "<group>"; };
 		472183DC787FB73A389002D6 /* Pods-TODOsTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TODOsTests.release.xcconfig"; path = "Target Support Files/Pods-TODOsTests/Pods-TODOsTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -116,6 +119,7 @@
 		198A613422D915B600BCC1D0 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				19B35C1022DC717100E191B7 /* Model.xcdatamodeld */,
 				198A612E22D9130600BCC1D0 /* Menu.swift */,
 				198A613022D915AA00BCC1D0 /* List.swift */,
 				198A613222D915B000BCC1D0 /* Tag.swift */,
@@ -428,6 +432,7 @@
 				1993A13622D8986A00C88D74 /* AppDelegate.swift in Sources */,
 				1998F58B22DBDD97003F211F /* PrimarySplitController.swift in Sources */,
 				1904D24022D8C38E00866F19 /* MenuHeaderView.swift in Sources */,
+				19B35C1222DC717100E191B7 /* Model.xcdatamodeld in Sources */,
 				197AC80022DB3215004883EC /* CheckCircle.swift in Sources */,
 				1904D22F22D8A09500866F19 /* ListViewController.swift in Sources */,
 				1904D23322D8A88F00866F19 /* TodoTableViewCell.swift in Sources */,
@@ -440,6 +445,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1993A14B22D8986B00C88D74 /* TODOsTests.swift in Sources */,
+				19B35C1322DC717100E191B7 /* Model.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -702,6 +708,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		19B35C1022DC717100E191B7 /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				19B35C1122DC717100E191B7 /* Model.xcdatamodel */,
+			);
+			currentVersion = 19B35C1122DC717100E191B7 /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 1993A12A22D8986A00C88D74 /* Project object */;
 }

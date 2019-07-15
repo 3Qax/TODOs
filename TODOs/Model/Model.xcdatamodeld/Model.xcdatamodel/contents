@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14490.99" systemVersion="18F132" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="List" representedClassName="List" syncable="YES" codeGenerationType="category">
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="todos" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Todo" inverseName="list" inverseEntity="Todo" syncable="YES"/>
+    </entity>
+    <entity name="Tag" representedClassName="Tag" syncable="YES" codeGenerationType="category">
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="todo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Todo" inverseName="tags" inverseEntity="Todo" syncable="YES"/>
+    </entity>
+    <entity name="Todo" representedClassName="Todo" syncable="YES" codeGenerationType="category">
+        <attribute name="isDone" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="list" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="List" inverseName="todos" inverseEntity="List" syncable="YES"/>
+        <relationship name="tags" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Tag" inverseName="todo" inverseEntity="Tag" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="List" positionX="-28.56640625" positionY="-38.0234375" width="128" height="73"/>
+        <element name="Todo" positionX="279.9921875" positionY="-38.0859375" width="128" height="103"/>
+        <element name="Tag" positionX="615.79296875" positionY="-23.47265625" width="128" height="73"/>
+    </elements>
+</model>

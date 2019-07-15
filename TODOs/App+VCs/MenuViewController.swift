@@ -7,16 +7,26 @@
 //
 
 import UIKit
-import RealmSwift
+import CoreData
 
 class MenuTableViewController: UITableViewController {
 
     @IBOutlet var menuTableView: UITableView!
     private var isListsSectionCollapsed: Bool = false
     private var isTagsSectionCollapsed: Bool = false
-    var menu: Menu = Menu.common
-    var listsObservationToken: NotificationToken?
-    var tagsObservationToken: NotificationToken?
+    let menu = Menu()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        do { try menu.lists.performFetch()
+        } catch let err { fatalError(err.localizedDescription) }
+        do { try menu.tags.performFetch()
+        } catch let err { fatalError(err.localizedDescription) }
+        menuTableView.reloadData()
+        menu.lists.delegate = self
+        menu.tags.delegate = self
+        
+    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
@@ -31,8 +41,8 @@ class MenuTableViewController: UITableViewController {
             guard section == 0 else {
                 fatalError("showList segue should only be performed for cells (actual lists) from section 0")
             }
-            listVC.title = menu.lists[index].name
-            listVC.list = menu.lists[index]
+            listVC.title = menu.lists.fetchedObjects![index].title!
+            listVC.list = menu.lists.fetchedObjects![index]
         }
         
         if identifier == "showListForTag" {
@@ -44,63 +54,18 @@ class MenuTableViewController: UITableViewController {
             guard section == 1 else {
                 fatalError("showListForTag segue should only be performed for cells (tags) from section 1")
             }
-            listForTagVC.title = menu.tags[index].name
-            listForTagVC.list = menu.todosFor(tag: menu.tags[index])
+            listForTagVC.title = menu.tags.fetchedObjects![index].name!
+            listForTagVC.todos = menu.todosFor(tag: menu.tags.fetchedObjects![index])
         }
 
-    }
-    
-    func applyListChanges(changes: RealmCollectionChange<Results<List>>) {
-        switch changes {
-        case .initial:
-            self.menuTableView.reloadData()
-        case .update(_, let deletions, let insertions, let modifications):
-            self.menuTableView.beginUpdates()
-            self.menuTableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0) }),
-                                          with: .automatic)
-            
-            self.menuTableView.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}),
-                                          with: .automatic)
-            
-            self.menuTableView.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0) }),
-                                          with: .automatic)
-            self.menuTableView.endUpdates()
-            
-            if let item = insertions.last,
-                let insertedCell = self.menuTableView.cellForRow(at: IndexPath(item: item, section: 0)) as? MenuTableViewCell {
-                insertedCell.titleTextView.isEditable = true
-                insertedCell.titleTextView.becomeFirstResponder()
-            }
-            
-        case .error(let err):
-            fatalError(err.localizedDescription)
-        }
-    }
-    
-    func applyTagsChanges(changes: RealmCollectionChange<Results<Tag>>) {
-        switch changes {
-        case .initial:
-            self.menuTableView.reloadSections(IndexSet(integer: 1), with: .automatic)
-        case .update(_, let deletions, let insertions, let modifications):
-            self.menuTableView.beginUpdates()
-            self.menuTableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: 1) }),
-                                          with: .automatic)
-            self.menuTableView.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 1)}),
-                                          with: .automatic)
-            self.menuTableView.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 1) }),
-                                          with: .automatic)
-            self.menuTableView.endUpdates()
-        case .error(let err):
-            fatalError(err.localizedDescription)
-        }
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
-            return isListsSectionCollapsed ? 0 : menu.lists.count
+            return isListsSectionCollapsed ? 0 : menu.lists.fetchedObjects?.count ?? 0
         case 1:
-            return isTagsSectionCollapsed ? 0 : menu.tags.count
+            return isTagsSectionCollapsed ? 0 : menu.tags.fetchedObjects?.count ?? 0
         default:
             fatalError()
         }
@@ -112,9 +77,9 @@ class MenuTableViewController: UITableViewController {
         cell.delegate = self
         switch indexPath.section {
         case 0:
-            cell.titleTextView.text = menu.lists[indexPath.item].name
+            cell.titleTextView.text = menu.lists.fetchedObjects![indexPath.item].title
         case 1:
-            cell.titleTextView.text = menu.tags[indexPath.item].name
+            cell.titleTextView.text = menu.tags.fetchedObjects![indexPath.item].name
         default:
             fatalError()
         }
@@ -122,21 +87,19 @@ class MenuTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        if indexPath.section == 0 { return true }
-        return false
+        return indexPath.section == 0
     }
     
     override func tableView(_ tableView: UITableView,
                             commit editingStyle: UITableViewCell.EditingStyle,
                             forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            menu.remove(menu.lists[indexPath.item])
+            menu.remove(menu.lists.fetchedObjects![indexPath.item])
         }
     }
     
     @IBAction func didTapAdd(_ sender: Any) {
-        let newList = List()
-        menu.add(newList)
+        menu.addNewList()
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -150,22 +113,6 @@ class MenuTableViewController: UITableViewController {
         }
     }
     
-    deinit {
-        listsObservationToken?.invalidate()
-        tagsObservationToken?.invalidate()
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        listsObservationToken?.invalidate()
-        tagsObservationToken?.invalidate()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        listsObservationToken = menu.lists.observe(applyListChanges(changes:))
-        tagsObservationToken = menu.tags.observe(applyTagsChanges(changes:))
-    }
 }
 
 // MARK: Handle adding new cells
@@ -173,11 +120,11 @@ extension MenuTableViewController: MenuTableViewCellDelegate {
     func didEndEditingListName(sender: MenuTableViewCell) {
         if let index = menuTableView.indexPath(for: sender)?.item {
             if sender.titleTextView.text.allSatisfy({ $0.isWhitespace }) {
-                menu.remove(menu.lists[index])
+                menu.remove(menu.lists.fetchedObjects![index])
                 UINotificationFeedbackGenerator().notificationOccurred(.error)
                 return
             }
-            menu.lists[index].set(name: sender.titleTextView.text)
+            menu.lists.fetchedObjects![index].set(name: sender.titleTextView.text)
         }
     }
 }
@@ -219,6 +166,61 @@ extension MenuTableViewController: MenuHeaderDelegate {
                 self.menuTableView.reloadSections(IndexSet(integer: 1), with: .none)
             }
             
+        }
+    }
+}
+
+extension MenuTableViewController: NSFetchedResultsControllerDelegate {
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        if anObject is List {
+            let changeIndexPath = IndexPath(item: indexPath!.item, section: 0)
+            switch type {
+            case .insert:
+                menuTableView.beginUpdates()
+                menuTableView.insertRows(at: [changeIndexPath], with: .automatic)
+                menuTableView.endUpdates()
+                if let insertedCell = menuTableView.cellForRow(at: changeIndexPath) as? MenuTableViewCell {
+                    insertedCell.titleTextView.isEditable = true
+                    insertedCell.titleTextView.becomeFirstResponder()
+                }
+            case .update:
+                menuTableView.beginUpdates()
+                menuTableView.reloadRows(at: [changeIndexPath], with: .automatic)
+                menuTableView.endUpdates()
+            case .move:
+                menuTableView.beginUpdates()
+                menuTableView.moveRow(at: changeIndexPath, to: IndexPath(item: newIndexPath!.item, section: 0))
+                menuTableView.endUpdates()
+            case .delete:
+                menuTableView.beginUpdates()
+                menuTableView.deleteRows(at: [changeIndexPath], with: .automatic)
+                menuTableView.endUpdates()
+            @unknown default:
+                fatalError()
+            }
+        }
+        if anObject is Tag {
+            let changeIndexPath = IndexPath(item: indexPath!.item, section: 1)
+            switch type {
+            case .insert:
+                menuTableView.beginUpdates()
+                menuTableView.insertRows(at: [changeIndexPath], with: .automatic)
+                menuTableView.endUpdates()
+            case .update:
+                menuTableView.beginUpdates()
+                menuTableView.reloadRows(at: [changeIndexPath], with: .automatic)
+                menuTableView.endUpdates()
+            case .move:
+                menuTableView.beginUpdates()
+                menuTableView.moveRow(at: changeIndexPath, to: IndexPath(item: newIndexPath!.item, section: 1))
+                menuTableView.endUpdates()
+            case .delete:
+                menuTableView.beginUpdates()
+                menuTableView.deleteRows(at: [changeIndexPath], with: .automatic)
+                menuTableView.endUpdates()
+            @unknown default:
+                fatalError()
+            }
         }
     }
 }

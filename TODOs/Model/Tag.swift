@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import RealmSwift
+import CoreData
 
-class Tag: Object {
-    @objc dynamic private(set) var name: String = ""
+class Tag: NSManagedObject {
+    
 }

@@ -7,36 +7,19 @@
 //
 
 import UIKit
-import RealmSwift
+import CoreData
 
 class ListForTagViewController: UIViewController {
     
-    var list = AnyRealmCollection(RealmSwift.List<Todo>()) {
+    var todos: NSFetchedResultsController<Todo>? {
         didSet {
-            listObservationToken?.invalidate()
-            listObservationToken = list.observe({ [weak self] changes in
-                switch changes {
-                case .initial:
-                    self?.taskTableView.reloadData()
-                case .update(_, let deletions, let insertions, let modifications):
-                    self?.taskTableView.beginUpdates()
-                    // When adding new cell
-                    self?.taskTableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0) }),
-                                                   with: .automatic)
-                    
-                    self?.taskTableView.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}),
-                                                   with: .automatic)
-                    
-                    self?.taskTableView.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0) }),
-                                                   with: .automatic)
-                    self?.taskTableView.endUpdates()
-                case .error(let err):
-                    fatalError(err.localizedDescription)
-                }
-            })
+            do { try todos?.performFetch()
+            } catch let err { fatalError(err.localizedDescription) }
+            todos?.delegate = self
+            taskTableView.reloadData()
         }
     }
-    var listObservationToken: NotificationToken?
+
     @IBOutlet weak var taskTableView: UITableView!
     
     override func viewDidLoad() {
@@ -54,7 +37,7 @@ class ListForTagViewController: UIViewController {
 extension ListForTagViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return list.count
+        return todos?.fetchedObjects?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -62,8 +45,8 @@ extension ListForTagViewController: UITableViewDataSource {
             fatalError()
         }
         
-        cell.nameLabel.text = list[indexPath.item].title
-        cell.shouldStypeAsDone = list[indexPath.item].isDone
+        cell.nameLabel.text = todos!.fetchedObjects![indexPath.item].name
+        cell.shouldStypeAsDone = todos!.fetchedObjects![indexPath.item].isDone
         cell.delegate = self
         
         return cell
@@ -74,11 +57,38 @@ extension ListForTagViewController: UITableViewDataSource {
 extension ListForTagViewController: TodoTableViewCellDelegate {
     func didTapCircle(sender: TodoTableViewCell) {
         if let index = taskTableView.indexPath(for: sender)?.item {
-            if list[index].isDone {
-                list[index].set(isDone: false)
+            if todos!.fetchedObjects![index].isDone {
+                todos!.fetchedObjects![index].set(isDone: false)
             } else {
-                list[index].set(isDone: true)
+                todos!.fetchedObjects![index].set(isDone: true)
             }
+        }
+    }
+}
+
+extension ListForTagViewController: NSFetchedResultsControllerDelegate {
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        guard let indexPath = indexPath else { fatalError() }
+        switch type {
+        case .insert:
+            taskTableView.beginUpdates()
+            taskTableView.insertRows(at: [indexPath], with: .automatic)
+            taskTableView.endUpdates()
+        case .delete:
+            taskTableView.beginUpdates()
+            taskTableView.deleteRows(at: [indexPath], with: .automatic)
+            taskTableView.endUpdates()
+        case .move:
+            taskTableView.beginUpdates()
+            taskTableView.moveRow(at: indexPath, to: newIndexPath!)
+            taskTableView.endUpdates()
+        case .update:
+            taskTableView.beginUpdates()
+            taskTableView.reloadRows(at: [indexPath], with: .automatic)
+            taskTableView.endUpdates()
+        @unknown default:
+            fatalError()
+            
         }
     }
 }

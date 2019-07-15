@@ -7,48 +7,56 @@
 //
 
 import Foundation
-import RealmSwift
+import CoreData
 
 class Menu {
-    private(set) var lists: Results<List>
-    private(set) var tags: Results<Tag>
-    public var realm: Realm
-    public static let common = Menu()
+    private(set) var lists: NSFetchedResultsController<List>
+    private(set) var tags: NSFetchedResultsController<Tag>
     
-    private init() {
+    init() {
         
-        let defaultPath = Realm.Configuration.defaultConfiguration.fileURL!
-        let pathToInitialData = Bundle.main.url(forResource: "default", withExtension: "realm")
-        
-        if !FileManager.default.fileExists(atPath: defaultPath.path) {
-            do { try FileManager.default.copyItem(at: pathToInitialData!, to: defaultPath)
-            } catch let err { fatalError(err.localizedDescription) }
-        }
-        
-        do { try realm = Realm()
-        } catch let error { fatalError(error.localizedDescription) }
-        
-        print(realm.configuration.fileURL!)
-        lists = realm.objects(List.self)
-        tags = realm.objects(Tag.self).distinct(by: ["name"])
-        do { try realm.write { lists.forEach({ $0.todos.sort(by: { _, rhs in return rhs.isDone})}) }
-        } catch let err {fatalError(err.localizedDescription)}
-        
+        lists = {
+            let request: NSFetchRequest<List> = List.fetchRequest()
+            request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+            return NSFetchedResultsController(fetchRequest: request,
+                                              managedObjectContext: AppDelegate.viewContext,
+                                              sectionNameKeyPath: nil,
+                                              cacheName: nil)
+        }()
+        tags = {
+            let request: NSFetchRequest<Tag> = Tag.fetchRequest()
+            request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+            request.resultType = .dictionaryResultType
+            request.propertiesToFetch = ["name"]
+            request.returnsDistinctResults = true
+            return NSFetchedResultsController(fetchRequest: request,
+                                              managedObjectContext: AppDelegate.viewContext,
+                                              sectionNameKeyPath: nil,
+                                              cacheName: nil)
+        }()
     }
     
-    func add(_ newList: List) {
-        do { try realm.write { realm.add(newList) }
+    func addNewList(title: String? = nil, todos: NSSet? = nil) {
+        let newList = List(context: AppDelegate.viewContext)
+        if let title = title { newList.title = title }
+        if let todos = todos { newList.todos = todos }
+        do { try AppDelegate.viewContext.save()
         } catch let err { fatalError(err.localizedDescription) }
     }
     
     func remove(_ list: List) {
-        do { try realm.write {
-            realm.delete(list)
-            }
+        AppDelegate.viewContext.delete(list)
+        do { try AppDelegate.viewContext.save()
         } catch let err { fatalError(err.localizedDescription) }
     }
     
-    func todosFor(tag: Tag) -> AnyRealmCollection<Todo> {
-        return AnyRealmCollection(realm.objects(Todo.self).filter("ANY tags.name = '\(tag.name)'"))
+    func todosFor(tag: Tag) -> NSFetchedResultsController<Todo> {
+        let request: NSFetchRequest<Todo> = Todo.fetchRequest()
+        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+        request.predicate = NSPredicate(format: "ANY tags.name = @%", tag.name!)
+        return NSFetchedResultsController(fetchRequest: request,
+                                          managedObjectContext: AppDelegate.viewContext,
+                                          sectionNameKeyPath: nil,
+                                          cacheName: nil)
     }
 }
