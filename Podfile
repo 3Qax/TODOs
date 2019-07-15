@@ -6,13 +6,11 @@ target 'TODOs' do
   use_frameworks!
 
   # Pods for TODOs
-  pod 'RealmSwift'
   pod 'SwiftLint'
   pod 'WSTagsField'
 
   target 'TODOsTests' do
-    inherit! :search_paths
-    pod 'RealmSwift'  
-end
+    inherit! :search_paths  
+  end
 
 end
