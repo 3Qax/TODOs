@@ -107,6 +107,9 @@ class MenuTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.section {
         case 0:
+            if let cell = tableView.cellForRow(at: indexPath) as? MenuTableViewCell, cell.titleTextView.isEditable {
+                return
+            }
             performSegue(withIdentifier: "showList", sender: self)
         case 1:
             performSegue(withIdentifier: "showListForTag", sender: self)
@@ -124,10 +127,13 @@ extension MenuTableViewController: MenuTableViewCellDelegate {
             if sender.titleTextView.text.allSatisfy({ $0.isWhitespace }) {
                 menu.remove(menu.lists.fetchedObjects![index])
                 UINotificationFeedbackGenerator().notificationOccurred(.error)
+                do { try AppDelegate.viewContext.save()
+                } catch let err { fatalError(err.localizedDescription) }
                 return
             }
             menu.lists.fetchedObjects![index].title = sender.titleTextView.text
-//            AppDelegate.viewContext.save()
+            do { try AppDelegate.viewContext.save()
+            } catch let err { fatalError(err.localizedDescription) }
         }
     }
 }
