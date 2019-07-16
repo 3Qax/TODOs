@@ -116,7 +116,9 @@ extension ListViewController: TodoTableViewCellDelegate {
 }
 
 extension ListViewController: NSFetchedResultsControllerDelegate {
+    // swiftlint:disable line_length
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        // swiftlint:enable line_length
         switch type {
         case .insert:
             taskTableView.beginUpdates()

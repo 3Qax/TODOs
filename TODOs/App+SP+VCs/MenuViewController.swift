@@ -139,7 +139,7 @@ extension MenuTableViewController: MenuTableViewCellDelegate {
 }
 
 // MARK: Headers handling
-extension MenuTableViewController: MenuHeaderDelegate {
+extension MenuTableViewController {
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }
@@ -151,35 +151,21 @@ extension MenuTableViewController: MenuHeaderDelegate {
         
         switch section {
         case 0:
-            header.setup(as: .lists)
+            header.titleLabel.text = "Lists"
         case 1:
-            header.setup(as: .tags)
+            header.titleLabel.text = "Tags"
         default:
             fatalError("Asked for header for incorrect section")
         }
-        header.delegate = self
         return header.contentView
     }
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 50
     }
-    func didTapHeader(sender: MenuHeaderView) {
-        print("tappp")
-        if let indexPath = menuTableView.indexPath(for: sender) {
-            if indexPath.section == 0 {
-                self.isListsSectionCollapsed.toggle()
-                self.menuTableView.reloadSections(IndexSet(integer: 0), with: .none)
-            }
-            if indexPath.section == 1 {
-                self.isTagsSectionCollapsed.toggle()
-                self.menuTableView.reloadSections(IndexSet(integer: 1), with: .none)
-            }
-            
-        }
-    }
 }
 
 extension MenuTableViewController: NSFetchedResultsControllerDelegate {
+    // swiftlint:disable line_length cyclomatic_complexity function_body_length
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         if anObject is List {
             switch type {
@@ -220,9 +206,6 @@ extension MenuTableViewController: NSFetchedResultsControllerDelegate {
                 menuTableView.endUpdates()
             case .delete:
                 menuTableView.reloadSections(IndexSet(integer: 1), with: .fade)
-//                menuTableView.beginUpdates()
-//                menuTableView.deleteRows(at: [correctIndexPath!], with: .automatic)
-//                menuTableView.endUpdates()
             case .move:
                 menuTableView.beginUpdates()
                 menuTableView.moveRow(at: correctIndexPath!, to: correctNewIndexPath!)
@@ -236,4 +219,5 @@ extension MenuTableViewController: NSFetchedResultsControllerDelegate {
             }
         }
     }
+    // swiftlint:enable line_length cyclomatic_complexity function_body_length
 }

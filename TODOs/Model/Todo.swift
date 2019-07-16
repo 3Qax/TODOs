@@ -25,7 +25,6 @@ class Todo: NSManagedObject {
     }
     
     func set(tags: [String]) {
-        // swiftlint:disable force_cast
         self.removeFromTags(self.tags!)
         tags.forEach({ tagName in
             let tag = Tag(entity: NSEntityDescription.entity(forEntityName: "Tag",

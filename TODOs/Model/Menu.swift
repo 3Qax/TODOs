@@ -34,7 +34,9 @@ class Menu {
     }
     
     func addNewList(title: String? = nil, todos: NSSet? = nil) {
-        let newList = List(entity: NSEntityDescription.entity(forEntityName: "List", in: AppDelegate.viewContext)!, insertInto: AppDelegate.viewContext)
+        let newList = List(entity: NSEntityDescription.entity(forEntityName: "List",
+                                                              in: AppDelegate.viewContext)!,
+                           insertInto: AppDelegate.viewContext)
         if let title = title { newList.title = title }
         if let todos = todos { newList.todos = todos }
         do { try AppDelegate.viewContext.save()

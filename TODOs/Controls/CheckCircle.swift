@@ -39,7 +39,10 @@ class CheckCircle: UIView {
         let innerMaskWidthConstraint = innerMask.widthAnchor.constraint(equalToConstant: 22)
         let innerMaskCenterXConstraint = innerMask.centerXAnchor.constraint(equalTo: self.centerXAnchor)
         let innerMaskCenterYConstraint = innerMask.centerYAnchor.constraint(equalTo: self.centerYAnchor)
-        self.addConstraints([innerMaskHeightContraint, innerMaskWidthConstraint, innerMaskCenterXConstraint, innerMaskCenterYConstraint])
+        self.addConstraints([innerMaskHeightContraint,
+                             innerMaskWidthConstraint,
+                             innerMaskCenterXConstraint,
+                             innerMaskCenterYConstraint])
         
         self.isUserInteractionEnabled = true
         self.addGestureRecognizer(tapGestureRecognizer)

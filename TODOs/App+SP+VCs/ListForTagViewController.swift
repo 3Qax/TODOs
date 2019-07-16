@@ -67,7 +67,9 @@ extension ListForTagViewController: TodoTableViewCellDelegate {
 }
 
 extension ListForTagViewController: NSFetchedResultsControllerDelegate {
+    // swiftlint:disable line_length
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        // swiftlint:enable line_length
         guard let indexPath = indexPath else { fatalError() }
         switch type {
         case .insert:
