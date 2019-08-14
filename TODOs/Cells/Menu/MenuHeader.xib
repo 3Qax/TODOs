@@ -29,17 +29,17 @@
                             <rect key="frame" x="374" y="15" width="20" height="20"/>
                             <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
-                                <constraint firstAttribute="width" constant="20" id="C17-II-dZr"/>
+                                <constraint firstAttribute="width" priority="999" constant="20" id="C17-II-dZr"/>
                                 <constraint firstAttribute="height" constant="20" id="fKs-Mc-2Zc"/>
                             </constraints>
                         </imageView>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
-                        <constraint firstAttribute="trailing" secondItem="CXS-Od-M8h" secondAttribute="trailing" constant="20" id="3g1-0m-shV"/>
-                        <constraint firstItem="OYK-dd-qUI" firstAttribute="leading" secondItem="4IE-g6-l4s" secondAttribute="leading" constant="20" id="DrV-U5-xXr"/>
+                        <constraint firstAttribute="trailing" secondItem="CXS-Od-M8h" secondAttribute="trailing" priority="999" constant="20" id="3g1-0m-shV"/>
+                        <constraint firstItem="OYK-dd-qUI" firstAttribute="leading" secondItem="4IE-g6-l4s" secondAttribute="leading" priority="999" constant="20" id="DrV-U5-xXr"/>
                         <constraint firstItem="OYK-dd-qUI" firstAttribute="centerY" secondItem="4IE-g6-l4s" secondAttribute="centerY" id="ZaD-Rt-tf8"/>
-                        <constraint firstItem="CXS-Od-M8h" firstAttribute="leading" secondItem="OYK-dd-qUI" secondAttribute="trailing" constant="12" id="o6S-U8-A1j"/>
+                        <constraint firstItem="CXS-Od-M8h" firstAttribute="leading" secondItem="OYK-dd-qUI" secondAttribute="trailing" priority="999" constant="12" id="o6S-U8-A1j"/>
                         <constraint firstItem="CXS-Od-M8h" firstAttribute="centerY" secondItem="4IE-g6-l4s" secondAttribute="centerY" id="tst-MU-79s"/>
                     </constraints>
                 </view>
