@@ -9,6 +9,7 @@
 import UIKit
 
 protocol MenuItemDelegate: AnyObject {
+    func textChanged()
     func didEndEditingListName(sender: MenuItem)
 }
 class MenuItem: UITableViewCell {
@@ -36,6 +37,7 @@ extension MenuItem: UITextViewDelegate {
             delegate?.didEndEditingListName(sender: self)
             return false
         }
+        delegate?.textChanged()
         return true
     }
 }

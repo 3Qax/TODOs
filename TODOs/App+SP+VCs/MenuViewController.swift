@@ -126,6 +126,14 @@ class MenuViewController: UITableViewController {
 
 // MARK: Handle adding new cells
 extension MenuViewController: MenuItemDelegate {
+    func textChanged() {
+        DispatchQueue.main.async {
+            UIView.performWithoutAnimation {
+                self.menuTableView.beginUpdates()
+                self.menuTableView.endUpdates()
+            }
+        }
+    }
     func didEndEditingListName(sender: MenuItem) {
         if let index = menuTableView.indexPath(for: sender)?.item {
             if sender.titleTextView.text.allSatisfy({ $0.isWhitespace }) {
