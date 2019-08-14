@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class MenuTableViewController: UITableViewController {
+class MenuViewController: UITableViewController {
 
     @IBOutlet var menuTableView: UITableView!
     private var isListsSectionCollapsed: Bool = false
@@ -125,7 +125,7 @@ class MenuTableViewController: UITableViewController {
 }
 
 // MARK: Handle adding new cells
-extension MenuTableViewController: MenuTableViewCellDelegate {
+extension MenuViewController: MenuItemDelegate {
     func didEndEditingListName(sender: MenuItem) {
         if let index = menuTableView.indexPath(for: sender)?.item {
             if sender.titleTextView.text.allSatisfy({ $0.isWhitespace }) {
@@ -143,7 +143,7 @@ extension MenuTableViewController: MenuTableViewCellDelegate {
 }
 
 // MARK: Headers handling
-extension MenuTableViewController {
+extension MenuViewController {
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }
@@ -175,7 +175,7 @@ extension MenuTableViewController {
     }
 }
 
-extension MenuTableViewController: NSFetchedResultsControllerDelegate {
+extension MenuViewController: NSFetchedResultsControllerDelegate {
     // swiftlint:disable line_length cyclomatic_complexity function_body_length
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         if anObject is List {

@@ -8,13 +8,13 @@
 
 import UIKit
 
-protocol MenuTableViewCellDelegate: AnyObject {
+protocol MenuItemDelegate: AnyObject {
     func didEndEditingListName(sender: MenuItem)
 }
 class MenuItem: UITableViewCell {
     
     @IBOutlet weak var titleTextView: UITextView!
-    weak var delegate: MenuTableViewCellDelegate?
+    weak var delegate: MenuItemDelegate?
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
