@@ -9,20 +9,22 @@
 import UIKit
 
 class MenuHeader: UITableViewHeaderFooterView {
+    var tapAction: (() -> Void)?
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var arrowImageView: UIImageView!
-    var styleAsCollapsed = false { didSet { styleAsCollapsed ? showAsCollapsed() : showAsExpanded() } }
-    
-    private func showAsCollapsed() {
-        arrowImageView.layer.removeAllAnimations()
-        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseInOut, animations: { [weak self] () in
-            self?.arrowImageView.transform = CGAffineTransform(rotationAngle: CGFloat.pi)
-        })
+    var styleAsCollapsed = false {
+        didSet {
+            if styleAsCollapsed { arrowImageView.transform = CGAffineTransform(rotationAngle: CGFloat.pi)
+            } else { arrowImageView.transform = CGAffineTransform(rotationAngle: 0) }
+        }
     }
-    private func showAsExpanded() {
-        arrowImageView.layer.removeAllAnimations()
-        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseInOut, animations: { [weak self] () in
-            self?.arrowImageView.transform = CGAffineTransform(rotationAngle: 0)
-        })
+    
+    func onTap(action: @escaping () -> Void) {
+        let tapGR = UITapGestureRecognizer(target: self, action: #selector(tapHandler))
+        self.addGestureRecognizer(tapGR)
+        tapAction = action
+    }
+    @objc func tapHandler() {
+        tapAction?()
     }
 }

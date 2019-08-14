@@ -12,8 +12,12 @@ import CoreData
 class MenuViewController: UITableViewController {
 
     @IBOutlet var menuTableView: UITableView!
-    private var isListsSectionCollapsed: Bool = false
-    private var isTagsSectionCollapsed: Bool = false
+    private var isListsSectionCollapsed: Bool = false {
+        didSet { menuTableView.reloadSections(IndexSet(integer: 0), with: .automatic)}
+    }
+    private var isTagsSectionCollapsed: Bool = false {
+        didSet { menuTableView.reloadSections(IndexSet(integer: 1), with: .automatic)}
+    }
     let menu = Menu()
     
     override func viewDidLoad() {
@@ -166,17 +170,17 @@ extension MenuViewController {
         switch section {
         case 0:
             header.titleLabel.text = "Lists"
+            header.styleAsCollapsed = isListsSectionCollapsed
+            header.onTap { [weak self] in self?.isListsSectionCollapsed.toggle() }
         case 1:
             header.titleLabel.text = "Tags"
+            header.styleAsCollapsed = isTagsSectionCollapsed
+            header.onTap { [weak self] in self?.isTagsSectionCollapsed.toggle() }
         default:
             fatalError("Asked for header for incorrect section")
         }
-        let tapGR = UITapGestureRecognizer(target: self, action: #selector(handleHeaderTap))
-        header.addGestureRecognizer(tapGR)
+
         return cell
-    }
-    @objc func handleHeaderTap() {
-        print("sjdlfjsdlahflasdhfjsadf asfdbnfljsadjf")
     }
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 50
