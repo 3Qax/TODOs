@@ -198,74 +198,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="menuHeaderCell" id="c86-f4-uI6" customClass="MenuHeaderView" customModule="TODOs" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="28" width="414" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="c86-f4-uI6" id="5LU-40-k20">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kcu-Fv-Omu">
-                                            <rect key="frame" x="20" y="11.5" width="354" height="21"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <nil key="textColor"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="down-arrow" translatesAutoresizingMaskIntoConstraints="NO" id="YY5-l6-G0H">
-                                            <rect key="frame" x="374" y="12" width="20" height="20"/>
-                                            <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="20" id="bqL-dX-KSy"/>
-                                                <constraint firstAttribute="width" constant="20" id="vhK-q5-EYY"/>
-                                            </constraints>
-                                        </imageView>
-                                    </subviews>
-                                    <constraints>
-                                        <constraint firstItem="YY5-l6-G0H" firstAttribute="centerY" secondItem="5LU-40-k20" secondAttribute="centerY" id="1WV-V2-xvt"/>
-                                        <constraint firstItem="YY5-l6-G0H" firstAttribute="leading" secondItem="kcu-Fv-Omu" secondAttribute="trailing" id="IdT-YU-yfW"/>
-                                        <constraint firstAttribute="trailing" secondItem="YY5-l6-G0H" secondAttribute="trailing" constant="20" id="kAz-FY-Dw4"/>
-                                        <constraint firstItem="kcu-Fv-Omu" firstAttribute="centerY" secondItem="5LU-40-k20" secondAttribute="centerY" id="qiJ-Xh-C49"/>
-                                        <constraint firstItem="kcu-Fv-Omu" firstAttribute="leading" secondItem="5LU-40-k20" secondAttribute="leading" constant="20" id="zZC-WK-sYr"/>
-                                    </constraints>
-                                </tableViewCellContentView>
-                                <gestureRecognizers/>
-                                <connections>
-                                    <outlet property="arrowImageView" destination="YY5-l6-G0H" id="ZCz-YF-jWv"/>
-                                    <outlet property="titleLabel" destination="kcu-Fv-Omu" id="ae9-0t-aaP"/>
-                                </connections>
-                            </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="menuTableViewCell" id="0P5-rf-mAt" customClass="MenuTableViewCell" customModule="TODOs" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="72" width="414" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="0P5-rf-mAt" id="WOP-gZ-TwD">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="crY-bQ-0Os">
-                                            <rect key="frame" x="25" y="5" width="369" height="33.5"/>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
-                                            <fontDescription key="fontDescription" type="system" weight="light" pointSize="17"/>
-                                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="done"/>
-                                            <connections>
-                                                <outlet property="delegate" destination="0P5-rf-mAt" id="JFG-ap-3gt"/>
-                                            </connections>
-                                        </textView>
-                                    </subviews>
-                                    <constraints>
-                                        <constraint firstItem="crY-bQ-0Os" firstAttribute="top" secondItem="WOP-gZ-TwD" secondAttribute="top" constant="5" id="8Le-gI-pCz"/>
-                                        <constraint firstAttribute="trailing" secondItem="crY-bQ-0Os" secondAttribute="trailing" constant="20" id="GqK-Lw-vWM"/>
-                                        <constraint firstItem="crY-bQ-0Os" firstAttribute="leading" secondItem="WOP-gZ-TwD" secondAttribute="leading" constant="25" id="Zos-9O-iCr"/>
-                                        <constraint firstAttribute="bottom" secondItem="crY-bQ-0Os" secondAttribute="bottom" constant="5" id="zBa-2P-AOH"/>
-                                    </constraints>
-                                </tableViewCellContentView>
-                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                                <connections>
-                                    <outlet property="titleTextView" destination="crY-bQ-0Os" id="AIo-Mr-Ugi"/>
-                                </connections>
-                            </tableViewCell>
-                        </prototypes>
                         <connections>
                             <outlet property="dataSource" destination="lKR-a0-QNJ" id="pI3-Zm-5rb"/>
                             <outlet property="delegate" destination="lKR-a0-QNJ" id="OeC-5x-NRB"/>
@@ -287,7 +219,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="t52-w2-OXS" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="159" y="-643"/>
+            <point key="canvasLocation" x="157.97101449275362" y="-643.52678571428567"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="eEu-dk-Qdm">
@@ -392,9 +324,6 @@
             <point key="canvasLocation" x="548" y="92"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="down-arrow" width="320" height="512"/>
-    </resources>
     <inferredMetricsTieBreakers>
         <segue reference="QcW-Rl-QvI"/>
         <segue reference="lTe-1O-FQY"/>

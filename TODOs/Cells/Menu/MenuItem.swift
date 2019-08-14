@@ -1,5 +1,5 @@
 //
-//  MenuTableViewCell.swift
+//  MenuItem.swift
 //  TODOs
 //
 //  Created by Jakub Towarek on 12/07/2019.
@@ -9,10 +9,10 @@
 import UIKit
 
 protocol MenuTableViewCellDelegate: AnyObject {
-    func didEndEditingListName(sender: MenuTableViewCell)
+    func didEndEditingListName(sender: MenuItem)
 }
-class MenuTableViewCell: UITableViewCell {
-
+class MenuItem: UITableViewCell {
+    
     @IBOutlet weak var titleTextView: UITextView!
     weak var delegate: MenuTableViewCellDelegate?
     override func awakeFromNib() {
@@ -20,16 +20,16 @@ class MenuTableViewCell: UITableViewCell {
         // Initialization code
         selectionStyle = .none
     }
-
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
+        
         // Configure the view for the selected state
     }
-
+    
 }
 
-extension MenuTableViewCell: UITextViewDelegate {
+extension MenuItem: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         if text == "\n" {
             self.titleTextView.isEditable = false

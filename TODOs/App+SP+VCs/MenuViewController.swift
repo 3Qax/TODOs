@@ -18,6 +18,10 @@ class MenuTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let menuHeaderNib = UINib(nibName: "MenuHeader", bundle: nil)
+        menuTableView.register(menuHeaderNib, forHeaderFooterViewReuseIdentifier: "menuHeader")
+        let menuItemNib = UINib(nibName: "MenuItem", bundle: nil)
+        menuTableView.register(menuItemNib, forCellReuseIdentifier: "menuItem")
         do { try menu.lists.performFetch()
         } catch let err { fatalError(err.localizedDescription) }
         do { try menu.tags.performFetch()
@@ -73,7 +77,7 @@ class MenuTableViewController: UITableViewController {
         }
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "menuTableViewCell") as? MenuTableViewCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "menuItem") as? MenuItem else {
             fatalError()
         }
         cell.delegate = self
@@ -107,7 +111,7 @@ class MenuTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.section {
         case 0:
-            if let cell = tableView.cellForRow(at: indexPath) as? MenuTableViewCell, cell.titleTextView.isEditable {
+            if let cell = tableView.cellForRow(at: indexPath) as? MenuItem, cell.titleTextView.isEditable {
                 return
             }
             performSegue(withIdentifier: "showList", sender: self)
@@ -122,7 +126,7 @@ class MenuTableViewController: UITableViewController {
 
 // MARK: Handle adding new cells
 extension MenuTableViewController: MenuTableViewCellDelegate {
-    func didEndEditingListName(sender: MenuTableViewCell) {
+    func didEndEditingListName(sender: MenuItem) {
         if let index = menuTableView.indexPath(for: sender)?.item {
             if sender.titleTextView.text.allSatisfy({ $0.isWhitespace }) {
                 menu.remove(menu.lists.fetchedObjects![index])
@@ -144,8 +148,10 @@ extension MenuTableViewController {
         return 2
     }
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        
-        guard let header = tableView.dequeueReusableCell(withIdentifier: "menuHeaderCell") as? MenuHeaderView else {
+        guard let cell = tableView.dequeueReusableHeaderFooterView(withIdentifier: "menuHeader") else {
+            fatalError()
+        }
+        guard let header = cell as? MenuHeader else {
             fatalError()
         }
         
@@ -157,7 +163,12 @@ extension MenuTableViewController {
         default:
             fatalError("Asked for header for incorrect section")
         }
-        return header.contentView
+        let tapGR = UITapGestureRecognizer(target: self, action: #selector(handleHeaderTap))
+        header.addGestureRecognizer(tapGR)
+        return cell
+    }
+    @objc func handleHeaderTap() {
+        print("sjdlfjsdlahflasdhfjsadf asfdbnfljsadjf")
     }
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 50
@@ -173,7 +184,7 @@ extension MenuTableViewController: NSFetchedResultsControllerDelegate {
                 menuTableView.beginUpdates()
                 menuTableView.insertRows(at: [newIndexPath!], with: .automatic)
                 menuTableView.endUpdates()
-                if let insertedCell = menuTableView.cellForRow(at: newIndexPath!) as? MenuTableViewCell {
+                if let insertedCell = menuTableView.cellForRow(at: newIndexPath!) as? MenuItem {
                     insertedCell.titleTextView.isEditable = true
                     insertedCell.titleTextView.becomeFirstResponder()
                 }
