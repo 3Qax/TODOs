@@ -12,6 +12,12 @@ class MenuHeader: UITableViewHeaderFooterView {
     var tapAction: (() -> Void)?
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var arrowImageView: UIImageView!
+    var styleAsEnabled = true {
+        didSet {
+            if styleAsEnabled { arrowImageView.tintColor = .black
+            } else { arrowImageView.tintColor = UIColor(red: 7/8, green: 7/8, blue: 7/8, alpha: 1) }
+        }
+    }
     var styleAsCollapsed = false {
         didSet {
             if styleAsCollapsed { arrowImageView.transform = CGAffineTransform(rotationAngle: CGFloat.pi)

@@ -12,9 +12,15 @@ import CoreData
 class MenuViewController: UITableViewController {
 
     @IBOutlet var menuTableView: UITableView!
-    private var isAddingNewList: Bool = false { didSet { plusBarButtonItem.isEnabled =  !isAddingNewList } }
-    private var isListsSectionCollapsed: Bool = false { didSet { updateListSectionVisualState() } }
-    private var isTagsSectionCollapsed: Bool = false { didSet { updateTagsSectionVisualState() } }
+    private var isAddingNewList: Bool = false {
+        didSet {
+            plusBarButtonItem.isEnabled =  !isAddingNewList
+            (menuTableView.headerView(forSection: 0) as? MenuHeader)?.styleAsEnabled = !isAddingNewList
+            (menuTableView.headerView(forSection: 1) as? MenuHeader)?.styleAsEnabled = !isAddingNewList
+        }
+    }
+    private var isListsSectionCollapsed: Bool = false
+    private var isTagsSectionCollapsed: Bool = false
     @IBOutlet weak var plusBarButtonItem: UIBarButtonItem!
     let menu = Menu()
     
@@ -189,11 +195,11 @@ extension MenuViewController {
         case 0:
             header.titleLabel.text = "Lists"
             header.styleAsCollapsed = isListsSectionCollapsed
-            header.onTap { [weak self] in self?.isListsSectionCollapsed.toggle() }
+            header.onTap { [weak self] in self?.didTapListSectionHeader() }
         case 1:
             header.titleLabel.text = "Tags"
             header.styleAsCollapsed = isTagsSectionCollapsed
-            header.onTap { [weak self] in self?.isTagsSectionCollapsed.toggle() }
+            header.onTap { [weak self] in self?.didTapTagsSectionHeader() }
         default:
             fatalError("Asked for header for incorrect section")
         }
@@ -261,11 +267,17 @@ extension MenuViewController: NSFetchedResultsControllerDelegate {
 
 // MARK: Section collapsing or expanding
 extension MenuViewController {
-    func updateListSectionVisualState() {
-        menuTableView.reloadSections(IndexSet(integer: 0), with: .automatic)
+    func didTapListSectionHeader() {
+        if !isAddingNewList {
+            isListsSectionCollapsed.toggle()
+            menuTableView.reloadSections(IndexSet(integer: 0), with: .automatic)
+        } else {
+            UINotificationFeedbackGenerator().notificationOccurred(.warning)
+        }
     }
     
-    func updateTagsSectionVisualState() {
+    func didTapTagsSectionHeader() {
+        isTagsSectionCollapsed.toggle()
         menuTableView.reloadSections(IndexSet(integer: 1), with: .automatic)
     }
 }

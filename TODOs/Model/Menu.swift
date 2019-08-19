@@ -10,8 +10,8 @@ import Foundation
 import CoreData
 
 class Menu {
-    private(set) var lists: NSFetchedResultsController<List>
-    private(set) var tags: NSFetchedResultsController<Tag>
+    let lists: NSFetchedResultsController<List>
+    let tags: NSFetchedResultsController<Tag>
     
     init() {
         
