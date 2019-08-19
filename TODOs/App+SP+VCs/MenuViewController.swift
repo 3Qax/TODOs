@@ -22,14 +22,19 @@ class MenuViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         let menuHeaderNib = UINib(nibName: "MenuHeader", bundle: nil)
         menuTableView.register(menuHeaderNib, forHeaderFooterViewReuseIdentifier: "menuHeader")
+        
         let menuItemNib = UINib(nibName: "MenuItem", bundle: nil)
         menuTableView.register(menuItemNib, forCellReuseIdentifier: "menuItem")
+        
         do { try menu.lists.performFetch()
         } catch let err { fatalError(err.localizedDescription) }
+        
         do { try menu.tags.performFetch()
         } catch let err { fatalError(err.localizedDescription) }
+        
         menuTableView.reloadData()
         menu.lists.delegate = self
         menu.tags.delegate = self
