@@ -12,12 +12,10 @@ import CoreData
 class MenuViewController: UITableViewController {
 
     @IBOutlet var menuTableView: UITableView!
-    private var isListsSectionCollapsed: Bool = false {
-        didSet { menuTableView.reloadSections(IndexSet(integer: 0), with: .automatic)}
-    }
-    private var isTagsSectionCollapsed: Bool = false {
-        didSet { menuTableView.reloadSections(IndexSet(integer: 1), with: .automatic)}
-    }
+    private var isAddingNewList: Bool = false { didSet { plusBarButtonItem.isEnabled =  !isAddingNewList } }
+    private var isListsSectionCollapsed: Bool = false { didSet { updateListSectionVisualState() } }
+    private var isTagsSectionCollapsed: Bool = false { didSet { updateTagsSectionVisualState() } }
+    @IBOutlet weak var plusBarButtonItem: UIBarButtonItem!
     let menu = Menu()
     
     override func viewDidLoad() {
@@ -114,7 +112,21 @@ class MenuViewController: UITableViewController {
     }
     
     @IBAction func didTapAdd(_ sender: Any) {
-        menu.addNewList()
+        
+        assert(!isAddingNewList, "didTapAdd should only be called if user isn't already in process of adding one")
+
+        let newList = menu.createNewList()
+        guard let indexPathOfNewList = menu.lists.indexPath(forObject: newList) else {
+            assert(false, "There always should be indexPath for newly created and inserted list")
+        }
+        guard let insertedMenuItem = menuTableView.cellForRow(at: indexPathOfNewList) as? MenuItem else {
+            assert(false, "Cell inserted at indexPathOfNewList have to be of type MenuItem")
+        }
+        
+        insertedMenuItem.titleTextView.isEditable = true
+        insertedMenuItem.titleTextView.becomeFirstResponder()
+        
+        isAddingNewList = true
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -145,17 +157,18 @@ extension MenuViewController: MenuItemDelegate {
     }
     func didEndEditingListName(sender: MenuItem) {
         if let index = menuTableView.indexPath(for: sender)?.item {
-            if sender.titleTextView.text.allSatisfy({ $0.isWhitespace }) {
+            // check if list name isnt jsut a bunch of whitespaces
+            if !sender.titleTextView.text.allSatisfy({ $0.isWhitespace }) {
+                menu.lists.fetchedObjects![index].title = sender.titleTextView.text
+            } else {
+                // if it and some tried saving it then delete it
                 menu.remove(menu.lists.fetchedObjects![index])
                 UINotificationFeedbackGenerator().notificationOccurred(.error)
-                do { try AppDelegate.viewContext.save()
-                } catch let err { fatalError(err.localizedDescription) }
-                return
             }
-            menu.lists.fetchedObjects![index].title = sender.titleTextView.text
             do { try AppDelegate.viewContext.save()
             } catch let err { fatalError(err.localizedDescription) }
         }
+        isAddingNewList = false
     }
 }
 
@@ -201,10 +214,6 @@ extension MenuViewController: NSFetchedResultsControllerDelegate {
                 menuTableView.beginUpdates()
                 menuTableView.insertRows(at: [newIndexPath!], with: .automatic)
                 menuTableView.endUpdates()
-                if let insertedCell = menuTableView.cellForRow(at: newIndexPath!) as? MenuItem {
-                    insertedCell.titleTextView.isEditable = true
-                    insertedCell.titleTextView.becomeFirstResponder()
-                }
             case .delete:
                 menuTableView.beginUpdates()
                 menuTableView.deleteRows(at: [indexPath!], with: .automatic)
@@ -248,4 +257,15 @@ extension MenuViewController: NSFetchedResultsControllerDelegate {
         }
     }
     // swiftlint:enable line_length cyclomatic_complexity function_body_length
+}
+
+// MARK: Section collapsing or expanding
+extension MenuViewController {
+    func updateListSectionVisualState() {
+        menuTableView.reloadSections(IndexSet(integer: 0), with: .automatic)
+    }
+    
+    func updateTagsSectionVisualState() {
+        menuTableView.reloadSections(IndexSet(integer: 1), with: .automatic)
+    }
 }

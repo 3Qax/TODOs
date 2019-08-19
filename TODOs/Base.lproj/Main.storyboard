@@ -39,7 +39,7 @@
                                                     </constraints>
                                                 </view>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Posprzątać pokójeeee" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P94-vz-TtX">
-                                                    <rect key="frame" x="45" y="10.5" width="545" height="23"/>
+                                                    <rect key="frame" x="45" y="10.5" width="359" height="23"/>
                                                     <fontDescription key="fontDescription" type="system" weight="light" pointSize="19"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -214,6 +214,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="menuTableView" destination="fTb-zS-egn" id="Lm0-14-p9R"/>
+                        <outlet property="plusBarButtonItem" destination="txJ-ou-5i2" id="9oW-Sc-jAR"/>
                         <segue destination="glH-h3-By5" kind="showDetail" identifier="showListForTag" id="PaJ-qu-lQ3"/>
                         <segue destination="gj9-6x-zaQ" kind="showDetail" identifier="showList" id="lTe-1O-FQY"/>
                     </connections>
@@ -280,7 +281,7 @@
                                                     </constraints>
                                                 </view>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Posprzątać pokójeeee" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WCb-hj-Yhy">
-                                                    <rect key="frame" x="45" y="10.5" width="545" height="23"/>
+                                                    <rect key="frame" x="45" y="10.5" width="359" height="23"/>
                                                     <fontDescription key="fontDescription" type="system" weight="light" pointSize="19"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>

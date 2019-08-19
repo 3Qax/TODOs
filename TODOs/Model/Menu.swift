@@ -33,7 +33,7 @@ class Menu {
         }()
     }
     
-    func addNewList(title: String? = nil, todos: NSSet? = nil) {
+    func createNewList(title: String? = nil, todos: NSSet? = nil) -> List {
         let newList = List(entity: NSEntityDescription.entity(forEntityName: "List",
                                                               in: AppDelegate.viewContext)!,
                            insertInto: AppDelegate.viewContext)
@@ -41,6 +41,8 @@ class Menu {
         if let todos = todos { newList.todos = todos }
         do { try AppDelegate.viewContext.save()
         } catch let err { fatalError(err.localizedDescription) }
+        
+        return newList
     }
     
     func remove(_ list: List) {
