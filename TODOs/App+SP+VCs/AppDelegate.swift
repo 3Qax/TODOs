@@ -21,6 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // swiftlint:enable force_cast
     }
     static var viewContext: NSManagedObjectContext {
+        persistentContainer.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         return persistentContainer.viewContext
     }
     lazy var persistentContainer: NSPersistentContainer = {

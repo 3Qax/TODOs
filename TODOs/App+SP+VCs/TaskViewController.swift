@@ -63,7 +63,7 @@ class TaskViewController: UIViewController {
     @objc func didTapDone() {
         task!.set(name: titleTextLabel.text!)
         task!.set(isDone: isDoneSwitch.isOn)
-        task!.set(tags: tagsField.tags.map({ $0.text }))
+        task!.set(tagsNames: tagsField.tags.map({ $0.text }))
         self.performSegue(withIdentifier: "unwindToList", sender: self)
     }
     
