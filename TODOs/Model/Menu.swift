@@ -11,7 +11,7 @@ import CoreData
 
 class Menu {
     let lists: NSFetchedResultsController<List>
-    let tags: NSFetchedResultsController<Tag>
+    let tags: NSFetchedResultsController<NSDictionary>
     
     init() {
         
@@ -24,8 +24,13 @@ class Menu {
                                               cacheName: nil)
         }()
         tags = {
-            let request: NSFetchRequest<Tag> = NSFetchRequest(entityName: "Tag")
+            let request: NSFetchRequest<NSDictionary> = NSFetchRequest(entityName: "Tag")
             request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+            request.returnsDistinctResults = true
+            request.propertiesToFetch = ["name"]
+            request.propertiesToGroupBy = ["name"]
+            request.resultType = .dictionaryResultType
+            request.returnsDistinctResults = true
             return NSFetchedResultsController(fetchRequest: request,
                                               managedObjectContext: AppDelegate.viewContext,
                                               sectionNameKeyPath: nil,
@@ -51,10 +56,10 @@ class Menu {
         } catch let err { fatalError(err.localizedDescription) }
     }
     
-    func todosFor(tag: Tag) -> NSFetchedResultsController<Todo> {
+    func todosFor(tag: String) -> NSFetchedResultsController<Todo> {
         let request: NSFetchRequest<Todo> = Todo.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
-        request.predicate = NSPredicate(format: "ANY tags.name = %@", tag.name!)
+        request.predicate = NSPredicate(format: "ANY tags.name = %@", tag)
         return NSFetchedResultsController(fetchRequest: request,
                                           managedObjectContext: AppDelegate.viewContext,
                                           sectionNameKeyPath: nil,

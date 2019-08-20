@@ -40,7 +40,6 @@ class MenuViewController: UITableViewController {
         
         menuTableView.reloadData()
         menu.lists.delegate = self
-        menu.tags.delegate = self
         
     }
     
@@ -72,8 +71,10 @@ class MenuViewController: UITableViewController {
                 fatalError("showListForTag segue should only be performed for cells (tags) from section 1")
             }
             _ = listForTagVC.view
-            listForTagVC.title = menu.tags.fetchedObjects![index].name!
-            listForTagVC.todos = menu.todosFor(tag: menu.tags.fetchedObjects![index])
+            let selectedTag: String = menu.tags.object(at: IndexPath(item: index, section: 0))["name"] as? String ?? ""
+            assert(selectedTag != "", "There shouldn't be empty tag!")
+            listForTagVC.title = selectedTag
+            listForTagVC.todos = menu.todosFor(tag: selectedTag)
         }
 
     }
@@ -97,7 +98,9 @@ class MenuViewController: UITableViewController {
         case 0:
             cell.titleTextView.text = menu.lists.fetchedObjects![indexPath.item].title
         case 1:
-            cell.titleTextView.text = menu.tags.fetchedObjects![indexPath.item].name
+            var correctedIndexPath = indexPath
+            correctedIndexPath.section = 0
+            cell.titleTextView.text = menu.tags.object(at: correctedIndexPath)["name"] as? String
         default:
             fatalError()
         }
@@ -221,7 +224,7 @@ extension MenuViewController {
 
 // MARK: Handle model notifications
 extension MenuViewController: NSFetchedResultsControllerDelegate {
-    // swiftlint:disable line_length cyclomatic_complexity function_body_length
+    // swiftlint:disable line_length
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         if anObject is List {
             switch type {
@@ -245,33 +248,8 @@ extension MenuViewController: NSFetchedResultsControllerDelegate {
                 fatalError()
             }
         }
-        if anObject is Tag {
-            //Fetch request controller doesn't know that these results are in 2nd section of table view
-            var correctedIndexPath = indexPath
-            correctedIndexPath?.section = 1
-            var correctedNewIndexPath = newIndexPath
-            correctedNewIndexPath?.section = 1
-            switch type {
-            case .insert:
-                menuTableView.beginUpdates()
-                menuTableView.insertRows(at: [correctedNewIndexPath!], with: .automatic)
-                menuTableView.endUpdates()
-            case .delete:
-                menuTableView.reloadSections(IndexSet(integer: 1), with: .fade)
-            case .move:
-                menuTableView.beginUpdates()
-                menuTableView.moveRow(at: correctedIndexPath!, to: correctedNewIndexPath!)
-                menuTableView.endUpdates()
-            case .update:
-                menuTableView.beginUpdates()
-                menuTableView.reloadRows(at: [correctedIndexPath!], with: .automatic)
-                menuTableView.endUpdates()
-            @unknown default:
-                fatalError()
-            }
-        }
     }
-    // swiftlint:enable line_length cyclomatic_complexity function_body_length
+    // swiftlint:enable line_length
 }
 
 // MARK: Section collapsing or expanding
