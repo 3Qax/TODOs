@@ -32,10 +32,10 @@
                 </subviews>
                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                 <constraints>
-                    <constraint firstAttribute="trailing" secondItem="87b-eK-4wc" secondAttribute="trailing" constant="20" id="7IZ-Yz-VKD"/>
-                    <constraint firstItem="87b-eK-4wc" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="JAq-MA-9S6"/>
-                    <constraint firstAttribute="bottom" secondItem="87b-eK-4wc" secondAttribute="bottom" constant="5" id="ePN-dN-2iJ"/>
-                    <constraint firstItem="87b-eK-4wc" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="25" id="sUS-hx-21C"/>
+                    <constraint firstAttribute="trailing" secondItem="87b-eK-4wc" secondAttribute="trailing" priority="999" constant="20" id="7IZ-Yz-VKD"/>
+                    <constraint firstItem="87b-eK-4wc" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" priority="999" constant="5" id="JAq-MA-9S6"/>
+                    <constraint firstAttribute="bottom" secondItem="87b-eK-4wc" secondAttribute="bottom" priority="999" constant="5" id="ePN-dN-2iJ"/>
+                    <constraint firstItem="87b-eK-4wc" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" priority="999" constant="25" id="sUS-hx-21C"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
