@@ -16,7 +16,6 @@ class MenuViewController: UITableViewController {
         didSet {
             plusBarButtonItem.isEnabled =  !isAddingNewList
             (menuTableView.headerView(forSection: 0) as? MenuHeader)?.styleAsEnabled = !isAddingNewList
-            (menuTableView.headerView(forSection: 1) as? MenuHeader)?.styleAsEnabled = !isAddingNewList
         }
     }
     private var isListsSectionCollapsed: Bool = false
@@ -117,24 +116,6 @@ class MenuViewController: UITableViewController {
         }
     }
     
-    @IBAction func didTapAdd(_ sender: Any) {
-        
-        assert(!isAddingNewList, "didTapAdd should only be called if user isn't already in process of adding one")
-
-        let newList = menu.createNewList()
-        guard let indexPathOfNewList = menu.lists.indexPath(forObject: newList) else {
-            assert(false, "There always should be indexPath for newly created and inserted list")
-        }
-        guard let insertedMenuItem = menuTableView.cellForRow(at: indexPathOfNewList) as? MenuItem else {
-            assert(false, "Cell inserted at indexPathOfNewList have to be of type MenuItem")
-        }
-        
-        insertedMenuItem.titleTextView.isEditable = true
-        insertedMenuItem.titleTextView.becomeFirstResponder()
-        
-        isAddingNewList = true
-    }
-    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.section {
         case 0:
@@ -151,8 +132,27 @@ class MenuViewController: UITableViewController {
     
 }
 
-// MARK: Handle adding new cells
+// MARK: Handle adding new MenuItem (List)
 extension MenuViewController: MenuItemDelegate {
+    @IBAction func didTapAdd(_ sender: Any) {
+        
+        assert(!isAddingNewList, "didTapAdd should only be called if user isn't already in process of adding one")
+        
+        if isListsSectionCollapsed { toggleListSection() }
+        
+        let newList = menu.createNewList()
+        guard let indexPathOfNewList = menu.lists.indexPath(forObject: newList) else {
+            assert(false, "There always should be indexPath for newly created and inserted list")
+        }
+        guard let insertedMenuItem = menuTableView.cellForRow(at: indexPathOfNewList) as? MenuItem else {
+            assert(false, "Cell inserted at indexPathOfNewList have to be of type MenuItem")
+        }
+        
+        insertedMenuItem.titleTextView.isEditable = true
+        insertedMenuItem.titleTextView.becomeFirstResponder()
+        
+        isAddingNewList = true
+    }
     func textChanged() {
         DispatchQueue.main.async {
             UIView.performWithoutAnimation {
@@ -183,6 +183,9 @@ extension MenuViewController {
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 50
+    }
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let cell = tableView.dequeueReusableHeaderFooterView(withIdentifier: "menuHeader") else {
             fatalError()
@@ -194,23 +197,29 @@ extension MenuViewController {
         switch section {
         case 0:
             header.titleLabel.text = "Lists"
-            header.styleAsCollapsed = isListsSectionCollapsed
             header.onTap { [weak self] in self?.didTapListSectionHeader() }
+            header.styleAsCollapsed = isListsSectionCollapsed
         case 1:
             header.titleLabel.text = "Tags"
-            header.styleAsCollapsed = isTagsSectionCollapsed
             header.onTap { [weak self] in self?.didTapTagsSectionHeader() }
+            header.styleAsCollapsed = isTagsSectionCollapsed
         default:
             fatalError("Asked for header for incorrect section")
         }
-
+        
         return cell
     }
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 50
+    func didTapListSectionHeader() {
+        if !isAddingNewList { toggleListSection()
+        } else { UINotificationFeedbackGenerator().notificationOccurred(.warning) }
+    }
+    
+    func didTapTagsSectionHeader() {
+        toggleTagsSection()
     }
 }
 
+// MARK: Handle model notifications
 extension MenuViewController: NSFetchedResultsControllerDelegate {
     // swiftlint:disable line_length cyclomatic_complexity function_body_length
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
@@ -238,24 +247,24 @@ extension MenuViewController: NSFetchedResultsControllerDelegate {
         }
         if anObject is Tag {
             //Fetch request controller doesn't know that these results are in 2nd section of table view
-            var correctIndexPath = indexPath
-            correctIndexPath?.section = 1
-            var correctNewIndexPath = newIndexPath
-            correctNewIndexPath?.section = 1
+            var correctedIndexPath = indexPath
+            correctedIndexPath?.section = 1
+            var correctedNewIndexPath = newIndexPath
+            correctedNewIndexPath?.section = 1
             switch type {
             case .insert:
                 menuTableView.beginUpdates()
-                menuTableView.insertRows(at: [correctNewIndexPath!], with: .automatic)
+                menuTableView.insertRows(at: [correctedNewIndexPath!], with: .automatic)
                 menuTableView.endUpdates()
             case .delete:
                 menuTableView.reloadSections(IndexSet(integer: 1), with: .fade)
             case .move:
                 menuTableView.beginUpdates()
-                menuTableView.moveRow(at: correctIndexPath!, to: correctNewIndexPath!)
+                menuTableView.moveRow(at: correctedIndexPath!, to: correctedNewIndexPath!)
                 menuTableView.endUpdates()
             case .update:
                 menuTableView.beginUpdates()
-                menuTableView.reloadRows(at: [correctIndexPath!], with: .automatic)
+                menuTableView.reloadRows(at: [correctedIndexPath!], with: .automatic)
                 menuTableView.endUpdates()
             @unknown default:
                 fatalError()
@@ -267,16 +276,13 @@ extension MenuViewController: NSFetchedResultsControllerDelegate {
 
 // MARK: Section collapsing or expanding
 extension MenuViewController {
-    func didTapListSectionHeader() {
-        if !isAddingNewList {
-            isListsSectionCollapsed.toggle()
-            menuTableView.reloadSections(IndexSet(integer: 0), with: .automatic)
-        } else {
-            UINotificationFeedbackGenerator().notificationOccurred(.warning)
-        }
+    
+    func toggleListSection() {
+        isListsSectionCollapsed.toggle()
+        menuTableView.reloadSections(IndexSet(integer: 0), with: .automatic)
     }
     
-    func didTapTagsSectionHeader() {
+    func toggleTagsSection() {
         isTagsSectionCollapsed.toggle()
         menuTableView.reloadSections(IndexSet(integer: 1), with: .automatic)
     }
