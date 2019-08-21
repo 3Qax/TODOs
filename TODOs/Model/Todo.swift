@@ -27,7 +27,18 @@ class Todo: NSManagedObject {
     func set(tagsNames: [String]) {
         
         // remove all of the tags of this todo
-        self.removeFromTags(self.tags!)
+        // if a owned tag has only 1 todo (this todo) then delete it
+        // since each tag should have at least 1
+        // if it has more than delete only self from it's todos
+        tags?.forEach({ tag in
+            if let tag = tag as? Tag {
+                if tag.todos?.count == 1 {
+                    AppDelegate.viewContext.delete(tag)
+                } else {
+                    tag.removeFromTodos(self)
+                }
+            }
+        })
         
         // for each new tag check if there is already such a tag
         tagsNames.forEach({ tagName in
