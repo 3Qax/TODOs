@@ -71,4 +71,17 @@ class Todo: NSManagedObject {
         } catch let err { fatalError(err.localizedDescription) }
     }
     
+    override func prepareForDeletion() {
+        super.prepareForDeletion()
+        tags?.forEach({ tag in
+            if let tag = tag as? Tag {
+                if tag.todos?.count == 1 {
+                    AppDelegate.viewContext.delete(tag)
+                } else {
+                    tag.removeFromTodos(self)
+                }
+            }
+        })
+    }
+    
 }

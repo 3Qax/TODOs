@@ -17,4 +17,10 @@ class List: NSManagedObject {
 //        } catch let err { fatalError(err.localizedDescription)}
     }
     
+    func remove(todo: Todo) {
+        AppDelegate.viewContext.delete(todo)
+        do { try AppDelegate.viewContext.save()
+        } catch let err { fatalError(err.localizedDescription) }
+    }
+    
 }

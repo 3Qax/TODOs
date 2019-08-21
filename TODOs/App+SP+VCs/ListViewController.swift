@@ -78,7 +78,7 @@ extension ListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            list!.removeFromTodos(todos!.fetchedObjects![indexPath.item])
+            list!.remove(todo: todos!.fetchedObjects![indexPath.item])
         }
     }
 }
