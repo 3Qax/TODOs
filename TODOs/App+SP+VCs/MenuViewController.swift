@@ -221,57 +221,53 @@ extension MenuViewController {
 
 // MARK: Handle model notifications
 extension MenuViewController: NSFetchedResultsControllerDelegate {
-    // swiftlint:disable line_length cyclomatic_complexity function_body_length
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        menuTableView.beginUpdates()
+    }
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>,
+                    didChange anObject: Any,
+                    at indexPath: IndexPath?,
+                    for type: NSFetchedResultsChangeType,
+                    newIndexPath: IndexPath?) {
+        
         if anObject is List {
             switch type {
             case .insert:
-                menuTableView.beginUpdates()
                 menuTableView.insertRows(at: [newIndexPath!], with: .automatic)
-                menuTableView.endUpdates()
             case .delete:
-                menuTableView.beginUpdates()
                 menuTableView.deleteRows(at: [indexPath!], with: .automatic)
-                menuTableView.endUpdates()
             case .move:
-                menuTableView.beginUpdates()
                 menuTableView.moveRow(at: indexPath!, to: newIndexPath!)
-                menuTableView.endUpdates()
             case .update:
-                menuTableView.beginUpdates()
                 menuTableView.reloadRows(at: [indexPath!], with: .automatic)
-                menuTableView.endUpdates()
             @unknown default:
-                fatalError()
+                assert(false, "Change of unknown type happened!")
             }
         }
         if anObject is Tag {
-            //Fetch request controller doesn't know that these results are in 2nd section of table view
-            var correctedIndexPath = indexPath
-            correctedIndexPath?.section = 1
-            var correctedNewIndexPath = newIndexPath
-            correctedNewIndexPath?.section = 1
+            // fetch request controller doesn't know that these results are in 2nd section of table view
+            // so we have to account for that by changing section in indexPath and newIndexPath
+            var correctIndexPath = indexPath
+            correctIndexPath?.section = 1
+            var correctNewIndexPath = newIndexPath
+            correctNewIndexPath?.section = 1
             switch type {
             case .insert:
-                menuTableView.beginUpdates()
-                menuTableView.insertRows(at: [correctedNewIndexPath!], with: .automatic)
-                menuTableView.endUpdates()
+                menuTableView.insertRows(at: [correctNewIndexPath!], with: .automatic)
             case .delete:
                 menuTableView.reloadSections(IndexSet(integer: 1), with: .fade)
             case .move:
-                menuTableView.beginUpdates()
-                menuTableView.moveRow(at: correctedIndexPath!, to: correctedNewIndexPath!)
-                menuTableView.endUpdates()
+                menuTableView.moveRow(at: correctIndexPath!, to: correctNewIndexPath!)
             case .update:
-                menuTableView.beginUpdates()
-                menuTableView.reloadRows(at: [correctedIndexPath!], with: .automatic)
-                menuTableView.endUpdates()
+                menuTableView.reloadRows(at: [correctIndexPath!], with: .automatic)
             @unknown default:
-                fatalError()
+                assert(false, "Change of unknown type happened!")
             }
         }
     }
-    // swiftlint:enable line_length cyclomatic_complexity function_body_length
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        menuTableView.endUpdates()
+    }
 }
 
 // MARK: Section collapsing or expanding
