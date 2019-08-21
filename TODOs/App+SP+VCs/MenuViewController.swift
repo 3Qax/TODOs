@@ -32,12 +32,6 @@ class MenuViewController: UITableViewController {
         let menuItemNib = UINib(nibName: "MenuItem", bundle: nil)
         menuTableView.register(menuItemNib, forCellReuseIdentifier: "menuItem")
         
-        do { try menu.lists.performFetch()
-        } catch let err { fatalError(err.localizedDescription) }
-        
-        do { try menu.tags.performFetch()
-        } catch let err { fatalError(err.localizedDescription) }
-        
         menuTableView.reloadData()
         menu.lists.delegate = self
         menu.tags.delegate = self

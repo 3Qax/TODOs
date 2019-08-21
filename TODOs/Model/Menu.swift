@@ -14,23 +14,24 @@ class Menu {
     let tags: NSFetchedResultsController<Tag>
     
     init() {
+        let listsFetchRequest: NSFetchRequest<List> = NSFetchRequest(entityName: "List")
+        listsFetchRequest.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+        lists = NSFetchedResultsController(fetchRequest: listsFetchRequest,
+                                           managedObjectContext: AppDelegate.viewContext,
+                                           sectionNameKeyPath: nil,
+                                           cacheName: nil)
+        do { try lists.performFetch()
+        } catch let err { fatalError(err.localizedDescription) }
         
-        lists = {
-            let request: NSFetchRequest<List> = NSFetchRequest(entityName: "List")
-            request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
-            return NSFetchedResultsController(fetchRequest: request,
-                                              managedObjectContext: AppDelegate.viewContext,
-                                              sectionNameKeyPath: nil,
-                                              cacheName: nil)
-        }()
-        tags = {
-            let request: NSFetchRequest<Tag> = NSFetchRequest(entityName: "Tag")
-            request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
-            return NSFetchedResultsController(fetchRequest: request,
-                                              managedObjectContext: AppDelegate.viewContext,
-                                              sectionNameKeyPath: nil,
-                                              cacheName: nil)
-        }()
+        let tagsFetchRequest: NSFetchRequest<Tag> = NSFetchRequest(entityName: "Tag")
+        tagsFetchRequest.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+        tags = NSFetchedResultsController(fetchRequest: tagsFetchRequest,
+                                          managedObjectContext: AppDelegate.viewContext,
+                                          sectionNameKeyPath: nil,
+                                          cacheName: nil)
+        
+        do { try tags.performFetch()
+        } catch let err { fatalError(err.localizedDescription) }
     }
     
     func createNewList(title: String? = nil, todos: NSSet? = nil) -> List {
