@@ -12,6 +12,20 @@ import CoreData
 @objc (List)
 class List: NSManagedObject {
     
+    lazy var sortedTodos: NSFetchedResultsController<Todo> = {
+        let request: NSFetchRequest<Todo> = Todo.fetchRequest()
+        request.predicate = NSPredicate(format: "list == %@", self)
+        request.sortDescriptors = [NSSortDescriptor(key: "isDone", ascending: true),
+                                   NSSortDescriptor(key: "name", ascending: true)]
+        let sortedTodos = NSFetchedResultsController(fetchRequest: request,
+                                                 managedObjectContext: AppDelegate.viewContext,
+                                                 sectionNameKeyPath: nil,
+                                                 cacheName: nil)
+        do { try  sortedTodos.performFetch()
+        } catch let err { fatalError(err.localizedDescription) }
+        return sortedTodos
+    }()
+    
     func set(name: String) {
 //        do { try Menu.common.realm.write { self.name = name }
 //        } catch let err { fatalError(err.localizedDescription)}

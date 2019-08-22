@@ -51,8 +51,6 @@ class MenuViewController: UITableViewController {
             guard section == 0 else {
                 fatalError("showList segue should only be performed for cells (actual lists) from section 0")
             }
-            _ = listVC.view
-            listVC.title = menu.lists.fetchedObjects![index].title
             listVC.list = menu.lists.fetchedObjects![index]
         }
         
@@ -111,9 +109,11 @@ class MenuViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // TODO: prevent user from going to list view when adding new list
         switch indexPath.section {
         case 0:
             if let cell = tableView.cellForRow(at: indexPath) as? MenuItem, cell.titleTextView.isEditable {
+//                assert(false, "something went wrong, and thats why navigation doesn't work")
                 return
             }
             performSegue(withIdentifier: "showList", sender: self)

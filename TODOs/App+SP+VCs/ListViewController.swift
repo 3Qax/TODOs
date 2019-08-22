@@ -12,28 +12,13 @@ import CoreData
 @IBDesignable
 class ListViewController: UIViewController {
     
-    var list: List? {
-        didSet {
-            let request: NSFetchRequest<Todo> = Todo.fetchRequest()
-            request.predicate = NSPredicate(format: "list == %@", list!)
-            request.sortDescriptors = [NSSortDescriptor(key: "isDone", ascending: true),
-                                       NSSortDescriptor(key: "name", ascending: true)]
-            todos = NSFetchedResultsController(fetchRequest: request,
-                                              managedObjectContext: AppDelegate.viewContext,
-                                              sectionNameKeyPath: nil,
-                                              cacheName: nil)
-            do { try  todos?.performFetch()
-            } catch let err { fatalError(err.localizedDescription) }
-            
-            taskTableView.reloadData()
-            todos?.delegate = self
-        }
-    }
-    var todos: NSFetchedResultsController<Todo>?
+    var list: List!
     @IBOutlet weak var taskTableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        list.sortedTodos.delegate = self
+        self.title = list.title
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -49,9 +34,9 @@ class ListViewController: UIViewController {
         }
         if segue.identifier == "showTaskDetails" {
             if let taskVC = segue.destination as? TaskViewController,
-            let indexOfSelecctedTask = taskTableView.indexPathForSelectedRow?.item {
+            let indexOfSelectedTask = taskTableView.indexPathForSelectedRow?.item {
                 _ = taskVC.view
-                taskVC.task = todos!.fetchedObjects![indexOfSelecctedTask]
+                taskVC.task = list.sortedTodos.fetchedObjects![indexOfSelectedTask]
                 taskVC.state = .viewing
                 taskVC.title = "edit todo"
             }
@@ -78,7 +63,7 @@ extension ListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            list!.remove(todo: todos!.fetchedObjects![indexPath.item])
+            list!.remove(todo: list.sortedTodos.fetchedObjects![indexPath.item])
         }
     }
 }
@@ -86,7 +71,7 @@ extension ListViewController: UITableViewDelegate {
 extension ListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return todos?.fetchedObjects?.count ?? 0
+        return list.sortedTodos.fetchedObjects!.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -94,8 +79,8 @@ extension ListViewController: UITableViewDataSource {
             fatalError()
         }
         
-        cell.nameLabel.text = todos!.fetchedObjects![indexPath.item].name
-        cell.shouldStypeAsDone = todos!.fetchedObjects![indexPath.item].isDone
+        cell.nameLabel.text = list.sortedTodos.fetchedObjects![indexPath.item].name
+        cell.shouldStypeAsDone = list.sortedTodos.fetchedObjects![indexPath.item].isDone
         cell.delegate = self
 
         return cell
@@ -106,38 +91,39 @@ extension ListViewController: UITableViewDataSource {
 extension ListViewController: TodoTableViewCellDelegate {
     func didTapCircle(sender: TodoTableViewCell) {
         if let index = taskTableView.indexPath(for: sender)?.item {
-            if todos!.fetchedObjects![index].isDone {
-                 todos!.fetchedObjects![index].set(isDone: false)
+            if list.sortedTodos.fetchedObjects![index].isDone {
+                 list.sortedTodos.fetchedObjects![index].set(isDone: false)
             } else {
-                 todos!.fetchedObjects![index].set(isDone: true)
+                 list.sortedTodos.fetchedObjects![index].set(isDone: true)
             }
         }
     }
 }
 
 extension ListViewController: NSFetchedResultsControllerDelegate {
-    // swiftlint:disable line_length
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        // swiftlint:enable line_length
-        switch type {
-        case .insert:
-            taskTableView.beginUpdates()
-            taskTableView.insertRows(at: [newIndexPath!], with: .automatic)
-            taskTableView.endUpdates()
-        case .delete:
-            taskTableView.beginUpdates()
-            taskTableView.deleteRows(at: [indexPath!], with: .automatic)
-            taskTableView.endUpdates()
-        case .move:
-            taskTableView.beginUpdates()
-            taskTableView.moveRow(at: indexPath!, to: newIndexPath!)
-            taskTableView.endUpdates()
-        case .update:
-            taskTableView.beginUpdates()
-            taskTableView.reloadRows(at: [indexPath!], with: .automatic)
-            taskTableView.endUpdates()
-        @unknown default:
-            fatalError()
-        }
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        taskTableView.beginUpdates()
+    }
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>,
+                    didChange anObject: Any,
+                    at indexPath: IndexPath?,
+                    for type: NSFetchedResultsChangeType,
+                    newIndexPath: IndexPath?) {
+        
+            switch type {
+            case .insert:
+                taskTableView.insertRows(at: [newIndexPath!], with: .automatic)
+            case .delete:
+                taskTableView.deleteRows(at: [indexPath!], with: .automatic)
+            case .move:
+                taskTableView.moveRow(at: indexPath!, to: newIndexPath!)
+            case .update:
+                taskTableView.reloadRows(at: [indexPath!], with: .automatic)
+            @unknown default:
+                assert(false, "Change of unknown type happened!")
+            }
+    }
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        taskTableView.endUpdates()
     }
 }

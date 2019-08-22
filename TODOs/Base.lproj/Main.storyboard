@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="A72-PI-b0a">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="y9b-ix-QCf">
     <device id="retina6_1" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -215,8 +215,8 @@
                     <connections>
                         <outlet property="menuTableView" destination="fTb-zS-egn" id="Lm0-14-p9R"/>
                         <outlet property="plusBarButtonItem" destination="txJ-ou-5i2" id="9oW-Sc-jAR"/>
-                        <segue destination="glH-h3-By5" kind="showDetail" identifier="showListForTag" id="PaJ-qu-lQ3"/>
-                        <segue destination="gj9-6x-zaQ" kind="showDetail" identifier="showList" id="lTe-1O-FQY"/>
+                        <segue destination="glH-h3-By5" kind="show" identifier="showListForTag" id="PaJ-qu-lQ3"/>
+                        <segue destination="gj9-6x-zaQ" kind="show" identifier="showList" id="lTe-1O-FQY"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="t52-w2-OXS" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -238,19 +238,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="719-fY-9cl" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-572" y="-643"/>
-        </scene>
-        <!--Primary Split View Controller-->
-        <scene sceneID="Psj-eh-qEf">
-            <objects>
-                <splitViewController id="A72-PI-b0a" customClass="PrimarySplitViewController" customModule="TODOs" customModuleProvider="target" sceneMemberID="viewController">
-                    <connections>
-                        <segue destination="y9b-ix-QCf" kind="relationship" relationship="masterViewController" id="avG-TN-z5B"/>
-                        <segue destination="gj9-6x-zaQ" kind="relationship" relationship="detailViewController" id="1ZP-34-quQ"/>
-                    </connections>
-                </splitViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="L6V-ed-jFZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-1516" y="-234"/>
         </scene>
         <!--List-->
         <scene sceneID="QMO-wX-yBP">
@@ -328,6 +315,5 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="QcW-Rl-QvI"/>
-        <segue reference="lTe-1O-FQY"/>
     </inferredMetricsTieBreakers>
 </document>
