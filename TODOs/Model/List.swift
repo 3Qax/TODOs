@@ -31,8 +31,8 @@ extension List {
         return NSFetchRequest<List>(entityName: "List")
     }
     
-    @NSManaged public var title: String?
-    @NSManaged public var todos: NSSet?
+    @NSManaged public var title: String
+    @NSManaged public var todos: Set<Todo>
     
 }
 
@@ -46,9 +46,9 @@ extension List {
     @NSManaged public func removeFromTodos(_ value: Todo)
     
     @objc(addTodos:)
-    @NSManaged public func addToTodos(_ values: NSSet)
+    @NSManaged public func addToTodos(_ values: Set<Todo>)
     
     @objc(removeTodos:)
-    @NSManaged public func removeFromTodos(_ values: NSSet)
+    @NSManaged public func removeFromTodos(_ values: Set<Todo>)
     
 }

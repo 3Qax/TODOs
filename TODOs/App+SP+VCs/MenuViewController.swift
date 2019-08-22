@@ -52,7 +52,7 @@ class MenuViewController: UITableViewController {
                 fatalError("showList segue should only be performed for cells (actual lists) from section 0")
             }
             _ = listVC.view
-            listVC.title = menu.lists.fetchedObjects![index].title!
+            listVC.title = menu.lists.fetchedObjects![index].title
             listVC.list = menu.lists.fetchedObjects![index]
         }
         
@@ -66,7 +66,7 @@ class MenuViewController: UITableViewController {
                 fatalError("showListForTag segue should only be performed for cells (tags) from section 1")
             }
             _ = listForTagVC.view
-            listForTagVC.title = menu.tags.fetchedObjects![index].name!
+            listForTagVC.title = menu.tags.fetchedObjects![index].name
             listForTagVC.todos = menu.todosFor(tag: menu.tags.fetchedObjects![index])
         }
 
@@ -134,7 +134,7 @@ extension MenuViewController: MenuItemDelegate {
         
         if isListsSectionCollapsed { toggleListSection() }
         
-        let newList = menu.createNewList()
+        let newList = menu.createNewEmptyList()
         guard let indexPathOfNewList = menu.lists.indexPath(forObject: newList) else {
             assert(false, "There always should be indexPath for newly created and inserted list")
         }

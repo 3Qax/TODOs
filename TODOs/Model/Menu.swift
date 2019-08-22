@@ -34,12 +34,10 @@ class Menu {
         } catch let err { fatalError(err.localizedDescription) }
     }
     
-    func createNewList(title: String? = nil, todos: NSSet? = nil) -> List {
+    func createNewEmptyList() -> List {
         let newList = List(entity: NSEntityDescription.entity(forEntityName: "List",
                                                               in: AppDelegate.viewContext)!,
                            insertInto: AppDelegate.viewContext)
-        if let title = title { newList.title = title }
-        if let todos = todos { newList.todos = todos }
         do { try AppDelegate.viewContext.save()
         } catch let err { fatalError(err.localizedDescription) }
         
@@ -55,7 +53,7 @@ class Menu {
     func todosFor(tag: Tag) -> NSFetchedResultsController<Todo> {
         let request: NSFetchRequest<Todo> = Todo.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
-        request.predicate = NSPredicate(format: "ANY tags.name = %@", tag.name!)
+        request.predicate = NSPredicate(format: "ANY tags.name = %@", tag.name)
         return NSFetchedResultsController(fetchRequest: request,
                                           managedObjectContext: AppDelegate.viewContext,
                                           sectionNameKeyPath: nil,

@@ -30,13 +30,11 @@ class Todo: NSManagedObject {
         // if a owned tag has only 1 todo (this todo) then delete it
         // since each tag should have at least 1
         // if it has more than delete only self from it's todos
-        tags?.forEach({ tag in
-            if let tag = tag as? Tag {
-                if tag.todos?.count == 1 {
-                    AppDelegate.viewContext.delete(tag)
-                } else {
-                    tag.removeFromTodos(self)
-                }
+        tags.forEach({ tag in
+            if tag.todos.count == 1 {
+                AppDelegate.viewContext.delete(tag)
+            } else {
+                tag.removeFromTodos(self)
             }
         })
         
@@ -73,13 +71,11 @@ class Todo: NSManagedObject {
     
     override func prepareForDeletion() {
         super.prepareForDeletion()
-        tags?.forEach({ tag in
-            if let tag = tag as? Tag {
-                if tag.todos?.count == 1 {
-                    AppDelegate.viewContext.delete(tag)
-                } else {
-                    tag.removeFromTodos(self)
-                }
+        tags.forEach({ tag in
+            if tag.todos.count == 1 {
+                AppDelegate.viewContext.delete(tag)
+            } else {
+                tag.removeFromTodos(self)
             }
         })
     }
@@ -93,9 +89,9 @@ extension Todo {
     }
     
     @NSManaged public var isDone: Bool
-    @NSManaged public var name: String?
-    @NSManaged public var list: List?
-    @NSManaged public var tags: NSSet?
+    @NSManaged public var name: String
+    @NSManaged public var list: List
+    @NSManaged public var tags: Set<Tag>
     
 }
 
@@ -109,9 +105,9 @@ extension Todo {
     @NSManaged public func removeFromTags(_ value: Tag)
     
     @objc(addTags:)
-    @NSManaged public func addToTags(_ values: NSSet)
+    @NSManaged public func addToTags(_ values: Set<Tag>)
     
     @objc(removeTags:)
-    @NSManaged public func removeFromTags(_ values: NSSet)
+    @NSManaged public func removeFromTags(_ values: Set<Tag>)
     
 }

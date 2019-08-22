@@ -32,7 +32,7 @@ class TaskViewController: UIViewController {
         didSet {
             titleTextLabel.text = task!.name
             isDoneSwitch.isOn = task!.isDone
-            task!.tags?.forEach({ tagsField.addTag(($0 as? Tag)!.name!) })
+            task!.tags.forEach({ tagsField.addTag($0.name) })
         }
     }
     

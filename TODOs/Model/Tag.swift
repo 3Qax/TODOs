@@ -20,8 +20,8 @@ extension Tag {
         return NSFetchRequest<Tag>(entityName: "Tag")
     }
     
-    @NSManaged public var name: String?
-    @NSManaged public var todos: NSSet?
+    @NSManaged public var name: String
+    @NSManaged public var todos: Set<Todo>
     
 }
 
@@ -35,9 +35,9 @@ extension Tag {
     @NSManaged public func removeFromTodos(_ value: Todo)
     
     @objc(addTodos:)
-    @NSManaged public func addToTodos(_ values: NSSet)
+    @NSManaged public func addToTodos(_ values: Set<Todo>)
     
     @objc(removeTodos:)
-    @NSManaged public func removeFromTodos(_ values: NSSet)
+    @NSManaged public func removeFromTodos(_ values: Set<Todo>)
     
 }
