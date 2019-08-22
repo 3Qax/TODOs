@@ -85,3 +85,33 @@ class Todo: NSManagedObject {
     }
     
 }
+
+extension Todo {
+    
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<Todo> {
+        return NSFetchRequest<Todo>(entityName: "Todo")
+    }
+    
+    @NSManaged public var isDone: Bool
+    @NSManaged public var name: String?
+    @NSManaged public var list: List?
+    @NSManaged public var tags: NSSet?
+    
+}
+
+// MARK: Generated accessors for tags
+extension Todo {
+    
+    @objc(addTagsObject:)
+    @NSManaged public func addToTags(_ value: Tag)
+    
+    @objc(removeTagsObject:)
+    @NSManaged public func removeFromTags(_ value: Tag)
+    
+    @objc(addTags:)
+    @NSManaged public func addToTags(_ values: NSSet)
+    
+    @objc(removeTags:)
+    @NSManaged public func removeFromTags(_ values: NSSet)
+    
+}

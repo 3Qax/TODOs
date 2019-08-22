@@ -13,3 +13,31 @@ import CoreData
 class Tag: NSManagedObject {
     
 }
+
+extension Tag {
+    
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<Tag> {
+        return NSFetchRequest<Tag>(entityName: "Tag")
+    }
+    
+    @NSManaged public var name: String?
+    @NSManaged public var todos: NSSet?
+    
+}
+
+// MARK: Generated accessors for todos
+extension Tag {
+    
+    @objc(addTodosObject:)
+    @NSManaged public func addToTodos(_ value: Todo)
+    
+    @objc(removeTodosObject:)
+    @NSManaged public func removeFromTodos(_ value: Todo)
+    
+    @objc(addTodos:)
+    @NSManaged public func addToTodos(_ values: NSSet)
+    
+    @objc(removeTodos:)
+    @NSManaged public func removeFromTodos(_ values: NSSet)
+    
+}
