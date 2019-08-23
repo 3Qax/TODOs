@@ -16,6 +16,7 @@ class Menu {
     init() {
         let listsFetchRequest: NSFetchRequest<List> = NSFetchRequest(entityName: "List")
         listsFetchRequest.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+        listsFetchRequest.predicate = NSPredicate(format: "isForTag == NO")
         lists = NSFetchedResultsController(fetchRequest: listsFetchRequest,
                                            managedObjectContext: AppDelegate.viewContext,
                                            sectionNameKeyPath: nil,
@@ -50,13 +51,22 @@ class Menu {
         } catch let err { fatalError(err.localizedDescription) }
     }
     
-    func todosFor(tag: Tag) -> NSFetchedResultsController<Todo> {
+    // this functions generates fake list containing
+    // all of the todos which have given tag assigned to them
+    // it is neccessary to delete fake tag created that way after going back from ListForTagVC
+    func listFor(tag: Tag) -> List {
+        let newList = List(context: AppDelegate.viewContext)
+        newList.title = tag.name
+        newList.isForTag = true
         let request: NSFetchRequest<Todo> = Todo.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
         request.predicate = NSPredicate(format: "ANY tags.name = %@", tag.name)
-        return NSFetchedResultsController(fetchRequest: request,
+        newList.sortedTodos = NSFetchedResultsController(fetchRequest: request,
                                           managedObjectContext: AppDelegate.viewContext,
                                           sectionNameKeyPath: nil,
                                           cacheName: nil)
+        do { try newList.sortedTodos.performFetch()
+        } catch let err { fatalError(err.localizedDescription) }
+        return newList
     }
 }

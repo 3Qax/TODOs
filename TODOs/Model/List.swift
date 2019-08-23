@@ -45,6 +45,7 @@ extension List {
         return NSFetchRequest<List>(entityName: "List")
     }
     
+    @NSManaged public var isForTag: Bool
     @NSManaged public var title: String
     @NSManaged public var todos: Set<Todo>
     

@@ -23,35 +23,30 @@ class ListViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "addTask" {
-            if let taskVC = segue.destination as? TaskViewController {
-                _ = taskVC.view
+            if let todoVC = segue.destination as? TodoViewController {
+                _ = todoVC.view
                 let newTodo = Todo(context: AppDelegate.viewContext)
-                list!.addToTodos(newTodo)
-                taskVC.task = newTodo
-                taskVC.state = .editing
-                taskVC.title = "add todo"
+                newTodo.list = list
+                todoVC.todo = newTodo
+                todoVC.state = .editing
+                todoVC.title = "add todo"
             }
         }
         if segue.identifier == "showTaskDetails" {
-            if let taskVC = segue.destination as? TaskViewController,
+            if let todoVC = segue.destination as? TodoViewController,
             let indexOfSelectedTask = taskTableView.indexPathForSelectedRow?.item {
-                _ = taskVC.view
-                taskVC.task = list.sortedTodos.fetchedObjects![indexOfSelectedTask]
-                taskVC.state = .viewing
-                taskVC.title = "edit todo"
+                _ = todoVC.view
+                todoVC.todo = list.sortedTodos.fetchedObjects![indexOfSelectedTask]
+                todoVC.state = .viewing
+                todoVC.title = "edit todo"
             }
         }
         
     }
     
     @IBAction func unwindToList(_ unwindSegue: UIStoryboardSegue) {
-        if unwindSegue.identifier == "unwindToList" {
-            if let taskVC = unwindSegue.source as? TaskViewController {
-                if taskVC.task!.name.allSatisfy({ $0.isWhitespace }) {
-                    UINotificationFeedbackGenerator().notificationOccurred(.error)
-                    list!.removeFromTodos(taskVC.task!)
-                }
-            }
+        if unwindSegue.identifier == "unwindToList", let todoVC = unwindSegue.source as? TodoViewController {
+            todoVC.todo.didEndEditing()
         }
     }
 }
@@ -91,11 +86,9 @@ extension ListViewController: UITableViewDataSource {
 extension ListViewController: TodoTableViewCellDelegate {
     func didTapCircle(sender: TodoTableViewCell) {
         if let index = taskTableView.indexPath(for: sender)?.item {
-            if list.sortedTodos.fetchedObjects![index].isDone {
-                 list.sortedTodos.fetchedObjects![index].set(isDone: false)
-            } else {
-                 list.sortedTodos.fetchedObjects![index].set(isDone: true)
-            }
+            list.sortedTodos.fetchedObjects![index].isDone.toggle()
+            do { try AppDelegate.viewContext.save()
+            } catch let err { fatalError(err.localizedDescription) }
         }
     }
 }

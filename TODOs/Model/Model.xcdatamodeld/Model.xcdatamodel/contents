@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14492.1" systemVersion="19A526h" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="List" representedClassName="TODOs.List" syncable="YES">
+        <attribute name="isForTag" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="todos" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Todo" inverseName="list" inverseEntity="Todo" syncable="YES"/>
     </entity>
@@ -20,7 +21,7 @@
         <relationship name="tags" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Tag" inverseName="todos" inverseEntity="Tag" syncable="YES"/>
     </entity>
     <elements>
-        <element name="List" positionX="-28.56640625" positionY="-38.0234375" width="175.0390625" height="73"/>
+        <element name="List" positionX="-28.56640625" positionY="-38.0234375" width="175.0390625" height="90"/>
         <element name="Tag" positionX="313.9765625" positionY="-42.65625" width="128" height="73"/>
         <element name="Todo" positionX="-30.59765625" positionY="85.17578125" width="174.98828125" height="103"/>
     </elements>

@@ -1,5 +1,5 @@
 //
-//  TaskViewController.swift
+//  TodoViewController.swift
 //  TODOs
 //
 //  Created by Jakub Towarek on 13/07/2019.
@@ -10,31 +10,21 @@ import UIKit
 import CoreData
 import WSTagsField
 
-class TaskViewController: UIViewController {
+class TodoViewController: UIViewController {
     
     enum State {
         case editing
         case viewing
     }
     
-    var state: State = .editing {
-        didSet {
-            updateViewState()
-        }
-    }
+    var todo: Todo!
+    var state: State = .editing { didSet { updateViewState() } }
+    
+    let tagsField = WSTagsField()
     @IBOutlet weak var titleTextLabel: UITextField!
     @IBOutlet weak var stateLabel: UILabel!
     @IBOutlet weak var isDoneSwitch: UISwitch!
     @IBOutlet weak var tagsLabel: UILabel!
-    let tagsField = WSTagsField()
-    
-    var task: Todo? {
-        didSet {
-            titleTextLabel.text = task!.name
-            isDoneSwitch.isOn = task!.isDone
-            task!.tags.forEach({ tagsField.addTag($0.name) })
-        }
-    }
     
     func updateViewState() {
         switch state {
@@ -53,7 +43,7 @@ class TaskViewController: UIViewController {
             tagsField.isUserInteractionEnabled = false
             if tagsField.tags.isEmpty { tagsField.placeholder = "No tags were specified" }
             isDoneSwitch.isHidden = true
-            stateLabel.text = task!.isDone ? "Marked as done" : "Pending"
+            stateLabel.text = todo!.isDone ? "Marked as done" : "Pending"
             navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit,
                                                                 target: self,
                                                                 action: #selector(didTapEdit))
@@ -61,9 +51,9 @@ class TaskViewController: UIViewController {
     }
     
     @objc func didTapDone() {
-        task!.set(name: titleTextLabel.text!)
-        task!.set(isDone: isDoneSwitch.isOn)
-        task!.set(tagsNames: tagsField.tags.map({ $0.text }))
+        todo.name = titleTextLabel.text!
+        todo.isDone = isDoneSwitch.isOn
+        todo.set(tagsNames: tagsField.tags.map({ $0.text }))
         self.performSegue(withIdentifier: "unwindToList", sender: self)
     }
     
@@ -97,6 +87,7 @@ class TaskViewController: UIViewController {
         tagsField.placeholderAlwaysVisible = false
         tagsField.returnKeyType = .next
         tagsField.acceptTagOption = .space
+        
     }
     
 }

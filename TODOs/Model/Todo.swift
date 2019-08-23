@@ -12,14 +12,10 @@ import CoreData
 @objc (Todo)
 class Todo: NSManagedObject {
     
-    func set(name: String) {
-        self.name = name
-        do { try AppDelegate.viewContext.save()
-        } catch let err { fatalError(err.localizedDescription) }
-    }
-    
-    func set(isDone: Bool) {
-        self.isDone = isDone
+    func didEndEditing() {
+        if self.name.allSatisfy({ $0.isWhitespace }) {
+            AppDelegate.viewContext.delete(self)
+        }
         do { try AppDelegate.viewContext.save()
         } catch let err { fatalError(err.localizedDescription) }
     }
