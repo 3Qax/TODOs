@@ -70,13 +70,59 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		1904D23E22D8C17900866F19 /* Cells */ = {
+		194D617A2315B28C006305D5 /* Menu */ = {
 			isa = PBXGroup;
 			children = (
-				19CB2952230497060006E4D1 /* Menu */,
-				19CB29532304971C0006E4D1 /* List */,
+				194D617F2315B345006305D5 /* Cells */,
+				1904D23422D8B59400866F19 /* MenuViewController.swift */,
+			);
+			path = Menu;
+			sourceTree = "<group>";
+		};
+		194D617B2315B29E006305D5 /* List */ = {
+			isa = PBXGroup;
+			children = (
+				194D61802315B371006305D5 /* Cell */,
+				1904D22E22D8A09500866F19 /* ListViewController.swift */,
+				19762C0822DB82E7008FEAD9 /* ListForTagViewController.swift */,
+			);
+			path = List;
+			sourceTree = "<group>";
+		};
+		194D617D2315B2BC006305D5 /* Todo */ = {
+			isa = PBXGroup;
+			children = (
+				19B9CBCA22DA37BA00012E61 /* TodoViewController.swift */,
+			);
+			path = Todo;
+			sourceTree = "<group>";
+		};
+		194D617E2315B30A006305D5 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				1993A13522D8986A00C88D74 /* AppDelegate.swift */,
+				1993A14122D8986B00C88D74 /* Info.plist */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		194D617F2315B345006305D5 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				19CB2950230492CF0006E4D1 /* MenuHeader.xib */,
+				1904D23F22D8C38E00866F19 /* MenuHeader.swift */,
+				19CB29572304A7070006E4D1 /* MenuItem.xib */,
+				19CB29562304A7070006E4D1 /* MenuItem.swift */,
 			);
 			path = Cells;
+			sourceTree = "<group>";
+		};
+		194D61802315B371006305D5 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				1904D23222D8A88F00866F19 /* TodoTableViewCell.swift */,
+			);
+			path = Cell;
 			sourceTree = "<group>";
 		};
 		19762C0722DB4451008FEAD9 /* Controls */ = {
@@ -103,8 +149,9 @@
 			isa = PBXGroup;
 			children = (
 				1993A13422D8986A00C88D74 /* TODOs */,
-				1993A13322D8986A00C88D74 /* Products */,
+				1993A13922D8986A00C88D74 /* Main.storyboard */,
 				1B2E76DF5235C578CE7FD7D3 /* Pods */,
+				1993A13322D8986A00C88D74 /* Products */,
 				82E99FBD012206C919FDE057 /* Frameworks */,
 			);
 			sourceTree = "<group>";
@@ -120,29 +167,25 @@
 		1993A13422D8986A00C88D74 /* TODOs */ = {
 			isa = PBXGroup;
 			children = (
-				1993A14122D8986B00C88D74 /* Info.plist */,
-				1993A13922D8986A00C88D74 /* Main.storyboard */,
-				1993A13C22D8986B00C88D74 /* Assets.xcassets */,
 				1993A13E22D8986B00C88D74 /* LaunchScreen.storyboard */,
+				1993A13C22D8986B00C88D74 /* Assets.xcassets */,
+				194D617E2315B30A006305D5 /* App */,
 				19A22EF322DA883700DFEB5A /* Extensions */,
 				19762C0722DB4451008FEAD9 /* Controls */,
-				1904D23E22D8C17900866F19 /* Cells */,
 				198A613422D915B600BCC1D0 /* Model */,
-				19A22EF222DA871300DFEB5A /* App+SP+VCs */,
+				19A22EF222DA871300DFEB5A /* Screens */,
 			);
 			path = TODOs;
 			sourceTree = "<group>";
 		};
-		19A22EF222DA871300DFEB5A /* App+SP+VCs */ = {
+		19A22EF222DA871300DFEB5A /* Screens */ = {
 			isa = PBXGroup;
 			children = (
-				1993A13522D8986A00C88D74 /* AppDelegate.swift */,
-				1904D23422D8B59400866F19 /* MenuViewController.swift */,
-				1904D22E22D8A09500866F19 /* ListViewController.swift */,
-				19762C0822DB82E7008FEAD9 /* ListForTagViewController.swift */,
-				19B9CBCA22DA37BA00012E61 /* TodoViewController.swift */,
+				194D617A2315B28C006305D5 /* Menu */,
+				194D617B2315B29E006305D5 /* List */,
+				194D617D2315B2BC006305D5 /* Todo */,
 			);
-			path = "App+SP+VCs";
+			path = Screens;
 			sourceTree = "<group>";
 		};
 		19A22EF322DA883700DFEB5A /* Extensions */ = {
@@ -151,25 +194,6 @@
 				19A22EF422DA885000DFEB5A /* UIView.swift */,
 			);
 			path = Extensions;
-			sourceTree = "<group>";
-		};
-		19CB2952230497060006E4D1 /* Menu */ = {
-			isa = PBXGroup;
-			children = (
-				19CB2950230492CF0006E4D1 /* MenuHeader.xib */,
-				1904D23F22D8C38E00866F19 /* MenuHeader.swift */,
-				19CB29572304A7070006E4D1 /* MenuItem.xib */,
-				19CB29562304A7070006E4D1 /* MenuItem.swift */,
-			);
-			path = Menu;
-			sourceTree = "<group>";
-		};
-		19CB29532304971C0006E4D1 /* List */ = {
-			isa = PBXGroup;
-			children = (
-				1904D23222D8A88F00866F19 /* TodoTableViewCell.swift */,
-			);
-			path = List;
 			sourceTree = "<group>";
 		};
 		1B2E76DF5235C578CE7FD7D3 /* Pods */ = {
