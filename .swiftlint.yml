@@ -1,7 +1,7 @@
 excluded:
   - Pods
 disabled_rules:
-  - trailing_whitespace
+  - force_cast
 
 # rules configuration
 line_length: 128

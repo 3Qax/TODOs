@@ -10,84 +10,75 @@ import UIKit
 import CoreData
 import WSTagsField
 
-class TodoViewController: UIViewController {
-    
-    enum State {
-        case editing
-        case viewing
+protocol TodoViewControllerDelegate: AnyObject {
+    func didSave()
+}
+
+final class TodoViewController: UIViewController {
+
+    private var customView: TodoView { return self.view as! TodoView }
+    private var saveBarButtonItem: UIBarButtonItem?
+    private weak var delegate: TodoViewControllerDelegate?
+    private var todo: Todo
+
+    init(todo: Todo, delegate: TodoViewControllerDelegate? = nil) {
+        self.todo = todo
+        self.delegate = delegate
+        super.init(nibName: nil, bundle: nil)
     }
-    
-    var todo: Todo!
-    var state: State = .editing { didSet { updateViewState() } }
-    
-    let tagsField = WSTagsField()
-    @IBOutlet weak var titleTextLabel: UITextField!
-    @IBOutlet weak var stateLabel: UILabel!
-    @IBOutlet weak var isDoneSwitch: UISwitch!
-    @IBOutlet weak var tagsLabel: UILabel!
-    
-    func updateViewState() {
-        switch state {
-        case .editing:
-            titleTextLabel.isUserInteractionEnabled = true
-            titleTextLabel.becomeFirstResponder()
-            tagsField.isUserInteractionEnabled = true
-            if tagsField.tags.isEmpty { tagsField.placeholder = "Space separated tags" }
-            isDoneSwitch.isHidden = false
-            stateLabel.text = "mark as done"
-            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done,
-                                                                target: self,
-                                                                action: #selector(didTapDone))
-        case .viewing:
-            titleTextLabel.isUserInteractionEnabled = false
-            tagsField.isUserInteractionEnabled = false
-            if tagsField.tags.isEmpty { tagsField.placeholder = "No tags were specified" }
-            isDoneSwitch.isHidden = true
-            stateLabel.text = todo!.isDone ? "Marked as done" : "Pending"
-            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit,
-                                                                target: self,
-                                                                action: #selector(didTapEdit))
-        }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
-    
-    @objc func didTapDone() {
-        todo.name = titleTextLabel.text!
-        todo.isDone = isDoneSwitch.isOn
-        todo.set(tagsNames: tagsField.tags.map({ $0.text }))
-        self.performSegue(withIdentifier: "unwindToList", sender: self)
+
+    override func loadView() {
+        self.view = TodoView.instanceFromNib()
     }
-    
-    @objc func didTapEdit() {
-        self.state = .editing
-    }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(tagsField)
-        tagsField.translatesAutoresizingMaskIntoConstraints = false
-        let topConstraint = tagsField.topAnchor.constraint(equalTo: tagsLabel!.bottomAnchor, constant: 5)
-        let leadingConstraint = tagsField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20)
-        let trailingConstraint = tagsField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 20)
-        view.addConstraints([topConstraint, leadingConstraint, trailingConstraint])
-        
-        tagsField.layoutMargins = UIEdgeInsets(top: 2, left: 6, bottom: 2, right: 6)
-        tagsField.contentInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-        tagsField.spaceBetweenLines = 5.0
-        tagsField.spaceBetweenTags = 10.0
-        tagsField.font = .systemFont(ofSize: 19, weight: .light)
-        tagsField.backgroundColor = .white
-        tagsField.placeholder = "Space separated tags"
-        tagsField.tintColor = view.tintColor
-        tagsField.textColor = .white
-        tagsField.fieldTextColor = .black
-        tagsField.selectedColor = .darkGray
-        tagsField.selectedTextColor = .white
-        tagsField.isDelimiterVisible = false
-        tagsField.placeholderColor = .darkGray
-        tagsField.placeholderAlwaysVisible = false
-        tagsField.returnKeyType = .next
-        tagsField.acceptTagOption = .space
-        
+
+        self.saveBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save,
+                                                 target: self,
+                                                 action: #selector(didTapSaveButton))
+        navigationItem.rightBarButtonItem = saveBarButtonItem
+        navigationItem.hidesBackButton = true
+
+        customView.tagsField.layoutMargins = UIEdgeInsets(top: 2, left: 6, bottom: 2, right: 6)
+        customView.tagsField.contentInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        customView.tagsField.spaceBetweenLines = 5.0
+        customView.tagsField.spaceBetweenTags = 10.0
+        customView.tagsField.font = .systemFont(ofSize: 19, weight: .light)
+        customView.tagsField.backgroundColor = .white
+        customView.tagsField.placeholder = "No tags entered...."
+        customView.tagsField.tintColor = view.tintColor
+        customView.tagsField.textColor = .white
+        customView.tagsField.fieldTextColor = .black
+        customView.tagsField.selectedColor = .darkGray
+        customView.tagsField.selectedTextColor = .white
+        customView.tagsField.isDelimiterVisible = false
+        customView.tagsField.placeholderColor = .lightGray
+        customView.tagsField.placeholderAlwaysVisible = false
+        customView.tagsField.returnKeyType = .next
+        customView.tagsField.acceptTagOption = .space
     }
-    
+
+    override func viewWillAppear(_ animated: Bool) {
+        customView.titleTextView.text = todo.name
+        customView.isDoneSwitch.isOn = todo.isDone
+    }
+
+    @objc func didTapSaveButton() {
+        todo.name = customView.titleTextView.text!
+        todo.isDone = customView.isDoneSwitch.isOn
+        todo.set(tagsNames: customView.tagsField.tags.map({ $0.text }))
+        do {
+            try AppDelegate.viewContext.save()
+            delegate?.didSave()
+        } catch let error {
+            print("Can not save: \(error.localizedDescription)")
+        }
+
+    }
+
 }

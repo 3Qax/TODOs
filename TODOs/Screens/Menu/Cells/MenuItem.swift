@@ -13,7 +13,7 @@ protocol MenuItemDelegate: AnyObject {
     func didEndEditingListName(sender: MenuItem)
 }
 class MenuItem: UITableViewCell {
-    
+
     @IBOutlet weak var titleTextView: UITextView!
     weak var delegate: MenuItemDelegate?
     override func awakeFromNib() {
@@ -21,16 +21,16 @@ class MenuItem: UITableViewCell {
         // Initialization code
         selectionStyle = .none
     }
-    
+
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-        
         // Configure the view for the selected state
     }
-    
+
 }
 
 extension MenuItem: UITextViewDelegate {
+
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         if text == "\n" {
             self.titleTextView.isEditable = false
@@ -40,4 +40,5 @@ extension MenuItem: UITextViewDelegate {
         delegate?.textChanged()
         return true
     }
+
 }

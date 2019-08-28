@@ -9,8 +9,10 @@
 import UIKit
 
 extension UIView {
-    @IBInspectable
-    var cornerRadius: CGFloat {
+
+    /// Exposed IBDesignable property to allow live styling of
+    /// views's corner radius in InterfaceBuilder
+    @IBInspectable var cornerRadius: CGFloat {
         set {
             self.layer.cornerRadius = newValue
             self.layer.masksToBounds = newValue > 0 ? true : false
@@ -19,4 +21,5 @@ extension UIView {
             return self.layer.cornerRadius
         }
     }
+
 }

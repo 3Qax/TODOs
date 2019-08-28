@@ -24,12 +24,13 @@ class MenuHeader: UITableViewHeaderFooterView {
             } else { arrowImageView.transform = CGAffineTransform(rotationAngle: 0) }
         }
     }
-    
+
     func onTap(action: @escaping () -> Void) {
         let tapGR = UITapGestureRecognizer(target: self, action: #selector(tapHandler))
         self.addGestureRecognizer(tapGR)
         tapAction = action
     }
+
     @objc func tapHandler() {
         tapAction?()
     }

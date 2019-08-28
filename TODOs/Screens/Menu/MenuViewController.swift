@@ -9,77 +9,79 @@
 import UIKit
 import CoreData
 
-class MenuViewController: UITableViewController {
+protocol MenuViewControllerDelegate: AnyObject {
+    func didTap(list: List)
+    func didTap(tag: Tag)
+}
 
-    @IBOutlet var menuTableView: UITableView!
+final class MenuViewController: UIViewController {
+
+    private var customView: MenuView { return self.view as! MenuView }
     private var isAddingNewList: Bool = false {
         didSet {
-            plusBarButtonItem.isEnabled =  !isAddingNewList
-            (menuTableView.headerView(forSection: 0) as? MenuHeader)?.styleAsEnabled = !isAddingNewList
+            addNewListBarButtonItem.isEnabled =  !isAddingNewList
+            (customView.tableView.headerView(forSection: 0) as? MenuHeader)?.styleAsEnabled = !isAddingNewList
         }
     }
     private var isListsSectionCollapsed: Bool = false
     private var isTagsSectionCollapsed: Bool = false
-    @IBOutlet weak var plusBarButtonItem: UIBarButtonItem!
-    let menu = Menu()
-    
+    // TODO: make that var optional
+    private var addNewListBarButtonItem: UIBarButtonItem!
+    weak var delegate: MenuViewControllerDelegate?
+    private let menu = Menu()
+
+    init(delegate: MenuViewControllerDelegate? = nil) {
+        self.delegate = delegate
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func loadView() {
+        view = MenuView.instanceFromNib()
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        let menuHeaderNib = UINib(nibName: "MenuHeader", bundle: nil)
-        menuTableView.register(menuHeaderNib, forHeaderFooterViewReuseIdentifier: "menuHeader")
-        
-        let menuItemNib = UINib(nibName: "MenuItem", bundle: nil)
-        menuTableView.register(menuItemNib, forCellReuseIdentifier: "menuItem")
-        
-        menuTableView.reloadData()
+
+        title = "TODOs by JT"
+        addNewListBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add,
+                                                       target: self,
+                                                       action: #selector(didTapAddNewList))
+        navigationItem.rightBarButtonItem = addNewListBarButtonItem
+
+        let menuHeaderNib = UINib(nibName: MenuHeader.className, bundle: nil)
+        customView.tableView.register(menuHeaderNib, forHeaderFooterViewReuseIdentifier: MenuHeader.className)
+
+        let menuItemNib = UINib(nibName: MenuItem.className, bundle: nil)
+        customView.tableView.register(menuItemNib, forCellReuseIdentifier: MenuItem.className)
+
+        customView.tableView.delegate = self
+        customView.tableView.dataSource = self
+
         menu.lists.delegate = self
         menu.tags.delegate = self
-        
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
-        guard let identifier = segue.identifier else { return }
-        
-        if identifier == "showList" {
-            guard let listVC = segue.destination as? ListViewController,
-            let section = tableView.indexPathForSelectedRow?.section,
-            let index = tableView.indexPathForSelectedRow?.item else {
-                fatalError()
-            }
-            guard section == 0 else {
-                fatalError("showList segue should only be performed for cells (actual lists) from section 0")
-            }
-            listVC.list = menu.lists.fetchedObjects![index]
-        }
-        
-        if identifier == "showListForTag" {
-            guard let listForTagVC = segue.destination as? ListForTagViewController,
-                let section = tableView.indexPathForSelectedRow?.section,
-                let index = tableView.indexPathForSelectedRow?.item else {
-                    fatalError()
-            }
-            guard section == 1 else {
-                fatalError("showListForTag segue should only be performed for cells (tags) from section 1")
-            }
-            listForTagVC.list = menu.listFor(tag: menu.tags.fetchedObjects![index])
-        }
 
     }
-    
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section {
-        case 0:
+
+}
+
+extension MenuViewController: UITableViewDataSource {
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if section == 0 {
             return isListsSectionCollapsed ? 0 : menu.lists.fetchedObjects?.count ?? 0
-        case 1:
+        } else if section == 1 {
             return isTagsSectionCollapsed ? 0 : menu.tags.fetchedObjects?.count ?? 0
-        default:
-            fatalError()
+        } else {
+            return 0
         }
     }
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "menuItem") as? MenuItem else {
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: MenuItem.className) as? MenuItem else {
             fatalError()
         }
         cell.delegate = self
@@ -93,97 +95,116 @@ class MenuViewController: UITableViewController {
         }
         return cell
     }
-    
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return indexPath.section == 0
     }
-    
-    override func tableView(_ tableView: UITableView,
-                            commit editingStyle: UITableViewCell.EditingStyle,
-                            forRowAt indexPath: IndexPath) {
+
+    func tableView(_ tableView: UITableView,
+                   commit editingStyle: UITableViewCell.EditingStyle,
+                   forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             menu.remove(menu.lists.fetchedObjects![indexPath.item])
         }
     }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        switch indexPath.section {
-        case 0:
-            if let cell = tableView.cellForRow(at: indexPath) as? MenuItem, cell.titleTextView.isEditable {
-                return
-            }
-            performSegue(withIdentifier: "showList", sender: self)
-        case 1:
-            performSegue(withIdentifier: "showListForTag", sender: self)
-        default:
-            fatalError("Invalid section")
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+
+        // do not navigate anywhere if user selects cell while it's name is being edited
+        // TODO: if users taps cell during editing and it's name isn't empty save it and go to the listVC
+        guard let cell = tableView.cellForRow(at: indexPath) as? MenuItem, !cell.titleTextView.isEditable else {
+            return
         }
+
+        if indexPath.section == 0, let list = menu.lists.fetchedObjects?[indexPath.row] {
+            delegate?.didTap(list: list)
+        }
+
+        if indexPath.section == 1, let tag = menu.tags.fetchedObjects?[indexPath.row] {
+            delegate?.didTap(tag: tag)
+        }
+
     }
-    
+
 }
 
-// MARK: Handle adding new MenuItem (List)
+// MARK: - Adding new List and editing it's name handlers
 extension MenuViewController: MenuItemDelegate {
-    @IBAction func didTapAdd(_ sender: Any) {
-        
+
+    /// This function should be called on tap of add button in navigation bar.
+    /// It tells model to create new list, then it enters list name editing state.
+    @objc func didTapAddNewList() {
+
         assert(!isAddingNewList, "didTapAdd should only be called if user isn't already in process of adding one")
-        
+
         if isListsSectionCollapsed { toggleListSection() }
-        
+
         let newList = menu.createNewEmptyList()
         guard let indexPathOfNewList = menu.lists.indexPath(forObject: newList) else {
             assert(false, "There always should be indexPath for newly created and inserted list")
         }
-        guard let insertedMenuItem = menuTableView.cellForRow(at: indexPathOfNewList) as? MenuItem else {
+        guard let insertedMenuItem = customView.tableView.cellForRow(at: indexPathOfNewList) as? MenuItem else {
             assert(false, "Cell inserted at indexPathOfNewList have to be of type MenuItem")
         }
-        
+
         insertedMenuItem.titleTextView.isEditable = true
         insertedMenuItem.titleTextView.becomeFirstResponder()
-        
+
         isAddingNewList = true
     }
+
+    /// This function is getting called by MenuItem which titleTextView.text changed. Calling beginUpdates() and
+    /// endUpdates() ensures that the cursor in titleTextView is allways fully visible (never goes behind keyboard)
+    /// by scrolling tableView up if titleTextView.text expanded so much, that such condition occures.
     func textChanged() {
         DispatchQueue.main.async {
             UIView.performWithoutAnimation {
-                self.menuTableView.beginUpdates()
-                self.menuTableView.endUpdates()
+                self.customView.tableView.beginUpdates()
+                self.customView.tableView.endUpdates()
             }
         }
     }
+
+    /// This function gets called when users ends editing list name (taps return on a keyboard)
     func didEndEditingListName(sender: MenuItem) {
-        if let index = menuTableView.indexPath(for: sender)?.item {
-            // check if list name isnt jsut a bunch of whitespaces
+        if let index = customView.tableView.indexPath(for: sender)?.item {
+            // check if list name isn't just a bunch of whitespaces
             if !sender.titleTextView.text.allSatisfy({ $0.isWhitespace }) {
+                // if it isn't then set the title to entered text
                 menu.lists.fetchedObjects![index].title = sender.titleTextView.text
             } else {
-                // if it and some tried saving it then delete it
+                // if it delete it
                 menu.remove(menu.lists.fetchedObjects![index])
                 UINotificationFeedbackGenerator().notificationOccurred(.error)
             }
+            // in both cases save context
             do { try AppDelegate.viewContext.save()
             } catch let err { fatalError(err.localizedDescription) }
         }
+        // leave list name editing state
         isAddingNewList = false
     }
 }
 
-// MARK: Headers handling
-extension MenuViewController {
-    override func numberOfSections(in tableView: UITableView) -> Int {
+// MARK: - Headers configuration and callbacks
+extension MenuViewController: UITableViewDelegate {
+
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 50
     }
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let cell = tableView.dequeueReusableHeaderFooterView(withIdentifier: "menuHeader") else {
+
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard let cell = tableView.dequeueReusableHeaderFooterView(withIdentifier: MenuHeader.className) else {
             fatalError()
         }
         guard let header = cell as? MenuHeader else {
             fatalError()
         }
-        
+
         switch section {
         case 0:
             header.titleLabel.text = "Lists"
@@ -196,40 +217,45 @@ extension MenuViewController {
         default:
             fatalError("Asked for header for incorrect section")
         }
-        
+
         return cell
     }
+
     func didTapListSectionHeader() {
+        // make sure user is not in the process of adding new list before toggling
         if !isAddingNewList { toggleListSection()
         } else { UINotificationFeedbackGenerator().notificationOccurred(.warning) }
     }
-    
+
     func didTapTagsSectionHeader() {
         toggleTagsSection()
     }
+
 }
 
-// MARK: Handle model notifications
+// MARK: - Model changes handling functions
 extension MenuViewController: NSFetchedResultsControllerDelegate {
+
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        menuTableView.beginUpdates()
+        customView.tableView.beginUpdates()
     }
+
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>,
                     didChange anObject: Any,
                     at indexPath: IndexPath?,
                     for type: NSFetchedResultsChangeType,
                     newIndexPath: IndexPath?) {
-        
+
         if anObject is List {
             switch type {
             case .insert:
-                menuTableView.insertRows(at: [newIndexPath!], with: .automatic)
+                customView.tableView.insertRows(at: [newIndexPath!], with: .automatic)
             case .delete:
-                menuTableView.deleteRows(at: [indexPath!], with: .automatic)
+                customView.tableView.deleteRows(at: [indexPath!], with: .automatic)
             case .move:
-                menuTableView.moveRow(at: indexPath!, to: newIndexPath!)
+                customView.tableView.moveRow(at: indexPath!, to: newIndexPath!)
             case .update:
-                menuTableView.reloadRows(at: [indexPath!], with: .automatic)
+                customView.tableView.reloadRows(at: [indexPath!], with: .automatic)
             @unknown default:
                 assert(false, "Change of unknown type happened!")
             }
@@ -243,33 +269,36 @@ extension MenuViewController: NSFetchedResultsControllerDelegate {
             correctNewIndexPath?.section = 1
             switch type {
             case .insert:
-                menuTableView.insertRows(at: [correctNewIndexPath!], with: .automatic)
+                customView.tableView.insertRows(at: [correctNewIndexPath!], with: .automatic)
             case .delete:
-                menuTableView.reloadSections(IndexSet(integer: 1), with: .fade)
+                customView.tableView.reloadSections(IndexSet(integer: 1), with: .fade)
             case .move:
-                menuTableView.moveRow(at: correctIndexPath!, to: correctNewIndexPath!)
+                customView.tableView.moveRow(at: correctIndexPath!, to: correctNewIndexPath!)
             case .update:
-                menuTableView.reloadRows(at: [correctIndexPath!], with: .automatic)
+                customView.tableView.reloadRows(at: [correctIndexPath!], with: .automatic)
             @unknown default:
                 assert(false, "Change of unknown type happened!")
             }
         }
     }
+
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        menuTableView.endUpdates()
+        customView.tableView.endUpdates()
     }
+
 }
 
-// MARK: Section collapsing or expanding
+// MARK: - Sections collapsing and expanding handlers
 extension MenuViewController {
-    
+
     func toggleListSection() {
         isListsSectionCollapsed.toggle()
-        menuTableView.reloadSections(IndexSet(integer: 0), with: .automatic)
+        customView.tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
     }
-    
+
     func toggleTagsSection() {
         isTagsSectionCollapsed.toggle()
-        menuTableView.reloadSections(IndexSet(integer: 1), with: .automatic)
+        customView.tableView.reloadSections(IndexSet(integer: 1), with: .automatic)
     }
+
 }
