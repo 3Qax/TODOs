@@ -19,7 +19,6 @@ final class TodoViewController: UIViewController {
     private var customView: TodoView { return self.view as! TodoView }
     private let titleTextViewPlaceholer = "Enter title here"
     private let tagsTextViewPlaceholder = "Enter space separated tags here"
-    private var cancleBarButtonItem: UIBarButtonItem?
     private var saveBarButtonItem: UIBarButtonItem?
     private weak var delegate: TodoViewControllerDelegate?
     private var todo: Todo
@@ -41,16 +40,12 @@ final class TodoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // setup navigation bar and it's buttons
+        // setup navigation bar and save button
         navigationItem.hidesBackButton = true
         saveBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save,
                                                  target: self,
                                                  action: #selector(didTapSaveButton))
-        cancleBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel,
-                                                   target: self,
-                                                   action: #selector(didTapCancleButton))
         navigationItem.rightBarButtonItem = saveBarButtonItem
-        navigationItem.leftBarButtonItem = cancleBarButtonItem
 
         // setup textViews delegates (for handling fake placeholder)
         customView.tagsTextView.delegate = self
@@ -84,6 +79,19 @@ final class TodoViewController: UIViewController {
     }
 
     @objc private func didTapSaveButton() {
+
+        if customView.titleTextView.text == titleTextViewPlaceholer {
+            let alert = UIAlertController(title: "Empty title",
+                              message: "Cannot save a TODO that doesn't have a title. Please enter one.",
+                              preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "I'll provide one", style: .default, handler: nil))
+            alert.addAction(UIAlertAction(title: "Exit and delete that todo", style: .destructive, handler: { [weak self] _ in
+                self?.delegate?.didCancel()
+                if let todo = self?.todo { AppDelegate.viewContext.delete(todo) }
+            }))
+            self.present(alert, animated: true)
+            return
+        }
         todo.name = customView.titleTextView.text!
         todo.isDone = customView.isDoneSwitch.isOn
         todo.set(tagsNames: customView.tagsTextView.text.components(separatedBy: " "))
@@ -91,7 +99,10 @@ final class TodoViewController: UIViewController {
             try AppDelegate.viewContext.save()
             delegate?.didSave()
         } catch let error {
-            print("Can not save: \(error.localizedDescription)")
+            let alert = UIAlertController(title: "Something went wrong",
+                              message: "Can not save: \(error.localizedDescription)",
+                              preferredStyle: .alert)
+            self.present(alert, animated: true)
         }
 
     }
