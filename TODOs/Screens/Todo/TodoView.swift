@@ -7,14 +7,13 @@
 //
 
 import UIKit
-import WSTagsField
 
 class TodoView: UIView {
 
     @IBOutlet weak var titleTextView: UITextView!
     @IBOutlet weak var stateLabel: UILabel!
     @IBOutlet weak var isDoneSwitch: UISwitch!
-    @IBOutlet weak var tagsField: WSTagsField!
+    @IBOutlet weak var tagsTextView: UITextView!
 
     class func instanceFromNib() -> UIView {
         return UINib(nibName: TodoView.className, bundle: nil)

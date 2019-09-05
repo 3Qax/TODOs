@@ -45,21 +45,27 @@
                     <rect key="frame" x="50" y="76" width="310" height="135.5"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</string>
+                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <fontDescription key="fontDescription" type="system" weight="thin" pointSize="20"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                 </textView>
-                <scrollView verifyAmbiguity="off" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" scrollEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gx6-St-y6B" customClass="WSTagsField" customModule="WSTagsField">
-                    <rect key="frame" x="50" y="350" width="310" height="128"/>
-                </scrollView>
+                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MGU-jJ-ZgB">
+                    <rect key="frame" x="50" y="261.5" width="310" height="135.5"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
+                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <fontDescription key="fontDescription" type="system" weight="thin" pointSize="20"/>
+                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                </textView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
-                <constraint firstItem="gx6-St-y6B" firstAttribute="top" secondItem="CKD-Ic-7ap" secondAttribute="top" constant="-10" id="0Vc-Za-rfO"/>
                 <constraint firstItem="CKD-Ic-7ap" firstAttribute="top" secondItem="wnn-JL-5OP" secondAttribute="bottom" constant="25" id="4Rg-eq-rMg"/>
-                <constraint firstItem="gx6-St-y6B" firstAttribute="leading" secondItem="CKD-Ic-7ap" secondAttribute="trailing" constant="10" id="7WX-8l-3IO"/>
-                <constraint firstItem="iEI-Iu-GZi" firstAttribute="trailing" secondItem="gx6-St-y6B" secondAttribute="trailing" constant="15" id="8Wj-vz-c3S"/>
                 <constraint firstItem="CKD-Ic-7ap" firstAttribute="leading" secondItem="iX5-Yx-LNc" secondAttribute="leading" id="LKA-jl-eiS"/>
                 <constraint firstItem="iX5-Yx-LNc" firstAttribute="leading" secondItem="iEI-Iu-GZi" secondAttribute="leading" constant="15" id="S6V-oQ-EHd"/>
+                <constraint firstItem="MGU-jJ-ZgB" firstAttribute="top" secondItem="CKD-Ic-7ap" secondAttribute="top" constant="-8" id="Ydo-S8-nX8"/>
+                <constraint firstItem="iEI-Iu-GZi" firstAttribute="trailing" secondItem="MGU-jJ-ZgB" secondAttribute="trailing" constant="15" id="bSc-PD-zTp"/>
+                <constraint firstItem="MGU-jJ-ZgB" firstAttribute="leading" secondItem="CKD-Ic-7ap" secondAttribute="trailing" constant="10" id="cZg-4D-JgB"/>
                 <constraint firstItem="LyU-ah-0Bu" firstAttribute="centerY" secondItem="wnn-JL-5OP" secondAttribute="centerY" id="dAj-tM-Srx"/>
                 <constraint firstItem="D7x-q5-aF7" firstAttribute="top" secondItem="iEI-Iu-GZi" secondAttribute="top" constant="12" id="dwf-9i-j5c"/>
                 <constraint firstItem="iEI-Iu-GZi" firstAttribute="trailing" secondItem="D7x-q5-aF7" secondAttribute="trailing" constant="15" id="kkm-U3-Y22"/>
@@ -74,7 +80,7 @@
             <connections>
                 <outlet property="isDoneSwitch" destination="LyU-ah-0Bu" id="Cfo-yX-UOe"/>
                 <outlet property="stateLabel" destination="wnn-JL-5OP" id="QgN-zz-BS5"/>
-                <outlet property="tagsField" destination="gx6-St-y6B" id="sgy-e0-PYU"/>
+                <outlet property="tagsTextView" destination="MGU-jJ-ZgB" id="g6W-wo-bMF"/>
                 <outlet property="titleTextView" destination="D7x-q5-aF7" id="qfa-dn-P8k"/>
             </connections>
             <point key="canvasLocation" x="34.399999999999999" y="34.632683658170919"/>

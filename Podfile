@@ -7,5 +7,4 @@ target 'TODOs' do
 
   # Pods for TODOs
   pod 'SwiftLint'
-  pod 'WSTagsField'
 end

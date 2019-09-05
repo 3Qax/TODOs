@@ -61,4 +61,8 @@ extension AppCoordinator: TodoViewControllerDelegate {
         navigationController?.popViewController(animated: true)
     }
 
+    func didCancel() {
+        navigationController?.popViewController(animated: true)
+    }
+
 }

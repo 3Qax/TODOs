@@ -1,20 +1,16 @@
 PODS:
-  - SwiftLint (0.34.0)
-  - WSTagsField (5.0.0)
+  - SwiftLint (0.35.0)
 
 DEPENDENCIES:
   - SwiftLint
-  - WSTagsField
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - SwiftLint
-    - WSTagsField
 
 SPEC CHECKSUMS:
-  SwiftLint: 79d48a17c6565dc286c37efb8322c7b450f95c67
-  WSTagsField: 5963db79f251c2a87ecfcf5dbfa36d05efc3d548
+  SwiftLint: 5553187048b900c91aa03552807681bb6b027846
 
-PODFILE CHECKSUM: bd304798508a681227d2b09b233430079c9b9f7e
+PODFILE CHECKSUM: 92dbb67242e034ae0dd6be37b0f169e9bcd2bf93
 
 COCOAPODS: 1.7.5
