@@ -271,7 +271,7 @@ extension MenuViewController: NSFetchedResultsControllerDelegate {
             case .insert:
                 customView.tableView.insertRows(at: [correctNewIndexPath!], with: .automatic)
             case .delete:
-                customView.tableView.reloadSections(IndexSet(integer: 1), with: .fade)
+                customView.tableView.deleteRows(at: [correctIndexPath!], with: .automatic)
             case .move:
                 customView.tableView.moveRow(at: correctIndexPath!, to: correctNewIndexPath!)
             case .update:

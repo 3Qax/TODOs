@@ -61,8 +61,6 @@ class Todo: NSManagedObject {
             }
         })
 
-        do { try AppDelegate.viewContext.save()
-        } catch let err { fatalError(err.localizedDescription) }
     }
 
     override func prepareForDeletion() {
