@@ -31,14 +31,14 @@ final class ListItem: UITableViewCell {
     }()
     private let checkAnimation: CABasicAnimation = {
         let animation = CABasicAnimation(keyPath: "strokeEnd")
-        animation.duration = 1
+        animation.duration = 0.25
         animation.fromValue = 0
         animation.toValue = 1
         return animation
     }()
     private let reverseCheckAnimation: CABasicAnimation = {
         let animation = CABasicAnimation(keyPath: "strokeEnd")
-        animation.duration = 1
+        animation.duration = 0.25
         animation.fromValue = 1
         animation.toValue = 0
         return animation
@@ -57,44 +57,40 @@ final class ListItem: UITableViewCell {
 
     }
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
-
     @objc func didTapCircle() {
-        print("recived circle tap event")
-        delegate?.didTapCircle(sender: self)
-    }
-
-    @objc func didTapBody() {
-
+        CATransaction.begin()
+        CATransaction.setCompletionBlock({ [weak self] in
+            self?.delegate?.didTapCircle(sender: self!)
+        })
+        shouldStypeAsDone ? styleAsNotDone() : styleAsDone()
+        CATransaction.commit()
     }
 
     func updateStyling() {
 
-        switch shouldStypeAsDone {
+            switch shouldStypeAsDone {
 
-        case true:
-            styleAsDone()
-        case false:
-            styleAsNotDone()
-        }
+            case true:
+                styleAsDone(animates: false)
+            case false:
+                styleAsNotDone(animates: false)
+            }
 
     }
 
-    private func styleAsDone() {
-        print("style as done")
-        nameTextView.textColor = .lightGray
+    private func styleAsDone(animates: Bool = true) {
         var textAttributes = [NSAttributedString.Key: Any]()
+        textAttributes[NSAttributedString.Key.font] = UIFont.systemFont(ofSize: 20.0, weight: .thin)
+        textAttributes[NSAttributedString.Key.foregroundColor] = UIColor.lightGray
         textAttributes[NSAttributedString.Key.strikethroughStyle] = NSUnderlineStyle.single.rawValue
         textAttributes[NSAttributedString.Key.strikethroughColor] = UIColor.darkGray
         nameTextView.attributedText = NSAttributedString(string: nameTextView.text!, attributes: textAttributes)
 
+        circle.backgroundColor = .lightGray
+
         shapeLayer.path = tickPath.cgPath
         shapeLayer.frame = circle.bounds
-        shapeLayer.strokeColor = UIColor.red.cgColor
+        shapeLayer.strokeColor = UIColor.darkGray.cgColor
         shapeLayer.fillColor = nil
         shapeLayer.lineWidth = 2
         shapeLayer.lineJoin = CAShapeLayerLineJoin.bevel
@@ -102,25 +98,27 @@ final class ListItem: UITableViewCell {
         tickView.layer.addSublayer(shapeLayer)
         shapeLayer.strokeEnd = 1.0
         shapeLayer.removeAllAnimations()
-        shapeLayer.add(checkAnimation, forKey: "strokeEnd")
+        if animates { shapeLayer.add(checkAnimation, forKey: nil) }
     }
 
-    private func styleAsNotDone() {
-        print("style as not done")
-        nameTextView.textColor = .black
-        let textAttributes = [NSAttributedString.Key: Any]()
+    private func styleAsNotDone(animates: Bool = true) {
+        var textAttributes = [NSAttributedString.Key: Any]()
+        textAttributes[NSAttributedString.Key.font] = UIFont.systemFont(ofSize: 20.0, weight: .thin)
+        textAttributes[NSAttributedString.Key.foregroundColor] = UIColor.black
         nameTextView.attributedText = NSAttributedString(string: nameTextView.text ?? "", attributes: textAttributes)
+
+        circle.backgroundColor = .darkGray
 
         shapeLayer.path = tickPath.cgPath
         shapeLayer.frame = circle.bounds
-        shapeLayer.strokeColor = UIColor.red.cgColor
+        shapeLayer.strokeColor = UIColor.darkGray.cgColor
         shapeLayer.fillColor = nil
         shapeLayer.lineWidth = 2
         shapeLayer.lineJoin = CAShapeLayerLineJoin.bevel
 
         shapeLayer.strokeEnd = 0.0
         shapeLayer.removeAllAnimations()
-        shapeLayer.add(reverseCheckAnimation, forKey: "strokeEnd")
+        if animates { shapeLayer.add(reverseCheckAnimation, forKey: nil) }
     }
 
 }

@@ -102,7 +102,7 @@ extension ListViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if allowsAddingAndEnteringDetails  {
+        if allowsAddingAndEnteringDetails {
             delegate?.didRequestedToEnterDetails(for: list.sortedTodos.fetchedObjects![indexPath.item])
         }
     }
@@ -119,10 +119,10 @@ extension ListViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: ListItem.className) as? ListItem else {
             fatalError()
         }
-
+        print("cellForRowAt")
         cell.nameTextView.text = list.sortedTodos.fetchedObjects![indexPath.item].name
         cell.shouldStypeAsDone = list.sortedTodos.fetchedObjects![indexPath.item].isDone
-//        list.sortedTodos.fetchedObjects![indexPath.item].isDone ? cell.styleAsDone() : cell.styleAsNotDone()
+        cell.updateStyling()
         cell.delegate = self
 
         return cell
@@ -135,9 +135,9 @@ extension ListViewController: ListItemDelegate {
     func didTapCircle(sender: ListItem) {
         if let index = customView.tableView.indexPath(for: sender)?.item {
             list.sortedTodos.fetchedObjects![index].isDone.toggle()
+            sender.shouldStypeAsDone.toggle()
             do { try AppDelegate.viewContext.save()
             } catch let err { fatalError(err.localizedDescription) }
-            sender.updateStyling()
         }
     }
 
@@ -161,7 +161,9 @@ extension ListViewController: NSFetchedResultsControllerDelegate {
             case .delete:
                 customView.tableView.deleteRows(at: [indexPath!], with: .automatic)
             case .move:
-                customView.tableView.moveRow(at: indexPath!, to: newIndexPath!)
+//                customView.tableView.moveRow(at: indexPath!, to: newIndexPath!)
+                customView.tableView.deleteRows(at: [indexPath!], with: .automatic)
+                customView.tableView.insertRows(at: [newIndexPath!], with: .automatic)
             case .update:
                 customView.tableView.reloadRows(at: [indexPath!], with: .automatic)
             @unknown default:
