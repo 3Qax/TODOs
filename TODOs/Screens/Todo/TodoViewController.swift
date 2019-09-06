@@ -56,8 +56,10 @@ final class TodoViewController: UIViewController {
             customView.titleTextView.textColor = .lightGray
             customView.titleTextView.text = titleTextViewPlaceholer
             navigationItem.title = "Add new todo"
-            customView.titleTextView.selectedTextRange = customView.titleTextView.textRange(from: customView.titleTextView.beginningOfDocument,
-                                                                                            to: customView.titleTextView.beginningOfDocument)
+
+            let textRangeToSelet = customView.titleTextView.textRange(from: customView.titleTextView.beginningOfDocument,
+                                                                      to: customView.titleTextView.beginningOfDocument)
+            customView.titleTextView.selectedTextRange = textRangeToSelet
         } else {
             customView.titleTextView.textColor = .black
             customView.titleTextView.text = todo.name
@@ -80,7 +82,10 @@ final class TodoViewController: UIViewController {
 
     @objc private func didTapSaveButton() {
 
-        if customView.titleTextView.text == titleTextViewPlaceholer {
+        // make sure that user specified title
+        // due to placeholder implemenatation if title is empty, textView.text will be equal to placeholder
+        guard customView.titleTextView.text != titleTextViewPlaceholer else {
+            // if user doesn't specify title show alert letting user either enter it or cancle adding/editing todo
             let alert = UIAlertController(title: "Empty title",
                               message: "Cannot save a TODO that doesn't have a title. Please enter one.",
                               preferredStyle: .alert)
@@ -92,9 +97,16 @@ final class TodoViewController: UIViewController {
             self.present(alert, animated: true)
             return
         }
+
         todo.name = customView.titleTextView.text!
         todo.isDone = customView.isDoneSwitch.isOn
-        todo.set(tagsNames: customView.tagsTextView.text.components(separatedBy: " "))
+
+        // make sure to not treat placeholder text as actual tags
+        // this is again due to placeholder implemantation
+        if customView.tagsTextView.text == tagsTextViewPlaceholder { todo.set(tagsNames: [String]())
+        } else { todo.set(tagsNames: customView.tagsTextView.text.components(separatedBy: " ")) }
+
+        // try to save the context
         do {
             try AppDelegate.viewContext.save()
             delegate?.didSave()
