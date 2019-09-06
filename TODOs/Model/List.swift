@@ -71,7 +71,11 @@ final class List: NSManagedObject {
                                                  sectionNameKeyPath: nil,
                                                  cacheName: nil)
         do { try  sortedTodos.performFetch()
+<<<<<<< HEAD
         } catch let err { assert(false, err.localizedDescription) }
+=======
+        } catch let err { fatalError(err.localizedDescription) }
+>>>>>>> c9b95c4fc7e941e5e1390771eccfffbed1efff7f
 
         return sortedTodos
 
@@ -82,7 +86,11 @@ final class List: NSManagedObject {
     func remove(todo: Todo) {
         AppDelegate.viewContext.delete(todo)
         do { try AppDelegate.viewContext.save()
+<<<<<<< HEAD
         } catch let err { assert(false, err.localizedDescription) }
+=======
+        } catch let err { fatalError(err.localizedDescription) }
+>>>>>>> c9b95c4fc7e941e5e1390771eccfffbed1efff7f
     }
 
 }
