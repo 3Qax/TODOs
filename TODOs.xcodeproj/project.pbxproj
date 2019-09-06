@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -17,7 +17,6 @@
 		194D618C2315BC08006305D5 /* NSObject+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194D618B2315BC08006305D5 /* NSObject+Extension.swift */; };
 		194D619023167974006305D5 /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194D618F23167974006305D5 /* MenuView.swift */; };
 		194D61922316D66A006305D5 /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194D61912316D66A006305D5 /* ListView.swift */; };
-		197AC80022DB3215004883EC /* CheckCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 197AC7FF22DB3215004883EC /* CheckCircle.swift */; };
 		198A612F22D9130600BCC1D0 /* Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 198A612E22D9130600BCC1D0 /* Menu.swift */; };
 		198A613122D915AA00BCC1D0 /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = 198A613022D915AA00BCC1D0 /* List.swift */; };
 		198A613322D915B000BCC1D0 /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 198A613222D915B000BCC1D0 /* Tag.swift */; };
@@ -48,7 +47,6 @@
 		194D618B2315BC08006305D5 /* NSObject+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSObject+Extension.swift"; sourceTree = "<group>"; };
 		194D618F23167974006305D5 /* MenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
 		194D61912316D66A006305D5 /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
-		197AC7FF22DB3215004883EC /* CheckCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckCircle.swift; sourceTree = "<group>"; };
 		198A612E22D9130600BCC1D0 /* Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Menu.swift; sourceTree = "<group>"; };
 		198A613022D915AA00BCC1D0 /* List.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = List.swift; sourceTree = "<group>"; };
 		198A613222D915B000BCC1D0 /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
@@ -146,14 +144,6 @@
 			path = Cell;
 			sourceTree = "<group>";
 		};
-		19762C0722DB4451008FEAD9 /* Controls */ = {
-			isa = PBXGroup;
-			children = (
-				197AC7FF22DB3215004883EC /* CheckCircle.swift */,
-			);
-			path = Controls;
-			sourceTree = "<group>";
-		};
 		198A613422D915B600BCC1D0 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -191,7 +181,6 @@
 				1993A13C22D8986B00C88D74 /* Assets.xcassets */,
 				194D617E2315B30A006305D5 /* App */,
 				19A22EF322DA883700DFEB5A /* Extensions */,
-				19762C0722DB4451008FEAD9 /* Controls */,
 				198A613422D915B600BCC1D0 /* Model */,
 				19A22EF222DA871300DFEB5A /* Screens */,
 			);
@@ -369,7 +358,6 @@
 				1904D24022D8C38E00866F19 /* MenuHeader.swift in Sources */,
 				19B35C1222DC717100E191B7 /* Model.xcdatamodeld in Sources */,
 				194D619023167974006305D5 /* MenuView.swift in Sources */,
-				197AC80022DB3215004883EC /* CheckCircle.swift in Sources */,
 				1904D22F22D8A09500866F19 /* ListViewController.swift in Sources */,
 				1904D23322D8A88F00866F19 /* ListItem.swift in Sources */,
 				198A613122D915AA00BCC1D0 /* List.swift in Sources */,
