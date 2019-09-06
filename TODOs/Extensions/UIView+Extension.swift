@@ -1,5 +1,5 @@
 //
-//  UIView.swift
+//  UIView+Extension.swift
 //  TODOs
 //
 //  Created by Jakub Towarek on 13/07/2019.
