@@ -30,32 +30,26 @@ final class Todo: NSManagedObject {
 
     // MARK: - Functions
 
-    // TODO: think of better name for that todo
-    func didEndEditing() {
-        if self.name.allSatisfy({ $0.isWhitespace }) {
-            AppDelegate.viewContext.delete(self)
-        }
-        do { try AppDelegate.viewContext.save()
-        } catch let err { fatalError(err.localizedDescription) }
-    }
+    /// Assigns new tags to todo, erasing tags that are currently assigned.
+    /// - Important: Calling this function will make todo have only tags specified as parameter.
+    /// - Warning: Do not assign tags directly!
+    /// - Parameter tags: Array of names of Tags which todo should have eventually assigned
+    func assign(tags: [String]) {
 
-    // TODO: create summary of this function
-    func set(tagsNames: [String]) {
-
-        // remove all of the tags of this todo
-        // if a owned tag has only 1 todo (this todo) then delete it
-        // since each tag should have at least 1
-        // if it has more then delete only self from it's todos
-        tags.forEach({ tag in
+        // unassign all curently assigned tags
+        // see prepareForDeletion() for more info
+        self.tags.forEach({ tag in
             if tag.todos.count == 1 {
+                // if a owned tag has only 1 todo (this todo) then delete it
                 AppDelegate.viewContext.delete(tag)
             } else {
+                // if it has more then delete only self from it's todos
                 tag.removeFromTodos(self)
             }
         })
 
         // for each new tag check if there is already such a tag
-        tagsNames.forEach({ tagName in
+        tags.forEach({ tagName in
 
             // create a fetch request for a tag with name matching tagName
             let request: NSFetchRequest<Tag> = NSFetchRequest(entityName: "Tag")

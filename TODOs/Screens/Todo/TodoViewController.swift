@@ -101,12 +101,12 @@ final class TodoViewController: UIViewController {
         todo.name = customView.titleTextView.text!
         todo.isDone = customView.isDoneSwitch.isOn
 
-        // make sure to not treat placeholder text as actual tags
-        // this is again due to placeholder implemantation
-        if customView.tagsTextView.text == tagsTextViewPlaceholder { todo.set(tagsNames: [String]())
-        } else { todo.set(tagsNames: customView.tagsTextView.text.components(separatedBy: " ")) }
+        // make sure to not treat placeholder text as actual tags, due to placeholder implemantation
+        if customView.tagsTextView.text == tagsTextViewPlaceholder { todo.assign(tags: [String]())
+        } else { todo.assign(tags: customView.tagsTextView.text.components(separatedBy: " ")) }
 
         // try to save the context
+        // FIXME: extract this to a model function
         do {
             try AppDelegate.viewContext.save()
             delegate?.didSave()
