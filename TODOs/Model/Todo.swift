@@ -10,8 +10,27 @@ import Foundation
 import CoreData
 
 @objc (Todo)
-class Todo: NSManagedObject {
+final class Todo: NSManagedObject {
 
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<Todo> {
+        return NSFetchRequest<Todo>(entityName: "Todo")
+    }
+
+    /// determins whether todo is done or not
+    @NSManaged public var isDone: Bool
+
+    /// name of the todo
+    @NSManaged public var name: String
+
+    /// list to which todo belongs
+    @NSManaged public var list: List
+
+    /// tags assigned to todo
+    @NSManaged public var tags: Set<Tag>
+
+    // MARK: - Functions
+
+    // TODO: think of better name for that todo
     func didEndEditing() {
         if self.name.allSatisfy({ $0.isWhitespace }) {
             AppDelegate.viewContext.delete(self)
@@ -20,6 +39,7 @@ class Todo: NSManagedObject {
         } catch let err { fatalError(err.localizedDescription) }
     }
 
+    // TODO: create summary of this function
     func set(tagsNames: [String]) {
 
         // remove all of the tags of this todo
@@ -43,53 +63,56 @@ class Todo: NSManagedObject {
             request.predicate = NSPredicate(format: "name == %@", tagName)
 
             let tagFetchResult = try? AppDelegate.viewContext.fetch(request) as [Tag]
-            assert(tagFetchResult != nil, "Fetching of tag should never fail")
-            // if fetch request returned a tag, it means that there already is such a tag
-            let suchTagDoesntExists = tagFetchResult?.isEmpty
 
-            if let suchTagDoesntExists = suchTagDoesntExists {
-                if suchTagDoesntExists {
-                    // create one and add self to todos of that tag
-                    let entity = NSEntityDescription.entity(forEntityName: "Tag", in: AppDelegate.viewContext)!
-                    let newTag = Tag(entity: entity, insertInto: AppDelegate.viewContext)
-                    newTag.name = tagName
-                    newTag.addToTodos(self)
-                } else {
-                    // add self to todos of that tag
-                    tagFetchResult?.first?.addToTodos(self)
-                }
+            // if fetch request result is empty, it means that such a tag does't exist
+            guard let suchTagDoesntExists = tagFetchResult?.isEmpty else {
+                assert(false, "Apparently tag tetch request failed since result is nil")
+                return
             }
+
+            switch suchTagDoesntExists {
+
+            case true:
+                // create one and assign that tag to self
+                let entity = NSEntityDescription.entity(forEntityName: "Tag", in: AppDelegate.viewContext)!
+                let newTag = Tag(entity: entity, insertInto: AppDelegate.viewContext)
+                newTag.name = tagName
+                self.addToTags(newTag)
+            case false:
+                // add self to todos of that tag
+                tagFetchResult?.first?.addToTodos(self)
+            }
+
         })
 
     }
 
+    /// Checks if deletion would leave any ghost tags (tags which are not not assign to any todo )
+    /// If there is such a tag then it gets deleted
     override func prepareForDeletion() {
+
         super.prepareForDeletion()
+
         tags.forEach({ tag in
-            if tag.todos.count == 1 {
+
+            let numberOfTodosReferencingTag = tag.todos.count
+
+            // if the count is equal to 1, this todo is the only one referencing it
+            if numberOfTodosReferencingTag == 1 {
+                // since this todo is about to be deleted that tag should be deleted too
                 AppDelegate.viewContext.delete(tag)
             } else {
+                // if not then simply unassign tag from self
                 tag.removeFromTodos(self)
             }
+
         })
+
     }
 
 }
 
-extension Todo {
-
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Todo> {
-        return NSFetchRequest<Todo>(entityName: "Todo")
-    }
-
-    @NSManaged public var isDone: Bool
-    @NSManaged public var name: String
-    @NSManaged public var list: List
-    @NSManaged public var tags: Set<Tag>
-
-}
-
-// MARK: Generated accessors for tags
+// MARK: - Automatically generated accessors for tags
 extension Todo {
 
     @objc(addTagsObject:)
