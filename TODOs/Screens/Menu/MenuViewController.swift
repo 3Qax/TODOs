@@ -104,7 +104,7 @@ extension MenuViewController: UITableViewDataSource {
                    commit editingStyle: UITableViewCell.EditingStyle,
                    forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            menu.remove(menu.lists.fetchedObjects![indexPath.item])
+            menu.delete(list: menu.lists.fetchedObjects![indexPath.item])
         }
     }
 
@@ -174,7 +174,7 @@ extension MenuViewController: MenuItemDelegate {
                 menu.lists.fetchedObjects![index].title = sender.titleTextView.text
             } else {
                 // if it delete it
-                menu.remove(menu.lists.fetchedObjects![index])
+                menu.delete(list: menu.lists.fetchedObjects![index])
                 UINotificationFeedbackGenerator().notificationOccurred(.error)
             }
             // in both cases save context

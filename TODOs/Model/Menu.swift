@@ -9,46 +9,73 @@
 import Foundation
 import CoreData
 
-class Menu {
-    let lists: NSFetchedResultsController<List>
-    let tags: NSFetchedResultsController<Tag>
+final class Menu {
 
-    init() {
-        let listsFetchRequest: NSFetchRequest<List> = NSFetchRequest(entityName: "List")
-        listsFetchRequest.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
-        listsFetchRequest.predicate = NSPredicate(format: "isForTag == NO")
-        lists = NSFetchedResultsController(fetchRequest: listsFetchRequest,
+    // MARK: - Properties
+
+    /// NSFetchedResultsController containg all exisiting lists.
+    /// Sorted by name in alphametical order.
+    public let lists: NSFetchedResultsController<List> = {
+
+        let fetchRequest: NSFetchRequest<List> = NSFetchRequest(entityName: "List")
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+        fetchRequest.predicate = NSPredicate(format: "isForTag == NO")
+
+        let result = NSFetchedResultsController(fetchRequest: fetchRequest,
                                            managedObjectContext: AppDelegate.viewContext,
                                            sectionNameKeyPath: nil,
                                            cacheName: nil)
-        do { try lists.performFetch()
-        } catch let err { fatalError(err.localizedDescription) }
 
-        let tagsFetchRequest: NSFetchRequest<Tag> = NSFetchRequest(entityName: "Tag")
-        tagsFetchRequest.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
-        tags = NSFetchedResultsController(fetchRequest: tagsFetchRequest,
+        do { try result.performFetch()
+        } catch let err { assert(false, err.localizedDescription) }
+
+        return result
+
+    }()
+
+    /// NSFetchedResultsController containing all exisitng tags
+    /// Sorted by name in alphametical order.
+    public let tags: NSFetchedResultsController<Tag> = {
+
+        let fetchRequest: NSFetchRequest<Tag> = NSFetchRequest(entityName: "Tag")
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+
+        let result = NSFetchedResultsController(fetchRequest: fetchRequest,
                                           managedObjectContext: AppDelegate.viewContext,
                                           sectionNameKeyPath: nil,
                                           cacheName: nil)
 
-        do { try tags.performFetch()
-        } catch let err { fatalError(err.localizedDescription) }
-    }
+        do { try result.performFetch()
+        } catch let err { assert(false, err.localizedDescription) }
 
-    func createNewEmptyList() -> List {
+        return result
+
+    }()
+
+    // MARK: - Functions
+
+    /// Creates new empty list
+    public func createNewEmptyList() -> List {
+
         let newList = List(entity: NSEntityDescription.entity(forEntityName: "List",
                                                               in: AppDelegate.viewContext)!,
                            insertInto: AppDelegate.viewContext)
+
         do { try AppDelegate.viewContext.save()
-        } catch let err { fatalError(err.localizedDescription) }
+        } catch let err { assert(false, err.localizedDescription) }
 
         return newList
     }
 
-    func remove(_ list: List) {
+    /// Deletes given list
+    /// - Parameter list: list to be deleted
+    public func delete(list: List) {
+
         AppDelegate.viewContext.delete(list)
+
         do { try AppDelegate.viewContext.save()
-        } catch let err { fatalError(err.localizedDescription) }
+        } catch let err { assert(false, err.localizedDescription) }
+
     }
 
 }
