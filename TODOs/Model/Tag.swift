@@ -10,17 +10,16 @@ import Foundation
 import CoreData
 
 @objc (Tag)
-class Tag: NSManagedObject {
-
-}
-
-extension Tag {
+final class Tag: NSManagedObject {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Tag> {
         return NSFetchRequest<Tag>(entityName: "Tag")
     }
 
+    /// name of tag
     @NSManaged public var name: String
+
+    /// todos to which this tag has been assigned
     @NSManaged public var todos: Set<Todo>
 
 }

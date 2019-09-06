@@ -55,34 +55,6 @@ final class ListViewController: UIViewController {
 
     }
 
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if segue.identifier == "addTask" {
-//            if let todoVC = segue.destination as? TodoViewController {
-//                _ = todoVC.view
-//                let newTodo = Todo(context: AppDelegate.viewContext)
-//                newTodo.list = list
-//                todoVC.todo = newTodo
-//                todoVC.state = .editing
-//                todoVC.title = "add todo"
-//            }
-//        }
-//        if segue.identifier == "showTaskDetails" {
-//            if let todoVC = segue.destination as? TodoViewController,
-//            let indexOfSelectedTask = customView.tableView.indexPathForSelectedRow?.item {
-//                _ = todoVC.view
-//                todoVC.todo = list.sortedTodos.fetchedObjects![indexOfSelectedTask]
-//                todoVC.state = .viewing
-//                todoVC.title = "edit todo"
-//            }
-//        }
-//    }
-//
-//    @IBAction func unwindToList(_ unwindSegue: UIStoryboardSegue) {
-//        if unwindSegue.identifier == "unwindToList", let todoVC = unwindSegue.source as? TodoViewController {
-//            todoVC.todo.didEndEditing()
-//        }
-//    }
-
     @objc func didTapPlusButton() {
         delegate?.didTapAddNewTodoTo(list: list)
     }
@@ -161,7 +133,6 @@ extension ListViewController: NSFetchedResultsControllerDelegate {
             case .delete:
                 customView.tableView.deleteRows(at: [indexPath!], with: .automatic)
             case .move:
-//                customView.tableView.moveRow(at: indexPath!, to: newIndexPath!)
                 customView.tableView.deleteRows(at: [indexPath!], with: .automatic)
                 customView.tableView.insertRows(at: [newIndexPath!], with: .automatic)
             case .update:
