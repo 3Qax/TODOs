@@ -25,6 +25,7 @@ final class MenuViewController: UIViewController {
 
     private var addNewListBarButtonItem: UIBarButtonItem?
     private var saveBarButtonItem: UIBarButtonItem?
+    private var cancelBarButtonItem: UIBarButtonItem?
 
     weak var delegate: MenuViewControllerDelegate?
 
@@ -47,6 +48,7 @@ final class MenuViewController: UIViewController {
         title = "TODOs by JT"
         addNewListBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(didTapAddNewList))
         saveBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(didTapSave))
+        cancelBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(didTapCancel))
         navigationItem.rightBarButtonItem = addNewListBarButtonItem
 
         let menuHeaderNib = UINib(nibName: MenuHeader.className, bundle: nil)
@@ -133,6 +135,14 @@ final class MenuViewController: UIViewController {
 
     }
 
+    /// This function should be called on tap of cancelBarButtonItem and when isAddinNewList.
+    @objc private func didTapCancel() {
+        guard isAddingNewList else { return }
+        self.isAddingNewList = false
+        let newList = menu.lists.fetchedObjects![0]
+        menu.delete(list: newList)
+    }
+
     // MARK: - TableView section's headers tap handlers
 
     private func didTapListSectionHeader() {
@@ -161,6 +171,7 @@ final class MenuViewController: UIViewController {
 
     func updateState() {
         navigationItem.rightBarButtonItem = isAddingNewList ? saveBarButtonItem : addNewListBarButtonItem
+        navigationItem.leftBarButtonItem = isAddingNewList ? cancelBarButtonItem : nil
         (customView.tableView.headerView(forSection: 0) as? MenuHeader)?.styleAsEnabled = !isAddingNewList
     }
 
@@ -251,7 +262,7 @@ extension MenuViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return indexPath.section == 0
+        return indexPath.section == 0 && !isAddingNewList
     }
 
     func tableView(_ tableView: UITableView,
