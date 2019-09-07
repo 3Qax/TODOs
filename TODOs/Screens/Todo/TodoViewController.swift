@@ -76,6 +76,14 @@ final class TodoViewController: UIViewController {
             customView.tagsTextView.text = todo.tags.map({ $0.name }).joined(separator: " ")
         }
 
+        // setup initial values for selectedTextRange of textViews,
+        // so that when user taps them first tim textViewDidChangeSelection() will get trigerred
+        let textViews: [UITextView] = [customView.titleTextView, customView.tagsTextView]
+        for textView in textViews {
+            textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument,
+                                                            to: textView.beginningOfDocument)
+        }
+
         customView.titleTextView.becomeFirstResponder()
 
     }
@@ -125,20 +133,26 @@ final class TodoViewController: UIViewController {
 
 }
 
-/// This extension handles fake placeholders for titleTextView and tagsTextView
+// This extension handles fake placeholders for titleTextView and tagsTextView
 extension TodoViewController: UITextViewDelegate {
 
     func textViewDidChangeSelection(_ textView: UITextView) {
+
+        // make sure that the view is visible
         if self.view.window != nil {
-            if textView === customView.titleTextView && textView.text == titleTextViewPlaceholer {
+
+            // if there is placeholder in any of textViews force curosr to be always at the beginning
+            if textView === customView.titleTextView && textView.text == titleTextViewPlaceholer
+            || textView === customView.tagsTextView && textView.text == tagsTextViewPlaceholder {
+
+                // move cursor to the beginning of the textview
                 textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument,
                                                                 to: textView.beginningOfDocument)
+
             }
-            if textView === customView.tagsTextView && textView.text == tagsTextViewPlaceholder {
-                textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument,
-                                                                to: textView.beginningOfDocument)
-            }
+
         }
+
     }
 
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
