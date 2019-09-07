@@ -20,8 +20,12 @@ final class MenuViewController: UIViewController {
     private let menu = Menu()
 
     private var isAddingNewList: Bool = false { didSet { updateState() } }
-    private var isListsSectionCollapsed: Bool = false
-    private var isTagsSectionCollapsed: Bool = false
+    private var isListsSectionCollapsed: Bool = false {
+        didSet { customView.tableView.reloadSections(IndexSet(integer: 0), with: .automatic) }
+    }
+    private var isTagsSectionCollapsed: Bool = false {
+        didSet { customView.tableView.reloadSections(IndexSet(integer: 1), with: .automatic) }
+    }
 
     private var addNewListBarButtonItem: UIBarButtonItem?
     private var saveBarButtonItem: UIBarButtonItem?
@@ -65,6 +69,14 @@ final class MenuViewController: UIViewController {
 
     }
 
+    /// This method gets called when view state (isAddingNewList) changes.
+    /// It sets buttons in navigation bar and changes styling of list's header accordingly.
+    private func updateState() {
+        navigationItem.rightBarButtonItem = isAddingNewList ? saveBarButtonItem : addNewListBarButtonItem
+        navigationItem.leftBarButtonItem = isAddingNewList ? cancelBarButtonItem : nil
+        (customView.tableView.headerView(forSection: 0) as? MenuHeader)?.shouldStyleAsEnabled = !isAddingNewList
+    }
+
     // MARK: - Bar buttons items tap handlers
 
     /// This function should be called on tap of addNewListBarButtonItem.
@@ -73,7 +85,7 @@ final class MenuViewController: UIViewController {
 
         guard !isAddingNewList else { return }
 
-        if isListsSectionCollapsed { toggleListSection() }
+        if isListsSectionCollapsed { isListsSectionCollapsed.toggle() }
 
         let newList = menu.createNewEmptyList()
         guard let indexPathOfNewList = menu.lists.indexPath(forObject: newList) else {
@@ -137,42 +149,13 @@ final class MenuViewController: UIViewController {
 
     /// This function should be called on tap of cancelBarButtonItem and when isAddinNewList.
     @objc private func didTapCancel() {
+
         guard isAddingNewList else { return }
+
         self.isAddingNewList = false
         let newList = menu.lists.fetchedObjects![0]
         menu.delete(list: newList)
-    }
 
-    // MARK: - TableView section's headers tap handlers
-
-    private func didTapListSectionHeader() {
-        // make sure user is not in the process of adding new list before toggling
-        if !isAddingNewList { toggleListSection()
-        } else { UINotificationFeedbackGenerator().notificationOccurred(.warning) }
-    }
-
-    private func didTapTagsSectionHeader() {
-        toggleTagsSection()
-    }
-
-    // MARK: - Sections collapsing and expanding handlers
-
-    func toggleListSection() {
-        isListsSectionCollapsed.toggle()
-        customView.tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
-    }
-
-    func toggleTagsSection() {
-        isTagsSectionCollapsed.toggle()
-        customView.tableView.reloadSections(IndexSet(integer: 1), with: .automatic)
-    }
-
-    // FIXME: make here meaningful MARK
-
-    func updateState() {
-        navigationItem.rightBarButtonItem = isAddingNewList ? saveBarButtonItem : addNewListBarButtonItem
-        navigationItem.leftBarButtonItem = isAddingNewList ? cancelBarButtonItem : nil
-        (customView.tableView.headerView(forSection: 0) as? MenuHeader)?.styleAsEnabled = !isAddingNewList
     }
 
 }
@@ -185,25 +168,34 @@ extension MenuViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+
         guard let cell = tableView.dequeueReusableHeaderFooterView(withIdentifier: MenuHeader.className) else {
-            fatalError()
-        }
-        guard let header = cell as? MenuHeader else {
-            fatalError()
+            assert(false, "Can not dequeue MenuHeader")
+            return UIView()
         }
 
-        switch section {
-        case 0:
-            header.titleLabel.text = "Lists"
-            header.onTap { [weak self] in self?.didTapListSectionHeader() }
-            header.styleAsCollapsed = isListsSectionCollapsed
-        case 1:
-            header.titleLabel.text = "Tags"
-            header.onTap { [weak self] in self?.didTapTagsSectionHeader() }
-            header.styleAsCollapsed = isTagsSectionCollapsed
-        default:
-            fatalError("Asked for header for incorrect section")
+        guard let header = cell as? MenuHeader else {
+            assert(false, "Casting menu header to MenuHeader failed")
+            return UIView()
         }
+
+        if section == 0 {
+            header.titleLabel.text = "Lists"
+            header.onTap { [weak self] in
+
+                guard let self = self else { return }
+
+                // make sure user is not in the process of adding new list before toggling
+                if !self.isAddingNewList { self.isListsSectionCollapsed.toggle()
+                } else { UINotificationFeedbackGenerator().notificationOccurred(.warning) }
+
+            }
+            header.shouldStyleAsCollapsed = isListsSectionCollapsed
+        } else if section == 1 {
+            header.titleLabel.text = "Tags"
+            header.onTap { [weak self] in self?.isTagsSectionCollapsed.toggle() }
+            header.shouldStyleAsCollapsed = isTagsSectionCollapsed
+        } else { assert(false, "Asked for header for incorrect section") }
 
         return cell
     }
@@ -211,18 +203,18 @@ extension MenuViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
         // do not navigate anywhere if user selects cell while it's name is being edited
-        // TODO: if users taps cell during editing and it's name isn't empty save it and go to the listVC
         guard let cell = tableView.cellForRow(at: indexPath) as? MenuItem, !cell.titleTextView.isEditable else {
+
+            let alert = UIAlertController(title: "Wait a second",
+                                          message: "Please save a list first and then try to enter it.",
+                                          preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default))
+            self.present(alert, animated: true)
             return
         }
 
-        if indexPath.section == 0, let list = menu.lists.fetchedObjects?[indexPath.row] {
-            delegate?.didTap(list: list)
-        }
-
-        if indexPath.section == 1, let tag = menu.tags.fetchedObjects?[indexPath.row] {
-            delegate?.didTap(tag: tag)
-        }
+        if indexPath.section == 0, let list = menu.lists.fetchedObjects?[indexPath.row] { delegate?.didTap(list: list)
+        } else if indexPath.section == 1, let tag = menu.tags.fetchedObjects?[indexPath.row] { delegate?.didTap(tag: tag) }
 
     }
 
@@ -236,6 +228,7 @@ extension MenuViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+
         if section == 0 {
             return isListsSectionCollapsed ? 0 : menu.lists.fetchedObjects?.count ?? 0
         } else if section == 1 {
@@ -246,31 +239,38 @@ extension MenuViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+
         guard let cell = tableView.dequeueReusableCell(withIdentifier: MenuItem.className) as? MenuItem else {
-            fatalError()
+            assert(false, "Can not dequeue MenuItem cell")
+            return UITableViewCell()
         }
+
         cell.delegate = self
-        switch indexPath.section {
-        case 0:
+
+        if indexPath.section == 0 {
             cell.titleTextView.text = menu.lists.fetchedObjects![indexPath.item].title
-        case 1:
+        } else if indexPath.section == 1 {
             cell.titleTextView.text = menu.tags.fetchedObjects![indexPath.item].name
-        default:
-            fatalError()
-        }
+        } else { assert(false, "Asked for cell for incorrect section")}
+
         return cell
     }
 
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return indexPath.section == 0 && !isAddingNewList
+
+        if isAddingNewList { return false
+        } else { return indexPath.section == 0 }
+
     }
 
     func tableView(_ tableView: UITableView,
                    commit editingStyle: UITableViewCell.EditingStyle,
                    forRowAt indexPath: IndexPath) {
+
         if editingStyle == .delete {
             menu.delete(list: menu.lists.fetchedObjects![indexPath.item])
         }
+
     }
 
 }
@@ -282,16 +282,19 @@ extension MenuViewController: MenuItemDelegate {
     /// endUpdates() ensures that the cursor in titleTextView is allways fully visible (never goes behind keyboard)
     /// by scrolling tableView up if titleTextView.text expanded so much, that such condition occures.
     func textChanged() {
+
         DispatchQueue.main.async {
             UIView.performWithoutAnimation {
                 self.customView.tableView.beginUpdates()
                 self.customView.tableView.endUpdates()
             }
         }
+
     }
 
     /// This function gets called when users taps return on a keyboard while editing MenuItem titleTextView
     func shouldEndEditing(sender: MenuItem) -> Bool {
+
         let titleToSet: String = sender.titleTextView.text
         let newList = menu.lists.fetchedObjects![0]
 
@@ -322,6 +325,7 @@ extension MenuViewController: MenuItemDelegate {
             }
             return false
         }
+
     }
 
 }
@@ -353,6 +357,7 @@ extension MenuViewController: NSFetchedResultsControllerDelegate {
                 assert(false, "Change of unknown type happened!")
             }
         }
+
         if anObject is Tag {
             // fetch request controller doesn't know that these results are in 2nd section of table view
             // so we have to account for that by changing section in indexPath and newIndexPath
@@ -373,6 +378,7 @@ extension MenuViewController: NSFetchedResultsControllerDelegate {
                 assert(false, "Change of unknown type happened!")
             }
         }
+
     }
 
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {

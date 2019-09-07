@@ -8,30 +8,41 @@
 
 import UIKit
 
-class MenuHeader: UITableViewHeaderFooterView {
-    var tapAction: (() -> Void)?
+/// Header displayed in MenuView's tableView
+final class MenuHeader: UITableViewHeaderFooterView {
+
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var arrowImageView: UIImageView!
-    var styleAsEnabled = true {
-        didSet {
-            if styleAsEnabled { arrowImageView.tintColor = .black
-            } else { arrowImageView.tintColor = UIColor(red: 7/8, green: 7/8, blue: 7/8, alpha: 1) }
-        }
-    }
-    var styleAsCollapsed = false {
-        didSet {
-            if styleAsCollapsed { arrowImageView.transform = CGAffineTransform(rotationAngle: CGFloat.pi)
-            } else { arrowImageView.transform = CGAffineTransform(rotationAngle: 0) }
-        }
+
+    var shouldStyleAsEnabled = true {
+        didSet { arrowImageView.tintColor =  shouldStyleAsEnabled ? .black : .lightGray }
     }
 
-    func onTap(action: @escaping () -> Void) {
-        let tapGR = UITapGestureRecognizer(target: self, action: #selector(tapHandler))
-        self.addGestureRecognizer(tapGR)
+    var shouldStyleAsCollapsed = false {
+        didSet { arrowImageView.transform = CGAffineTransform(rotationAngle: shouldStyleAsCollapsed ? CGFloat.pi : 0) }
+    }
+
+    // clousure to execute when header is tapped
+    private var tapAction: (() -> Void)?
+
+    override func awakeFromNib() {
+
+        super.awakeFromNib()
+
+        let bodyTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(bodyTapHandler))
+        self.addGestureRecognizer(bodyTapGestureRecognizer)
+
+    }
+
+    /// Sets MenuHeader's tap callback
+    /// - Parameter action: clousure to execute
+    public func onTap(action: @escaping () -> Void) {
         tapAction = action
     }
 
-    @objc func tapHandler() {
+    // Called on body tap. Executes tapAction if it is set.
+    @objc private func bodyTapHandler() {
         tapAction?()
     }
+
 }

@@ -12,19 +12,18 @@ protocol MenuItemDelegate: AnyObject {
     func textChanged()
     func shouldEndEditing(sender: MenuItem) -> Bool
 }
+
+/// Cell isplayed in MenuView's tableView. Represents list.
 class MenuItem: UITableViewCell {
 
     @IBOutlet weak var titleTextView: UITextView!
+
     weak var delegate: MenuItemDelegate?
+
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
-        selectionStyle = .none
-    }
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        // Configure the view for the selected state
+        selectionStyle = .none
     }
 
 }
@@ -32,6 +31,8 @@ class MenuItem: UITableViewCell {
 extension MenuItem: UITextViewDelegate {
 
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+
+        // when user taps return asks delegate whether or not it should end editing
         if text == "\n" {
             if let shouldEndEditing = delegate?.shouldEndEditing(sender: self) {
                 self.titleTextView.isEditable =  !shouldEndEditing
@@ -40,8 +41,12 @@ extension MenuItem: UITextViewDelegate {
             }
             return false
         }
+
+        // informs delegate that the entered title has changed
         delegate?.textChanged()
+
         return true
+
     }
 
 }
