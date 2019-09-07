@@ -17,6 +17,7 @@ final class ListItem: UITableViewCell {
     @IBOutlet weak var nameTextView: UITextView!
     @IBOutlet weak var circle: UIView!
     @IBOutlet weak var circleMask: UIView!
+    @IBOutlet weak var circleTapArea: UIView!
     @IBOutlet weak var tickView: UIView!
 
     var shouldStypeAsDone = false
@@ -51,9 +52,7 @@ final class ListItem: UITableViewCell {
         selectionStyle = .none
 
         let circleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTapCircle))
-        circleMask.isUserInteractionEnabled = false
-        circle.isUserInteractionEnabled = true
-        circle.addGestureRecognizer(circleTapGestureRecognizer)
+        circleTapArea.addGestureRecognizer(circleTapGestureRecognizer)
 
     }
 

@@ -76,7 +76,7 @@ extension ListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if allowsAddingAndEnteringDetails {
             delegate?.didRequestedToEnterDetails(for: list.sortedTodos.fetchedObjects![indexPath.item])
-        }
+        } else { UINotificationFeedbackGenerator().notificationOccurred(.warning) }
     }
 
 }

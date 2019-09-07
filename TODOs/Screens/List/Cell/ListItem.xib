@@ -19,7 +19,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="49.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iQa-Rm-VPm">
+                    <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iQa-Rm-VPm">
                         <rect key="frame" x="15" y="12.5" width="25" height="25"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
                         <constraints>
@@ -32,7 +32,7 @@
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
                     </view>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xM8-fn-YT9">
+                    <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xM8-fn-YT9">
                         <rect key="frame" x="16.5" y="14" width="22" height="22"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -59,24 +59,33 @@
                             <constraint firstAttribute="width" constant="28" id="IHz-3b-7QF"/>
                         </constraints>
                     </view>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2Ot-xS-LRi">
+                        <rect key="frame" x="0.0" y="0.0" width="50" height="49.5"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </view>
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="bottom" secondItem="uHg-Bh-4MB" secondAttribute="bottom" constant="10" id="0dX-P0-o27"/>
                     <constraint firstItem="XFW-vQ-gKf" firstAttribute="centerX" secondItem="iQa-Rm-VPm" secondAttribute="centerX" id="4m5-U5-6qu"/>
                     <constraint firstItem="iQa-Rm-VPm" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="15" id="7Qt-Gl-9Lw"/>
+                    <constraint firstItem="2Ot-xS-LRi" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="98y-dO-LC0"/>
+                    <constraint firstItem="2Ot-xS-LRi" firstAttribute="trailing" secondItem="uHg-Bh-4MB" secondAttribute="leading" id="CvT-5D-lgu"/>
                     <constraint firstItem="uHg-Bh-4MB" firstAttribute="leading" secondItem="iQa-Rm-VPm" secondAttribute="trailing" constant="10" id="Eoi-2T-Mb9"/>
                     <constraint firstItem="xM8-fn-YT9" firstAttribute="centerY" secondItem="iQa-Rm-VPm" secondAttribute="centerY" id="H7n-UH-Rbs"/>
+                    <constraint firstAttribute="bottom" secondItem="2Ot-xS-LRi" secondAttribute="bottom" id="Hsx-iD-v65"/>
                     <constraint firstItem="iQa-Rm-VPm" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="MGT-XA-XAP"/>
                     <constraint firstItem="xM8-fn-YT9" firstAttribute="centerX" secondItem="iQa-Rm-VPm" secondAttribute="centerX" id="VHp-tK-jFG"/>
                     <constraint firstItem="uHg-Bh-4MB" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="9" id="X5a-16-lat"/>
                     <constraint firstItem="XFW-vQ-gKf" firstAttribute="centerY" secondItem="iQa-Rm-VPm" secondAttribute="centerY" id="dwN-gI-1Lz"/>
                     <constraint firstAttribute="trailing" secondItem="uHg-Bh-4MB" secondAttribute="trailing" constant="15" id="lmS-mr-lx0"/>
+                    <constraint firstItem="2Ot-xS-LRi" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="ykE-m6-Iax"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
                 <outlet property="circle" destination="iQa-Rm-VPm" id="j3m-Hh-rvP"/>
                 <outlet property="circleMask" destination="xM8-fn-YT9" id="vRy-I4-DP0"/>
+                <outlet property="circleTapArea" destination="2Ot-xS-LRi" id="lIK-po-bnz"/>
                 <outlet property="nameTextView" destination="uHg-Bh-4MB" id="HOI-nR-7Um"/>
                 <outlet property="tickView" destination="XFW-vQ-gKf" id="LcM-lD-LQ5"/>
             </connections>
