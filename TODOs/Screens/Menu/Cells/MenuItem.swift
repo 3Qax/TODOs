@@ -10,7 +10,7 @@ import UIKit
 
 protocol MenuItemDelegate: AnyObject {
     func textChanged()
-    func didEndEditingListName(sender: MenuItem)
+    func shouldEndEditing(sender: MenuItem) -> Bool
 }
 class MenuItem: UITableViewCell {
 
@@ -33,8 +33,11 @@ extension MenuItem: UITextViewDelegate {
 
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         if text == "\n" {
-            self.titleTextView.isEditable = false
-            delegate?.didEndEditingListName(sender: self)
+            if let shouldEndEditing = delegate?.shouldEndEditing(sender: self) {
+                self.titleTextView.isEditable =  !shouldEndEditing
+            } else {
+                self.titleTextView.isEditable =  false
+            }
             return false
         }
         delegate?.textChanged()

@@ -12,6 +12,12 @@ import CoreData
 @objc (List)
 final class List: NSManagedObject {
 
+    enum TitleSettingErrors: Error {
+        case emptyTitle
+        case blankTitle
+        case duplicateTitle
+    }
+
     @nonobjc public class func fetchRequest() -> NSFetchRequest<List> {
         return NSFetchRequest<List>(entityName: "List")
     }
@@ -76,6 +82,33 @@ final class List: NSManagedObject {
         return sortedTodos
 
     }()
+
+    /// Sets list title after validating it. Checks for title being empty, blank or not uniqe.
+    /// - Parameter title: title to set
+    func set(title: String) -> Result<Void, TitleSettingErrors> {
+
+        // make sure title is not empty
+        guard !title.isEmpty else {
+            return .failure(.emptyTitle)
+        }
+
+        guard !title.allSatisfy({ $0.isWhitespace }) else {
+            return .failure(.blankTitle)
+        }
+
+        let allTitles = Menu.getAllListTitles()
+        guard !allTitles.contains(title) else {
+            return .failure(.duplicateTitle)
+        }
+
+        self.title = title
+
+        do { try AppDelegate.viewContext.save()
+        } catch let err { assert(false, err.localizedDescription) }
+
+        return .success(())
+
+    }
 
     /// Removes given todo from list.
     /// - Parameter todo: The todo to be deleted

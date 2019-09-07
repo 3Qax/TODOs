@@ -11,6 +11,16 @@ import CoreData
 
 final class Menu {
 
+    /// Returns array of titles of all lists
+    public static func getAllListTitles() -> [String] {
+        let fetchRequest: NSFetchRequest<List> = NSFetchRequest(entityName: "List")
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+        fetchRequest.predicate = NSPredicate(format: "isForTag == NO")
+        if let lists = try? AppDelegate.viewContext.fetch(fetchRequest) {
+            return lists.map({ $0.title })
+        } else { return [String]() }
+    }
+
     // MARK: - Properties
 
     /// NSFetchedResultsController containg all exisiting lists.
