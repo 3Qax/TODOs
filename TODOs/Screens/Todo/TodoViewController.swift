@@ -143,13 +143,14 @@ extension TodoViewController: UITextViewDelegate {
 
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
 
-        // Combine the textView text and the replacement text to
-        // create the updated text string
+        // textView's current text (without any modifications)
         let currentText: String = textView.text
+
+        // what will text of textView look like after applying changes
+        // (Combining the textView current text and the replacement text)
         let updatedText = (currentText as NSString).replacingCharacters(in: range, with: text)
 
-        // If updated text view will be empty, add the placeholder
-        // and set the cursor to the beginning of the text view
+        // if the textView is going to be empty, insert placeholder text and style it appropreatly
         if updatedText.isEmpty {
 
             if textView === customView.titleTextView { textView.text = titleTextViewPlaceholer }
@@ -158,26 +159,28 @@ extension TodoViewController: UITextViewDelegate {
 
             textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument,
                                                             to: textView.beginningOfDocument)
+
+            // since placeholder text has been set manually, doesn't allow textView to change it
+            return false
+
         }
 
-            // Else if the text view's placeholder is showing and the
-            // length of the replacement string is greater than 0, set
-            // the text color to black then set its text to the
-            // replacement string
-        else if textView.textColor == UIColor.lightGray && !text.isEmpty {
-            textView.textColor = UIColor.black
-            textView.text = text
+        // if the textView won't be empty,
+        // but there is placeholder in it and the change is not a deletion
+        if textView.textColor == UIColor.lightGray && !text.isEmpty {
+
+            // delete placeholder text and remove placeholder styling
+            textView.textColor = .black
+            textView.text = ""
+
+            // let the textView insert replacement text
+            return false
+
         }
 
-            // For every other case, the text should change with the usual
-            // behavior...
-        else {
-            return true
-        }
+        // for every other case, the textView should use it's normal behavior
+        return true
 
-        // ...otherwise return false since the updates have already
-        // been made
-        return false
     }
 
 }
