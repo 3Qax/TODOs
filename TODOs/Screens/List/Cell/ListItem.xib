@@ -46,7 +46,7 @@
                         </userDefinedRuntimeAttributes>
                     </view>
                     <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" text="Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, se" translatesAutoresizingMaskIntoConstraints="NO" id="uHg-Bh-4MB">
-                        <rect key="frame" x="50" y="5" width="255" height="34.5"/>
+                        <rect key="frame" x="50" y="9" width="255" height="30.5"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <fontDescription key="fontDescription" type="system" weight="thin" pointSize="20"/>
                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -68,7 +68,7 @@
                     <constraint firstItem="xM8-fn-YT9" firstAttribute="centerY" secondItem="iQa-Rm-VPm" secondAttribute="centerY" id="H7n-UH-Rbs"/>
                     <constraint firstItem="iQa-Rm-VPm" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="MGT-XA-XAP"/>
                     <constraint firstItem="xM8-fn-YT9" firstAttribute="centerX" secondItem="iQa-Rm-VPm" secondAttribute="centerX" id="VHp-tK-jFG"/>
-                    <constraint firstItem="uHg-Bh-4MB" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="X5a-16-lat"/>
+                    <constraint firstItem="uHg-Bh-4MB" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="9" id="X5a-16-lat"/>
                     <constraint firstItem="XFW-vQ-gKf" firstAttribute="centerY" secondItem="iQa-Rm-VPm" secondAttribute="centerY" id="dwN-gI-1Lz"/>
                     <constraint firstAttribute="trailing" secondItem="uHg-Bh-4MB" secondAttribute="trailing" constant="15" id="lmS-mr-lx0"/>
                 </constraints>
