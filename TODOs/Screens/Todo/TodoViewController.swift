@@ -14,6 +14,16 @@ protocol TodoViewControllerDelegate: AnyObject {
     func didCancel()
 }
 
+fileprivate extension String {
+
+    /// Converts string containg tags to arrays of tags.
+    /// - Requires: Individual tags in the string have to be space separated.
+    func convertedToTags() -> [String] {
+        return self.trimmingCharacters(in: .whitespaces).components(separatedBy: " ")
+    }
+
+}
+
 final class TodoViewController: UIViewController {
 
     private var customView: TodoView { return self.view as! TodoView }
@@ -92,7 +102,7 @@ final class TodoViewController: UIViewController {
     @objc private func didTapSaveButton() {
 
         // make sure that user specified title
-        // due to placeholder implemenatation if title is empty, textView.text will be equal to placeholder
+        // due to placeholder implemenatation if title is empty, textView.text will be equal to it's placeholder
         guard customView.titleTextView.text != titleTextViewPlaceholer else {
             // if user doesn't specify title, show alert letting user either enter it or cancle adding/editing todo
             let alert = UIAlertController(title: "Empty title",
@@ -107,26 +117,44 @@ final class TodoViewController: UIViewController {
             return
         }
 
-        todo.name = customView.titleTextView.text!
-        todo.isDone = customView.isDoneSwitch.isOn
+        let nameToSet: String = customView.titleTextView.text
+        switch todo.set(name: nameToSet) {
 
-        // make sure to not treat placeholder text as actual tags, due to placeholder implemantation
-        if customView.tagsTextView.text == tagsTextViewPlaceholder { todo.assign(tags: [String]())
-        } else { todo.assign(tags: customView.tagsTextView.text.components(separatedBy: " ")) }
+        case .success:
 
-        // try to save the context
-        do {
-            try AppDelegate.viewContext.save()
-            delegate?.didSave()
-        } catch let error {
-            let alert = UIAlertController(title: "Something went wrong",
-                              message: "Can not save: \(error.localizedDescription)",
-                              preferredStyle: .alert)
-            self.present(alert, animated: true)
+            // set the state of todo
+            todo.isDone = customView.isDoneSwitch.isOn
+
+            // make sure to not treat placeholder text as actual tags, due to placeholder implemantation
+            if customView.tagsTextView.text != tagsTextViewPlaceholder {
+                todo.assign(tags: customView.tagsTextView.text.convertedToTags())
+            } else {  todo.assign(tags: [String]()) }
+
+            // try to save the context
+            do {
+                try AppDelegate.viewContext.save()
+                delegate?.didSave()
+            } catch let error {
+                let alert = UIAlertController(title: "Something went wrong",
+                                              message: "Can not save: \(error.localizedDescription)",
+                    preferredStyle: .alert)
+                self.present(alert, animated: true)
+            }
+
+        case .failure(let reason):
+
+            switch reason {
+            case .blankName:
+                let alert = UIAlertController(title: "Incorrect title",
+                                              message: "Todo title cannot consist only of whitespaces.",
+                                              preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default))
+                self.present(alert, animated: true)
+            }
+
         }
 
     }
-
 
 }
 

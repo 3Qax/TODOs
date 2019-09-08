@@ -12,6 +12,10 @@ import CoreData
 @objc (Todo)
 final class Todo: NSManagedObject {
 
+    enum NameSettingErrors: Error {
+        case blankName
+    }
+
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Todo> {
         return NSFetchRequest<Todo>(entityName: "Todo")
     }
@@ -29,6 +33,21 @@ final class Todo: NSManagedObject {
     @NSManaged public var tags: Set<Tag>
 
     // MARK: - Functions
+
+    /// Sets new title after validation
+    /// - Parameter name: Name to set
+    func set(name: String) -> Result<Void, NameSettingErrors> {
+
+        guard !name.allSatisfy({ $0.isWhitespace }) else {
+            return .failure(.blankName)
+        }
+
+        let trimmmedName = name.trimmingCharacters(in: .whitespaces)
+        self.name = trimmmedName
+
+        return .success(())
+
+    }
 
     /// Assigns new tags to todo, erasing tags that are currently assigned.
     /// - Important: Calling this function will make todo have only tags specified as parameter.

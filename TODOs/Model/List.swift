@@ -101,7 +101,7 @@ final class List: NSManagedObject {
             return .failure(.duplicateTitle)
         }
 
-        self.title = title
+        self.title = title.trimmingCharacters(in: .whitespaces)
 
         do { try AppDelegate.viewContext.save()
         } catch let err { assert(false, err.localizedDescription) }
