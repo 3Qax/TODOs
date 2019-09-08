@@ -17,10 +17,13 @@ final class ListItem: UITableViewCell {
     @IBOutlet weak var nameTextView: UITextView!
     @IBOutlet weak var circle: UIView!
     @IBOutlet weak var circleMask: UIView!
+    /// UIView over circle, bigger than circle.
+    /// Tap events in this view are being intepreted as the circle taps
     @IBOutlet weak var circleTapArea: UIView!
+    /// UIView in which tick can be draw
     @IBOutlet weak var tickView: UIView!
 
-    var shouldStypeAsDone = false
+    var shouldStyleAsDone = false
     weak var delegate: ListItemDelegate?
 
     private let tickPath: UIBezierPath = {
@@ -51,38 +54,46 @@ final class ListItem: UITableViewCell {
 
         selectionStyle = .none
 
-        let circleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTapCircle))
-        circleTapArea.addGestureRecognizer(circleTapGestureRecognizer)
+        let circleAreaTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTapCircleArea))
+        circleTapArea.addGestureRecognizer(circleAreaTapGestureRecognizer)
 
     }
 
-    @objc func didTapCircle() {
+    /// Updates styling of ListItem regarding to shouldStyleAsDone
+    /// - Experiment: try moving it to shouldStyleAsDone
+    func updateStyling() {
+
+        switch shouldStyleAsDone {
+
+        case true:
+            styleAsDone(animates: false)
+        case false:
+            styleAsNotDone(animates: false)
+        }
+
+    }
+
+    /// Called on tap of circleArea
+    /// First perform animation, then calles delegate
+    @objc private func didTapCircleArea() {
         CATransaction.begin()
         CATransaction.setCompletionBlock({ [weak self] in
             self?.delegate?.didTapCircle(sender: self!)
         })
-        shouldStypeAsDone ? styleAsNotDone() : styleAsDone()
+        shouldStyleAsDone ? styleAsNotDone() : styleAsDone()
         CATransaction.commit()
     }
 
-    func updateStyling() {
-
-            switch shouldStypeAsDone {
-
-            case true:
-                styleAsDone(animates: false)
-            case false:
-                styleAsNotDone(animates: false)
-            }
-
-    }
-
+    /// Styles ListItem as done
+    /// - Parameter animates: should changes in style be done as animation
     private func styleAsDone(animates: Bool = true) {
-        var textAttributes = [NSAttributedString.Key: Any]()
-        textAttributes[NSAttributedString.Key.font] = UIFont.systemFont(ofSize: 20.0, weight: .thin)
-        textAttributes[NSAttributedString.Key.foregroundColor] = UIColor.lightGray
-        textAttributes[NSAttributedString.Key.strikethroughStyle] = NSUnderlineStyle.single.rawValue
-        textAttributes[NSAttributedString.Key.strikethroughColor] = UIColor.darkGray
+
+        let textAttributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.systemFont(ofSize: 20.0, weight: .thin),
+            .foregroundColor: UIColor.lightGray,
+            .strikethroughStyle: NSUnderlineStyle.single.rawValue,
+            .strikethroughColor: UIColor.darkGray ]
+
         nameTextView.attributedText = NSAttributedString(string: nameTextView.text!, attributes: textAttributes)
 
         circle.backgroundColor = .lightGray
@@ -98,13 +109,18 @@ final class ListItem: UITableViewCell {
         shapeLayer.strokeEnd = 1.0
         shapeLayer.removeAllAnimations()
         if animates { shapeLayer.add(checkAnimation, forKey: nil) }
+
     }
 
+    /// Styles ListItem as not done
+    /// - Parameter animates: should changes in style be done as animation
     private func styleAsNotDone(animates: Bool = true) {
-        var textAttributes = [NSAttributedString.Key: Any]()
-        textAttributes[NSAttributedString.Key.font] = UIFont.systemFont(ofSize: 20.0, weight: .thin)
-        textAttributes[NSAttributedString.Key.foregroundColor] = UIColor.black
-        nameTextView.attributedText = NSAttributedString(string: nameTextView.text ?? "", attributes: textAttributes)
+
+        let textAttributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.systemFont(ofSize: 20.0, weight: .thin),
+            .foregroundColor: UIColor.black ]
+
+        nameTextView.attributedText = NSAttributedString(string: nameTextView.text!, attributes: textAttributes)
 
         circle.backgroundColor = .darkGray
 
@@ -118,6 +134,7 @@ final class ListItem: UITableViewCell {
         shapeLayer.strokeEnd = 0.0
         shapeLayer.removeAllAnimations()
         if animates { shapeLayer.add(reverseCheckAnimation, forKey: nil) }
+
     }
 
 }

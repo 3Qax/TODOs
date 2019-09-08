@@ -10,8 +10,8 @@ import UIKit
 import CoreData
 
 protocol ListViewControllerDelegate: AnyObject {
-    func didRequestedToEnterDetails(for todo: Todo)
-    func didTapAddNewTodoTo(list: List)
+    func didRequestToEnterDetails(of todo: Todo)
+    func didRequestToAddNewTodo(to list: List)
 }
 
 final class ListViewController: UIViewController {
@@ -40,10 +40,10 @@ final class ListViewController: UIViewController {
         super.viewDidLoad()
 
         title = list.title
-        if allowsAddingAndEnteringDetails {
+        if self.allowsAddingAndEnteringDetails {
             navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add,
                                                                 target: self,
-                                                                action: #selector(didTapPlusButton))
+                                                                action: #selector(didTapPlus))
         }
 
         let listItemNib = UINib(nibName: ListItem.className, bundle: nil)
@@ -55,8 +55,9 @@ final class ListViewController: UIViewController {
 
     }
 
-    @objc func didTapPlusButton() {
-        delegate?.didTapAddNewTodoTo(list: list)
+    /// Called on tap of plus button in navigation bar
+    @objc private func didTapPlus() {
+        delegate?.didRequestToAddNewTodo(to: list)
     }
 
 }
@@ -75,7 +76,8 @@ extension ListViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if allowsAddingAndEnteringDetails {
-            delegate?.didRequestedToEnterDetails(for: list.sortedTodos.fetchedObjects![indexPath.item])
+            let selectedTodo = list.sortedTodos.fetchedObjects![indexPath.item]
+            delegate?.didRequestToEnterDetails(of: selectedTodo)
         } else { UINotificationFeedbackGenerator().notificationOccurred(.warning) }
     }
 
@@ -88,12 +90,14 @@ extension ListViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+
         guard let cell = tableView.dequeueReusableCell(withIdentifier: ListItem.className) as? ListItem else {
-            fatalError()
+            assert(false, "Can not dequeue cell")
+            return UITableViewCell()
         }
-        print("cellForRowAt")
+
         cell.nameTextView.text = list.sortedTodos.fetchedObjects![indexPath.item].name
-        cell.shouldStypeAsDone = list.sortedTodos.fetchedObjects![indexPath.item].isDone
+        cell.shouldStyleAsDone = list.sortedTodos.fetchedObjects![indexPath.item].isDone
         cell.updateStyling()
         cell.delegate = self
 
@@ -105,12 +109,19 @@ extension ListViewController: UITableViewDataSource {
 extension ListViewController: ListItemDelegate {
 
     func didTapCircle(sender: ListItem) {
-        if let index = customView.tableView.indexPath(for: sender)?.item {
-            list.sortedTodos.fetchedObjects![index].isDone.toggle()
-            sender.shouldStypeAsDone.toggle()
-            do { try AppDelegate.viewContext.save()
-            } catch let err { fatalError(err.localizedDescription) }
+
+        guard let index = customView.tableView.indexPath(for: sender)?.item else {
+            assert(false, "Can not get index of ListItem")
+            sender.updateStyling()
+            return
         }
+
+        list.sortedTodos.fetchedObjects![index].toggleState()
+        sender.shouldStyleAsDone.toggle()
+
+        do { try AppDelegate.viewContext.save()
+        } catch let err { assert(false, "Something went wrong when saving: \(err)") }
+
     }
 
 }
@@ -139,6 +150,7 @@ extension ListViewController: NSFetchedResultsControllerDelegate {
                 customView.tableView.reloadRows(at: [indexPath!], with: .automatic)
             @unknown default:
                 assert(false, "Change of unknown type happened!")
+                return
             }
     }
 

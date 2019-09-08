@@ -81,6 +81,11 @@ final class Todo: NSManagedObject {
 
     }
 
+    /// Toogles state of todo
+    func toggleState() {
+        self.isDone.toggle()
+    }
+
     /// Checks if deletion would leave any ghost tags (tags which are not not assign to any todo )
     /// If there is such a tag then it gets deleted
     override func prepareForDeletion() {

@@ -41,12 +41,12 @@ extension AppCoordinator: MenuViewControllerDelegate {
 }
 
 extension AppCoordinator: ListViewControllerDelegate {
-    func didRequestedToEnterDetails(for todo: Todo) {
+    func didRequestToEnterDetails(of todo: Todo) {
         let viewController = TodoViewController(todo: todo, delegate: self)
         navigationController?.pushViewController(viewController, animated: true)
     }
 
-    func didTapAddNewTodoTo(list: List) {
+    func didRequestToAddNewTodo(to list: List) {
         let newTodo = Todo(context: AppDelegate.viewContext)
         newTodo.list = list
         let viewController = TodoViewController(todo: newTodo, delegate: self)
