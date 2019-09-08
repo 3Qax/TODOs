@@ -23,7 +23,10 @@ final class ListItem: UITableViewCell {
     /// UIView in which tick can be draw
     @IBOutlet weak var tickView: UIView!
 
-    var shouldStyleAsDone = false
+    var shouldStyleAsDone = false {
+        // updates styling of ListItem regarding to shouldStyleAsDone
+        didSet { shouldStyleAsDone ? styleAsDone(animates: false) : styleAsNotDone(animates: false) }
+    }
     weak var delegate: ListItemDelegate?
 
     private let tickPath: UIBezierPath = {
@@ -56,20 +59,6 @@ final class ListItem: UITableViewCell {
 
         let circleAreaTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTapCircleArea))
         circleTapArea.addGestureRecognizer(circleAreaTapGestureRecognizer)
-
-    }
-
-    /// Updates styling of ListItem regarding to shouldStyleAsDone
-    /// - Experiment: try moving it to shouldStyleAsDone
-    func updateStyling() {
-
-        switch shouldStyleAsDone {
-
-        case true:
-            styleAsDone(animates: false)
-        case false:
-            styleAsNotDone(animates: false)
-        }
 
     }
 

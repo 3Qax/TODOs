@@ -98,7 +98,6 @@ extension ListViewController: UITableViewDataSource {
 
         cell.nameTextView.text = list.sortedTodos.fetchedObjects![indexPath.item].name
         cell.shouldStyleAsDone = list.sortedTodos.fetchedObjects![indexPath.item].isDone
-        cell.updateStyling()
         cell.delegate = self
 
         return cell
@@ -110,11 +109,7 @@ extension ListViewController: ListItemDelegate {
 
     func didTapCircle(sender: ListItem) {
 
-        guard let index = customView.tableView.indexPath(for: sender)?.item else {
-            assert(false, "Can not get index of ListItem")
-            sender.updateStyling()
-            return
-        }
+        guard let index = customView.tableView.indexPath(for: sender)?.item else { return }
 
         list.sortedTodos.fetchedObjects![index].toggleState()
         sender.shouldStyleAsDone.toggle()
