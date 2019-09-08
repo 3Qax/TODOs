@@ -61,39 +61,41 @@ final class TodoViewController: UIViewController {
         customView.tagsTextView.delegate = self
         customView.titleTextView.delegate = self
 
-        // set default values for: titleTextView, isDoneSwitch, tagsTextView
-        if todo.name.isEmpty {
-            customView.titleTextView.textColor = .lightGray
-            customView.titleTextView.text = titleTextViewPlaceholer
-            navigationItem.title = "Add new todo"
+        // set navigation bar title
+        navigationItem.title = todo.name.isEmpty ? "Add new todo" : todo.name
 
-            let textRangeToSelet = customView.titleTextView.textRange(from: customView.titleTextView.beginningOfDocument,
-                                                                      to: customView.titleTextView.beginningOfDocument)
-            customView.titleTextView.selectedTextRange = textRangeToSelet
-        } else {
-            customView.titleTextView.textColor = .black
-            customView.titleTextView.text = todo.name
-            navigationItem.title = todo.name
-        }
+        // set default values for titleTextView
+        customView.titleTextView.text = todo.name.isEmpty ? titleTextViewPlaceholer : todo.name
+        customView.titleTextView.textColor = todo.name.isEmpty ? .lightGray :  .black
 
+        let titleTextViewBeginningRange = customView.titleTextView
+            .textRange(from: customView.titleTextView.beginningOfDocument,
+                       to: customView.titleTextView.beginningOfDocument)
+        let titleTextViewEndRange = customView.titleTextView
+            .textRange(from: customView.titleTextView.endOfDocument,
+                       to: customView.titleTextView.endOfDocument)
+
+        customView.titleTextView.selectedTextRange = todo.name.isEmpty ? titleTextViewBeginningRange : titleTextViewEndRange
+
+        // set value of isDoneSwitch
         customView.isDoneSwitch.isOn = todo.isDone
 
-        if todo.tags.isEmpty {
-            customView.tagsTextView.textColor = .lightGray
-            customView.tagsTextView.text = tagsTextViewPlaceholder
-        } else {
-            customView.tagsTextView.textColor = .black
-            customView.tagsTextView.text = todo.tags.map({ $0.name }).joined(separator: " ")
-        }
+        // set default values for tagsTextView
+        customView.tagsTextView.textColor = todo.tags.isEmpty ? .lightGray : .black
+        customView.tagsTextView.text = todo.tags.isEmpty
+                                        ? tagsTextViewPlaceholder
+                                        : todo.tags.map({ $0.name }).joined(separator: " ")
 
-        // setup initial values for selectedTextRange of textViews,
-        // so that when user taps them first tim textViewDidChangeSelection() will get trigerred
-        let textViews: [UITextView] = [customView.titleTextView, customView.tagsTextView]
-        for textView in textViews {
-            textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument,
-                                                            to: textView.beginningOfDocument)
-        }
+        let tagsTextViewBeginningRange = customView.tagsTextView
+            .textRange(from: customView.tagsTextView.beginningOfDocument,
+                       to: customView.tagsTextView.beginningOfDocument)
+        let tagsTextViewEndRange = customView.tagsTextView
+            .textRange(from: customView.tagsTextView.endOfDocument,
+                       to: customView.tagsTextView.endOfDocument)
 
+        customView.tagsTextView.selectedTextRange = todo.name.isEmpty ? tagsTextViewBeginningRange : tagsTextViewEndRange
+
+        // automatically enter titleTextView
         customView.titleTextView.becomeFirstResponder()
 
     }
