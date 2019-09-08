@@ -17,11 +17,12 @@ protocol TodoViewControllerDelegate: AnyObject {
 final class TodoViewController: UIViewController {
 
     private var customView: TodoView { return self.view as! TodoView }
+    private var todo: Todo
+
     private let titleTextViewPlaceholer = "Enter title here"
     private let tagsTextViewPlaceholder = "Enter space separated tags here"
-    private var saveBarButtonItem: UIBarButtonItem?
+
     private weak var delegate: TodoViewControllerDelegate?
-    private var todo: Todo
 
     init(todo: Todo, delegate: TodoViewControllerDelegate? = nil) {
         self.todo = todo
@@ -42,10 +43,9 @@ final class TodoViewController: UIViewController {
 
         // setup navigation bar and save button
         navigationItem.hidesBackButton = true
-        saveBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save,
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save,
                                                  target: self,
                                                  action: #selector(didTapSaveButton))
-        navigationItem.rightBarButtonItem = saveBarButtonItem
 
         // setup textViews delegates (for handling fake placeholder)
         customView.tagsTextView.delegate = self
@@ -88,12 +88,13 @@ final class TodoViewController: UIViewController {
 
     }
 
+    // Called on tap of save buttton
     @objc private func didTapSaveButton() {
 
         // make sure that user specified title
         // due to placeholder implemenatation if title is empty, textView.text will be equal to placeholder
         guard customView.titleTextView.text != titleTextViewPlaceholer else {
-            // if user doesn't specify title show alert letting user either enter it or cancle adding/editing todo
+            // if user doesn't specify title, show alert letting user either enter it or cancle adding/editing todo
             let alert = UIAlertController(title: "Empty title",
                               message: "Cannot save a TODO that doesn't have a title. Please enter one.",
                               preferredStyle: .alert)
@@ -114,7 +115,6 @@ final class TodoViewController: UIViewController {
         } else { todo.assign(tags: customView.tagsTextView.text.components(separatedBy: " ")) }
 
         // try to save the context
-        // FIXME: extract this to a model function
         do {
             try AppDelegate.viewContext.save()
             delegate?.didSave()
@@ -127,9 +127,6 @@ final class TodoViewController: UIViewController {
 
     }
 
-    @objc private func didTapCancleButton() {
-        delegate?.didCancel()
-    }
 
 }
 
