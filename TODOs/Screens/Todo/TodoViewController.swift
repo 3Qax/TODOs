@@ -188,7 +188,7 @@ extension TodoViewController: UITextViewDelegate {
             textView.text = ""
 
             // let the textView insert replacement text
-            return false
+            return true
 
         }
 
